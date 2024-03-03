@@ -1,39 +1,69 @@
 #include <lcms2.h>
 
+#include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
-double* GenerateLabImage( double* image, double const L ) {
-    double* ptr = image;
+#include <algorithm>
+#include <string>
 
-    for ( int y { }; y < 200; ++y ) {
-        for ( int x { }; x < 200; ++x ) {
-            *ptr++ = L;
-            *ptr++ = x - 100.0;
-            *ptr++ = y - 100.0;
+namespace {
+
+    std::string OutputFilePath { "TestSet4" };
+
+    template<typename T>
+    T constexpr _ce_abs( T value ) {
+        return ( value < static_cast<T>( 0 ) ) ? -value : value;
+    }
+
+    double constexpr LabMinimumA { -128.0 /*-100.0*/ };
+    double constexpr LabMaximumA {  127.0 /* 100.0*/ };
+    double constexpr LabMinimumB { -128.0 /*-100.0*/ };
+    double constexpr LabMaximumB {  127.0 /* 100.0*/ };
+
+    int    constexpr ImageWidth  { _ce_abs( static_cast<int>( LabMinimumA ) ) + _ce_abs( static_cast<int>( LabMaximumA ) ) };
+    int    constexpr ImageHeight { _ce_abs( static_cast<int>( LabMinimumB ) ) + _ce_abs( static_cast<int>( LabMaximumB ) ) };
+
+    double* GenerateLabImage( double* image, double const L ) {
+        int constexpr minA { static_cast<int>( LabMinimumA ) };
+        int constexpr minB { static_cast<int>( LabMinimumB ) };
+        double*       ptr  { image };
+
+        for ( int y { }; y < ImageHeight; ++y ) {
+            for ( int x { }; x < ImageWidth; ++x ) {
+                *ptr++ = L;
+                *ptr++ = x + minA;
+                *ptr++ = y + minB;
+            }
         }
+
+        return image;
     }
 
-    return image;
-}
+    bool WriteImageToFile( std::string fileName, uint8_t const* image, size_t const bytesToWrite, int const width, int const height ) {
+        FILE* f { fopen( fileName.c_str( ), "wb" ) };
+        if ( !f ) {
+            fprintf( stderr, "Couldn't create output file\n" );
+            return false;
+        }
 
-bool WriteImageToFile( char const* fileName, uint8_t const* image, size_t const bytesToWrite, int const width, int const height ) {
-    FILE* f { fopen( fileName, "wb" ) };
-    if ( !f ) {
-        fprintf( stderr, "Couldn't create output file\n" );
-        return false;
-    }
+        fprintf( f, "P6\n%d %d 255\n", width, height );
+        if ( fwrite( image, 1, bytesToWrite, f ) != bytesToWrite ) {
+            fprintf( stderr, "Couldn't write image to file\n" );
+            fclose( f );
+            return false;
+        }
 
-    fprintf( f, "P6\n%d %d 255\n", width, height );
-    if ( fwrite( image, 1, bytesToWrite, f ) != bytesToWrite ) {
-        fprintf( stderr, "Couldn't write image to file\n" );
         fclose( f );
-        return false;
+        return true;
     }
 
-    fclose( f );
-    return true;
+    std::string PadLeft( std::string input, char const padChar, size_t const minWidth ) {
+        return ( input.length( ) > minWidth ) ? input : std::string( std::max( minWidth - input.length( ), 0ULL ), padChar ) + input;
+    }
+
 }
 
 int main( ) {
@@ -49,15 +79,17 @@ int main( ) {
     }
 
 
-    double*  inputBuffer  { new double[3 * 200 * 200]  };
-    uint8_t* outputBuffer { new uint8_t[3 * 200 * 200] };
-    char fileName[64];
+    double*  inputBuffer  { new  double[3 * ImageWidth * ImageHeight] };
+    uint8_t* outputBuffer { new uint8_t[3 * ImageWidth * ImageHeight] };
 
     for ( int L = 0; L <= 100; L += 5 ) {
         GenerateLabImage( inputBuffer, L );
-        cmsDoTransform( hTransform, inputBuffer, outputBuffer, 200 * 200 );
-        sprintf( fileName, "test-%03d.ppm", L );
-        WriteImageToFile( fileName, outputBuffer, sizeof( uint8_t ) * 3 * 200 * 200, 200, 200 );
+        cmsDoTransform( hTransform, inputBuffer, outputBuffer, ImageWidth * ImageHeight );
+
+        std::string fileName { ( OutputFilePath.empty( ) ? std::string { } : OutputFilePath + '\\' ) + "test-" + PadLeft( std::to_string( L ), '0', 3 ) + ".ppm" };
+        if ( !WriteImageToFile( fileName, outputBuffer, sizeof uint8_t * 3 * ImageWidth * ImageHeight, ImageWidth, ImageHeight ) ) {
+            break;
+        }
     }
 
     delete[] outputBuffer;
