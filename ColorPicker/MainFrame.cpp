@@ -3,102 +3,68 @@
 #include "ColorPicker.h"
 #include "MainFrame.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+IMPLEMENT_DYNAMIC( CMainFrame, CFrameWnd )
 
-// CMainFrame
+BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
+    ON_WM_CREATE( )
+    ON_WM_SETFOCUS( )
+END_MESSAGE_MAP( )
 
-IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
-
-BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-	ON_WM_CREATE()
-	ON_WM_SETFOCUS()
-END_MESSAGE_MAP()
-
-static UINT indicators[] =
+CMainFrame::CMainFrame( ) noexcept:
+    m_pwndView { }
 {
-	ID_SEPARATOR,           // status line indicator
-	ID_INDICATOR_CAPS,
-	ID_INDICATOR_NUM,
-	ID_INDICATOR_SCRL,
-};
-
-// CMainFrame construction/destruction
-
-CMainFrame::CMainFrame() noexcept
-{
-	// TODO: add member initialization code here
+    /*empty*/
 }
 
-CMainFrame::~CMainFrame()
-{
+CMainFrame::~CMainFrame( ) {
+    /*empty*/
 }
 
-int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
-		return -1;
+int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
+    if ( CFrameWnd::OnCreate( lpCreateStruct ) == -1 ) {
+        return -1;
+    }
 
-	// create a view to occupy the client area of the frame
-	if (!m_wndView.Create(nullptr, nullptr, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, nullptr))
-	{
-		TRACE0("Failed to create view window\n");
-		return -1;
-	}
+    m_pwndView = DYNAMIC_DOWNCAST( CNewChildView, RUNTIME_CLASS( CNewChildView )->CreateObject( ) );
+    if ( !m_pwndView ) {
+        TRACE0( "Failed to create view window\n" );
+        return -1;
+    }
 
-	if (!m_wndStatusBar.Create(this))
-	{
-		TRACE0("Failed to create status bar\n");
-		return -1;      // fail to create
-	}
-	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
+    // now we need to figure out how to get it to create its Win32 HWND window.
+    // this code would do it, if CFormView::Create() weren't protected:
+    //if ( !m_pwndView->Create( nullptr, nullptr, AFX_WS_DEFAULT_VIEW, CRect( 0, 0, 0, 0 ), this, AFX_IDW_PANE_FIRST, nullptr ) ) {
+    //    TRACE0("Failed to create view window\n");
+    //    return -1;
+    //}
 
-	return 0;
+    return 0;
 }
 
-BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
-{
-	if( !CFrameWnd::PreCreateWindow(cs) )
-		return FALSE;
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
+    if ( !CFrameWnd::PreCreateWindow( cs ) ) {
+        return FALSE;
+    }
 
-	cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
-	cs.lpszClass = AfxRegisterWndClass(0);
-	return TRUE;
+    cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
+    cs.lpszClass  = AfxRegisterWndClass( 0 );
+
+    return TRUE;
 }
 
-// CMainFrame diagnostics
-
-#ifdef _DEBUG
-void CMainFrame::AssertValid() const
-{
-	CFrameWnd::AssertValid();
+void CMainFrame::OnSetFocus( CWnd* /*pOldWnd*/ ) {
+    // forward focus to the view window
+    if ( m_pwndView->GetSafeHwnd( ) ) {
+        m_pwndView->SetFocus( );
+    }
 }
 
-void CMainFrame::Dump(CDumpContext& dc) const
-{
-	CFrameWnd::Dump(dc);
+BOOL CMainFrame::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo ) {
+    // let the view have first crack at the command
+    if ( m_pwndView->OnCmdMsg( nID, nCode, pExtra, pHandlerInfo ) ) {
+        return TRUE;
+    }
+
+    // otherwise, do default handling
+    return CFrameWnd::OnCmdMsg( nID, nCode, pExtra, pHandlerInfo );
 }
-#endif //_DEBUG
-
-
-// CMainFrame message handlers
-
-void CMainFrame::OnSetFocus(CWnd* /*pOldWnd*/)
-{
-	// forward focus to the view window
-	m_wndView.SetFocus();
-}
-
-BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
-{
-	// let the view have first crack at the command
-	if (m_wndView.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-		return TRUE;
-
-	// otherwise, do default handling
-	return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
-}
-

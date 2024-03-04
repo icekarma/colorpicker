@@ -1,47 +1,40 @@
-
-// MainFrame.h : interface of the CMainFrame class
-//
-
 #pragma once
-#include "ChildView.h"
 
-class CMainFrame : public CFrameWnd
-{
-	
-public:
-	CMainFrame() noexcept;
-protected: 
-	DECLARE_DYNAMIC(CMainFrame)
+#include "NewChildView.h"
 
-// Attributes
+class CMainFrame: public CFrameWnd {
+
+    DECLARE_DYNAMIC( CMainFrame )
+    DECLARE_MESSAGE_MAP( )
+
 public:
 
-// Operations
+    CMainFrame( ) noexcept;
+
+    // Attributes
 public:
 
-// Overrides
+    // Operations
 public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
-// Implementation
+    // Overrides
 public:
-	virtual ~CMainFrame();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 
-protected:  // control bar embedded members
-	CStatusBar        m_wndStatusBar;
-	CChildView    m_wndView;
+    virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+    virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
 
-// Generated message map functions
+    // Implementation
+public:
+
+    virtual ~CMainFrame( );
+
 protected:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSetFocus(CWnd *pOldWnd);
-	DECLARE_MESSAGE_MAP()
+    CNewChildView* m_pwndView;
+
+    // Generated message map functions
+protected:
+
+    afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
+    afx_msg void OnSetFocus( CWnd* pOldWnd );
 
 };
-
-

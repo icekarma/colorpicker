@@ -3,9 +3,6 @@
 #include "ColorPicker.h"
 #include "MainFrame.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
 
 
 // CColorPickerApp

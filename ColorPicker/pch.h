@@ -6,12 +6,12 @@
 #define  VC_EXTRALEAN
 #define  WIN32_LEAN_AND_MEAN
 
+#include "targetver.h"
+
 #include <algorithm>
 
 using std::max;
 using std::min;
-
-#include "targetver.h"
 
 #include <afxwin.h>
 #include <afxext.h>
@@ -37,4 +37,11 @@ using std::min;
 #   else
 #       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #   endif
+#endif
+
+#if defined _DEBUG
+#   if defined new
+#       undef new
+#   endif
+#   define new DEBUG_NEW
 #endif
