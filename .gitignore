@@ -6,6 +6,12 @@
 ## Ice Karma's additions
 ConversionTest/TestSet?/
 lcms2-2.16/
+BlackPointCompensationTests.pdf
+CIC18_UnboundedCMM.pdf
+LittleCMS2.16 API.pdf
+LittleCMS2.16 Plugin API.pdf
+LittleCMS2.16 tutorial.pdf
+lcms2-2.16.zip
 
 # User-specific files
 *.rsuser
