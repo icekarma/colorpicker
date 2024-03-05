@@ -10,7 +10,10 @@ class CChildView:
 public:
 
     //CChildView( );
-    //virtual ~CChildView( );
+
+    virtual ~CChildView( ) {
+        /*empty*/
+    }
 
     // Attributes
 public:

@@ -15,6 +15,10 @@ public:
         /*empty*/
     }
 
+    virtual ~CAboutDlg( ) {
+        /*empty*/
+    }
+
     // Dialog Data
 public:
 

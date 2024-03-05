@@ -10,8 +10,15 @@ class CNewChildView:
     // Construction
 protected:
 
-    CNewChildView( );
-    //virtual ~CNewChildView( );
+    CNewChildView( ):
+        CFormView { IDD_NEWCHILDVIEW }
+    {
+        /*empty*/
+    }
+
+    virtual ~CNewChildView( ) {
+        /*empty*/
+    }
 
     // Dialog Data
 public:
@@ -23,12 +30,12 @@ public:
     // Overrides
 protected:
 
-    virtual void DoDataExchange( CDataExchange* pDX );
+    //virtual void DoDataExchange( CDataExchange* pDX );
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 
     // Generated message map functions
 protected:
 
-    afx_msg void OnPaint( );
+    //afx_msg void OnPaint( );
 
 };

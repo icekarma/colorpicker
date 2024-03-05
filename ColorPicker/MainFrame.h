@@ -13,7 +13,10 @@ class CMainFrame:
 public:
 
     //CMainFrame( ) noexcept;
-    //virtual ~CMainFrame( );
+
+    virtual ~CMainFrame( ) {
+        /*empty*/
+    }
 
     // Attributes
 public:

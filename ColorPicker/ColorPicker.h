@@ -13,6 +13,10 @@ public:
 
     CColorPickerApp( ) noexcept;
 
+    virtual ~CColorPickerApp( ) {
+        /*empty*/
+    }
+
     // Overrides
 public:
 
