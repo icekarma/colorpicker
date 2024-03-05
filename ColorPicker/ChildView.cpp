@@ -3,6 +3,14 @@
 #include "ColorPicker.h"
 #include "ChildView.h"
 
+// XY color grid: 256x256
+// Z color strip: 19x256
+
+// Selection  Z   X   Y
+// L*         L*  a*  b*
+// a*         a*  b*  L*
+// b*         b*  a*  L*
+
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
