@@ -6,32 +6,18 @@ class CAboutDlg:
 
     DECLARE_MESSAGE_MAP( )
 
-    // Construction
-public:
-
-    CAboutDlg( ) noexcept:
-        CDialogEx( IDD_ABOUTBOX )
-    {
-        /*empty*/
-    }
-
-    virtual ~CAboutDlg( ) {
-        /*empty*/
-    }
-
-    // Dialog Data
 public:
 
 #if defined AFX_DESIGN_TIME
     enum { IDD = IDD_ABOUTBOX };
 #endif
 
-    // Overrides
+    CAboutDlg( ) noexcept: CDialogEx { IDD_ABOUTBOX } { /*empty*/ }
+
+    virtual ~CAboutDlg( ) { /*empty*/ }
+
 protected:
 
     //virtual void DoDataExchange( CDataExchange* pDX );
-
-    // Implementation
-protected:
 
 };

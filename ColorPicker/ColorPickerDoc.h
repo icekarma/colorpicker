@@ -10,11 +10,9 @@ class CColorPickerDoc:
     // Construction
 protected:
 
-    //CColorPickerDoc( ) noexcept;
+    CColorPickerDoc( ) noexcept { /*empty*/ }
 
-    virtual ~CColorPickerDoc( ) {
-        /*empty*/
-    }
+    virtual ~CColorPickerDoc( ) { /*empty*/ }
 
     // Attributes
 public:

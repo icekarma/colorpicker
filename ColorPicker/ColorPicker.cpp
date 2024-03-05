@@ -44,7 +44,7 @@ BOOL CColorPickerApp::InitInstance( ) {
             IDR_MAINFRAME,
             RUNTIME_CLASS( CColorPickerDoc ),
             RUNTIME_CLASS( CMainFrame ),
-            RUNTIME_CLASS( CNewChildView )
+            RUNTIME_CLASS( CChildView )
         )
     };
     if ( !pDocTemplate ) {

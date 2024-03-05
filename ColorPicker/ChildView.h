@@ -1,38 +1,29 @@
 #pragma once
 
 class CChildView:
-    public CWnd
+    public CFormView
 {
 
+    DECLARE_DYNCREATE( CChildView )
     DECLARE_MESSAGE_MAP( )
 
-    // Construction
 public:
 
-    //CChildView( );
+#if defined AFX_DESIGN_TIME
+    enum { IDD = IDD_NEWCHILDVIEW };
+#endif
 
-    virtual ~CChildView( ) {
-        /*empty*/
-    }
-
-    // Attributes
-public:
-
-    // Operations
-public:
-
-    // Overrides
 protected:
 
+    CChildView( ): CFormView { IDD_NEWCHILDVIEW } { /*empty*/ }
+
+    virtual ~CChildView( ) { /*empty*/ }
+
+protected:
+
+    //virtual void DoDataExchange( CDataExchange* pDX );
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 
-    // Implementation
-public:
-
-    // Generated message map functions
-protected:
-
-    afx_msg void OnPaint( );
+    //afx_msg void OnPaint( );
 
 };
-

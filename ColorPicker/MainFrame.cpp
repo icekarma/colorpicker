@@ -10,20 +10,12 @@ BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
     //ON_WM_SETFOCUS( )
 END_MESSAGE_MAP( )
 
-//CMainFrame::CMainFrame( ) noexcept {
-//    /*empty*/
-//}
-
-//CMainFrame::~CMainFrame( ) {
-//    /*empty*/
-//}
-
 //int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
 //    if ( CFrameWnd::OnCreate( lpCreateStruct ) == -1 ) {
 //        return -1;
 //    }
 //
-//    m_pwndView = DYNAMIC_DOWNCAST( CNewChildView, RUNTIME_CLASS( CNewChildView )->CreateObject( ) );
+//    m_pwndView = DYNAMIC_DOWNCAST( CChildView, RUNTIME_CLASS( CChildView )->CreateObject( ) );
 //    if ( !m_pwndView ) {
 //        TRACE0( "Failed to create view window\n" );
 //        return -1;

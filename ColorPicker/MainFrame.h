@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NewChildView.h"
+#include "ChildView.h"
 
 class CMainFrame:
     public CFrameWnd
@@ -9,33 +9,17 @@ class CMainFrame:
     DECLARE_DYNCREATE( CMainFrame )
     DECLARE_MESSAGE_MAP( )
 
-    // Construction
 public:
 
-    //CMainFrame( ) noexcept;
+    //CMainFrame( ) noexcept { /*empty*/ }
 
-    virtual ~CMainFrame( ) {
-        /*empty*/
-    }
+    virtual ~CMainFrame( ) { /*empty*/ }
 
-    // Attributes
-public:
-
-    // Operations
-public:
-
-    // Overrides
-public:
-
-    virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
-    //virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
-
-    // Implementation
-public:
-
-    // Generated message map functions
 protected:
 
+    virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+
+    //virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
     //afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
     //afx_msg void OnSetFocus( CWnd* pOldWnd );
 

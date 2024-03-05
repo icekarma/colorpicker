@@ -10,14 +10,6 @@ IMPLEMENT_DYNCREATE( CColorPickerDoc, CDocument )
 BEGIN_MESSAGE_MAP( CColorPickerDoc, CDocument )
 END_MESSAGE_MAP( )
 
-//CColorPickerDoc::CColorPickerDoc( ) noexcept {
-//	/*empty*/
-//}
-//
-//CColorPickerDoc::~CColorPickerDoc( ) {
-//	/*empty*/
-//}
-//
 //BOOL CColorPickerDoc::OnNewDocument( ) {
 //	if ( !CDocument::OnNewDocument( ) ) {
 //		return FALSE;
@@ -28,7 +20,7 @@ END_MESSAGE_MAP( )
 //
 //	return TRUE;
 //}
-//
+
 //void CColorPickerDoc::Serialize( CArchive& ar ) {
 //	if ( ar.IsStoring( ) ) {
 //		// TODO: add storing code here

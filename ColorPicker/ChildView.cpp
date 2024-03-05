@@ -3,17 +3,15 @@
 #include "ColorPicker.h"
 #include "ChildView.h"
 
-//CChildView::CChildView( ) {
-//    /*empty*/
-//}
+IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
-//CChildView::~CChildView( ) {
-//    /*empty*/
-//}
-
-BEGIN_MESSAGE_MAP( CChildView, CWnd )
-    ON_WM_PAINT( )
+BEGIN_MESSAGE_MAP( CChildView, CFormView )
+    //ON_WM_PAINT( )
 END_MESSAGE_MAP( )
+
+//void CChildView::DoDataExchange( CDataExchange* pDX ) {
+//    CFormView::DoDataExchange( pDX );
+//}
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     if ( !CWnd::PreCreateWindow( cs ) ) {
@@ -27,9 +25,9 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     return TRUE;
 }
 
-void CChildView::OnPaint( ) {
-    CPaintDC dc( this );
-
-    // Do not call CWnd::OnPaint() for painting messages
-}
-
+//void CChildView::OnPaint( ) {
+//    // Do not call CWnd::OnPaint() for painting messages
+//    CPaintDC dc { this };
+//
+//    // TODO
+//}

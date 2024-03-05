@@ -8,23 +8,16 @@ class CColorPickerApp:
 
     DECLARE_MESSAGE_MAP( )
 
-    // Construction
 public:
 
     CColorPickerApp( ) noexcept;
 
-    virtual ~CColorPickerApp( ) {
-        /*empty*/
-    }
-
-    // Overrides
-public:
+    virtual ~CColorPickerApp( ) { /*empty*/ }
 
     virtual BOOL InitInstance( );
     //virtual int ExitInstance( );
 
-    // Implementation
-public:
+protected:
 
     afx_msg void OnAppAbout( );
 
