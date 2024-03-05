@@ -6,12 +6,12 @@
 #define IDP_SOCKETS_INIT_FAILED         104
 #define IDR_MAINFRAME                   128
 #define IDR_ColorPickerTYPE             130
-#define IDD_NEWCHILDVIEW                310
+#define IDD_CHILDVIEW                   310
 
 // Next default values for new objects
 // 
-#if defined APSTUDIO_INVOKED
-#if !defined APSTUDIO_READONLY_SYMBOLS
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
