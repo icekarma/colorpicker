@@ -199,6 +199,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="MainFrame.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="MainFrame.cpp" />
