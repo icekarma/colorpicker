@@ -8,6 +8,8 @@ BEGIN_MESSAGE_MAP( CColorPickerApp, CWinApp )
     ON_COMMAND( ID_APP_ABOUT, &CColorPickerApp::OnAppAbout )
 END_MESSAGE_MAP( )
 
+CColorPickerApp theApp;
+
 CColorPickerApp::CColorPickerApp( ) noexcept {
     m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 
@@ -17,8 +19,6 @@ CColorPickerApp::CColorPickerApp( ) noexcept {
     // TODO: add construction code here,
     // Place all significant initialization in InitInstance
 }
-
-CColorPickerApp theApp;
 
 BOOL CColorPickerApp::InitInstance( ) {
     INITCOMMONCONTROLSEX InitCtrls { sizeof InitCtrls, 0xFFFF };
