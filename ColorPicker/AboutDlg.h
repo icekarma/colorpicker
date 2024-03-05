@@ -6,6 +6,7 @@ class CAboutDlg:
 
     DECLARE_MESSAGE_MAP( )
 
+    // Construction
 public:
 
     CAboutDlg( ) noexcept:
@@ -15,10 +16,13 @@ public:
     }
 
     // Dialog Data
+public:
+
 #if defined AFX_DESIGN_TIME
     enum { IDD = IDD_ABOUTBOX };
 #endif
 
+    // Overrides
 protected:
 
     virtual void DoDataExchange( CDataExchange* pDX );

@@ -4,14 +4,14 @@
 
 class CColorPickerApp:
     public CWinApp
- {
+{
 
     DECLARE_MESSAGE_MAP( )
 
+    // Construction
 public:
 
     CColorPickerApp( ) noexcept;
-
 
     // Overrides
 public:

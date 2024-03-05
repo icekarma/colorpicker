@@ -9,6 +9,7 @@ class CMainFrame:
     DECLARE_DYNAMIC( CMainFrame )
     DECLARE_MESSAGE_MAP( )
 
+    // Construction
 public:
 
     CMainFrame( ) noexcept;

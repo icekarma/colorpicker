@@ -13,9 +13,10 @@ protected:
     CNewChildView( );
     virtual ~CNewChildView( );
 
-#if defined AFX_DESIGN_TIME
+    // Dialog Data
 public:
 
+#if defined AFX_DESIGN_TIME
     enum { IDD = IDD_NEWCHILDVIEW };
 #endif
 
