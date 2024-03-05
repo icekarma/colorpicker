@@ -6,7 +6,7 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    //ON_WM_PAINT( )
+    ON_WM_PAINT( )
 END_MESSAGE_MAP( )
 
 //void CChildView::DoDataExchange( CDataExchange* pDX ) {
@@ -25,9 +25,9 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     return TRUE;
 }
 
-//void CChildView::OnPaint( ) {
-//    // Do not call CWnd::OnPaint() for painting messages
-//    CPaintDC dc { this };
-//
-//    // TODO
-//}
+void CChildView::OnPaint( ) {
+    // Do not call CWnd::OnPaint() for painting messages
+    CPaintDC dc { this };
+
+    // TODO
+}
