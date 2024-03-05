@@ -30,10 +30,6 @@ public:
     // Implementation
 public:
 
-protected:
-
-    CNewChildView* m_pwndView;
-
     // Generated message map functions
 protected:
 

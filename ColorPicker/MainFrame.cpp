@@ -10,9 +10,7 @@ BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
     //ON_WM_SETFOCUS( )
 END_MESSAGE_MAP( )
 
-//CMainFrame::CMainFrame( ) noexcept:
-//    m_pwndView { }
-//{
+//CMainFrame::CMainFrame( ) noexcept {
 //    /*empty*/
 //}
 
