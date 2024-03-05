@@ -6,7 +6,7 @@ class CMainFrame:
     public CFrameWnd
 {
 
-    DECLARE_DYNAMIC( CMainFrame )
+    DECLARE_DYNCREATE( CMainFrame )
     DECLARE_MESSAGE_MAP( )
 
     // Construction
