@@ -9,8 +9,8 @@ class CChildView:
     // Construction
 public:
 
-    CChildView( );
-    virtual ~CChildView( );
+    //CChildView( );
+    //virtual ~CChildView( );
 
     // Attributes
 public:

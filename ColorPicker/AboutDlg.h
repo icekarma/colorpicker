@@ -25,7 +25,7 @@ public:
     // Overrides
 protected:
 
-    virtual void DoDataExchange( CDataExchange* pDX );
+    //virtual void DoDataExchange( CDataExchange* pDX );
 
     // Implementation
 protected:

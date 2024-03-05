@@ -12,8 +12,8 @@ class CMainFrame:
     // Construction
 public:
 
-    CMainFrame( ) noexcept;
-    virtual ~CMainFrame( );
+    //CMainFrame( ) noexcept;
+    //virtual ~CMainFrame( );
 
     // Attributes
 public:
@@ -25,7 +25,7 @@ public:
 public:
 
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
-    virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
+    //virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
 
     // Implementation
 public:
@@ -37,7 +37,7 @@ protected:
     // Generated message map functions
 protected:
 
-    afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
-    afx_msg void OnSetFocus( CWnd* pOldWnd );
+    //afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
+    //afx_msg void OnSetFocus( CWnd* pOldWnd );
 
 };

@@ -15,9 +15,9 @@ CNewChildView::CNewChildView( ):
     /*empty*/
 }
 
-CNewChildView::~CNewChildView( ) {
-    /*empty*/
-}
+//CNewChildView::~CNewChildView( ) {
+//    /*empty*/
+//}
 
 void CNewChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );

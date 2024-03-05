@@ -11,7 +11,7 @@ class CNewChildView:
 protected:
 
     CNewChildView( );
-    virtual ~CNewChildView( );
+    //virtual ~CNewChildView( );
 
     // Dialog Data
 public:

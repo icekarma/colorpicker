@@ -3,13 +3,13 @@
 #include "ColorPicker.h"
 #include "ChildView.h"
 
-CChildView::CChildView( ) {
-    /*empty*/
-}
+//CChildView::CChildView( ) {
+//    /*empty*/
+//}
 
-CChildView::~CChildView( ) {
-    /*empty*/
-}
+//CChildView::~CChildView( ) {
+//    /*empty*/
+//}
 
 BEGIN_MESSAGE_MAP( CChildView, CWnd )
     ON_WM_PAINT( )
