@@ -3,6 +3,7 @@
 #include "ColorPicker.h"
 #include "AboutDlg.h"
 #include "MainFrame.h"
+#include "ColorPickerDoc.h"
 
 BEGIN_MESSAGE_MAP( CColorPickerApp, CWinApp )
     ON_COMMAND( ID_APP_ABOUT, &CColorPickerApp::OnAppAbout )
@@ -36,20 +37,29 @@ BOOL CColorPickerApp::InitInstance( ) {
     AfxInitRichEdit2();
 
     SetRegistryKey( L"Zive Technology Research\\ColorPicker" );
+    LoadStdProfileSettings( 4 );
 
-    //====vvvv====0001====TODO==TODO==TODO==TODO==TODO====
-
-    CFrameWnd* pFrame = new CMainFrame;
-    if ( !pFrame ) {
+    CSingleDocTemplate* pDocTemplate {
+        new CSingleDocTemplate(
+            IDR_MAINFRAME,
+            RUNTIME_CLASS( CColorPickerDoc ),
+            RUNTIME_CLASS( CMainFrame ),
+            RUNTIME_CLASS( CNewChildView )
+        )
+    };
+    if ( !pDocTemplate ) {
         return FALSE;
     }
-    m_pMainWnd = pFrame;
-    pFrame->LoadFrame( IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr, nullptr );
+    AddDocTemplate( pDocTemplate );
 
-    //====^^^^====0001====TODO==TODO==TODO==TODO==TODO====
+    CCommandLineInfo cmdInfo;
+    ParseCommandLine( cmdInfo );
+    if ( !ProcessShellCommand( cmdInfo ) ) {
+        return FALSE;
+    }
 
-    pFrame->ShowWindow( SW_SHOW );
-    pFrame->UpdateWindow( );
+    m_pMainWnd->ShowWindow( SW_SHOW );
+    m_pMainWnd->UpdateWindow( );
     return TRUE;
 }
 
