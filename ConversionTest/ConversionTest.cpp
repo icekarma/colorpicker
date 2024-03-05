@@ -18,10 +18,10 @@ namespace {
         return ( value < static_cast<T>( 0 ) ) ? -value : value;
     }
 
-    double constexpr LabMinimumA { -128.0 /*-100.0*/ };
-    double constexpr LabMaximumA {  127.0 /* 100.0*/ };
-    double constexpr LabMinimumB { -128.0 /*-100.0*/ };
-    double constexpr LabMaximumB {  127.0 /* 100.0*/ };
+    double constexpr LabMinimumA { -128.0 };
+    double constexpr LabMaximumA {  128.0 };
+    double constexpr LabMinimumB { -128.0 };
+    double constexpr LabMaximumB {  128.0 };
 
     int    constexpr ImageWidth  { _ce_abs( static_cast<int>( LabMinimumA ) ) + _ce_abs( static_cast<int>( LabMaximumA ) ) };
     int    constexpr ImageHeight { _ce_abs( static_cast<int>( LabMinimumB ) ) + _ce_abs( static_cast<int>( LabMaximumB ) ) };
