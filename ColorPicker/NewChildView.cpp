@@ -37,8 +37,7 @@ BOOL CNewChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 
 void CNewChildView::OnPaint( ) {
     // Do not call CWnd::OnPaint() for painting messages
+    CPaintDC dc { this };
 
     // TODO
-
-    //CPaintDC dc { this };
 }
