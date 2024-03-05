@@ -23,7 +23,7 @@ public:
     // Overrides
 public:
 
-    //virtual BOOL OnNewDocument( );
+    virtual BOOL OnNewDocument( );
     //virtual void Serialize( CArchive& ar );
 
     // Implementation
