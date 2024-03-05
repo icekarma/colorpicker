@@ -1,10 +1,16 @@
 #pragma once
 
-class CChildView: public CWnd {
+class CChildView:
+    public CWnd
+{
+
+    DECLARE_MESSAGE_MAP( )
 
     // Construction
 public:
+
     CChildView( );
+    virtual ~CChildView( );
 
     // Attributes
 public:
@@ -14,15 +20,16 @@ public:
 
     // Overrides
 protected:
+
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 
     // Implementation
 public:
-    virtual ~CChildView( );
 
     // Generated message map functions
 protected:
+
     afx_msg void OnPaint( );
-    DECLARE_MESSAGE_MAP( )
+
 };
 

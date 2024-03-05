@@ -1,6 +1,8 @@
 #pragma once
 
-class CAboutDlg: public CDialogEx {
+class CAboutDlg:
+    public CDialogEx
+{
 
     DECLARE_MESSAGE_MAP( )
 
@@ -13,7 +15,7 @@ public:
     }
 
     // Dialog Data
-#ifdef AFX_DESIGN_TIME
+#if defined AFX_DESIGN_TIME
     enum { IDD = IDD_ABOUTBOX };
 #endif
 

@@ -2,7 +2,9 @@
 
 #include "NewChildView.h"
 
-class CMainFrame: public CFrameWnd {
+class CMainFrame:
+    public CFrameWnd
+{
 
     DECLARE_DYNAMIC( CMainFrame )
     DECLARE_MESSAGE_MAP( )
@@ -10,6 +12,7 @@ class CMainFrame: public CFrameWnd {
 public:
 
     CMainFrame( ) noexcept;
+    virtual ~CMainFrame( );
 
     // Attributes
 public:
@@ -26,9 +29,8 @@ public:
     // Implementation
 public:
 
-    virtual ~CMainFrame( );
-
 protected:
+
     CNewChildView* m_pwndView;
 
     // Generated message map functions
