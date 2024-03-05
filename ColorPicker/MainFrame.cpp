@@ -44,8 +44,9 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
         return FALSE;
     }
 
-    cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
-    cs.lpszClass  = AfxRegisterWndClass( 0 );
+    cs.style     &= ~( WS_BORDER | WS_DLGFRAME | WS_THICKFRAME );
+    cs.dwExStyle &= ~( WS_EX_CLIENTEDGE );
+    //cs.lpszClass  = AfxRegisterWndClass( 0 );
 
     return TRUE;
 }
