@@ -202,6 +202,7 @@
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="NewChildView.h" />
     <ClInclude Include="pch.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
+    <ClCompile Include="ColorPickerDoc.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="NewChildView.cpp" />
     <ClCompile Include="pch.cpp">
