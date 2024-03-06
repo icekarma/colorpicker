@@ -13,29 +13,23 @@ namespace {
 
     std::string OutputFilePath { "TestSet5" };
 
-    template<typename T>
-    T constexpr _ce_abs( T value ) {
-        return ( value < static_cast<T>( 0 ) ) ? -value : value;
-    }
 
     double constexpr LabMinimumA { -128.0 };
     double constexpr LabMaximumA {  128.0 };
     double constexpr LabMinimumB { -128.0 };
     double constexpr LabMaximumB {  128.0 };
 
-    int    constexpr ImageWidth  { _ce_abs( static_cast<int>( LabMinimumA ) ) + _ce_abs( static_cast<int>( LabMaximumA ) ) };
-    int    constexpr ImageHeight { _ce_abs( static_cast<int>( LabMinimumB ) ) + _ce_abs( static_cast<int>( LabMaximumB ) ) };
+    int    constexpr ImageWidth  { static_cast<int>( LabMaximumA - LabMinimumA ) + 1 };
+    int    constexpr ImageHeight { static_cast<int>( LabMaximumB - LabMinimumB ) + 1 };
 
     double* GenerateLabImage( double* image, double const L ) {
-        int constexpr minA { static_cast<int>( LabMinimumA ) };
-        int constexpr minB { static_cast<int>( LabMinimumB ) };
-        double*       ptr  { image };
+        double* ptr { image };
 
         for ( int y { }; y < ImageHeight; ++y ) {
             for ( int x { }; x < ImageWidth; ++x ) {
                 *ptr++ = L;
-                *ptr++ = x + minA;
-                *ptr++ = y + minB;
+                *ptr++ = LabMinimumA + static_cast<double>( x );
+                *ptr++ = LabMinimumB + static_cast<double>( y );
             }
         }
 
@@ -83,7 +77,7 @@ int main( ) {
     uint8_t* outputBuffer { new uint8_t[3 * ImageWidth * ImageHeight] };
 
     for ( int L = 0; L <= 100; L += 5 ) {
-        GenerateLabImage( inputBuffer, L );
+        GenerateLabImage( inputBuffer, static_cast<double>( L ) );
         cmsDoTransform( hTransform, inputBuffer, outputBuffer, ImageWidth * ImageHeight );
 
         std::string fileName { ( OutputFilePath.empty( ) ? std::string { } : OutputFilePath + '\\' ) + "test-" + PadLeft( std::to_string( L ), '0', 3 ) + ".ppm" };
