@@ -11,25 +11,27 @@
 
 namespace {
 
-    std::string OutputFilePath { "TestSet5" };
+    using FloatT = float;
+    uint32_t const InputFormat = TYPE_Lab_FLT;
 
+    std::string const OutputFilePath { "TestSet5" };
 
-    double constexpr LabMinimumA { -128.0 };
-    double constexpr LabMaximumA {  128.0 };
-    double constexpr LabMinimumB { -128.0 };
-    double constexpr LabMaximumB {  128.0 };
+    FloatT constexpr LabMinimumA { -128.0 };
+    FloatT constexpr LabMaximumA {  127.0 };
+    FloatT constexpr LabMinimumB { -128.0 };
+    FloatT constexpr LabMaximumB {  127.0 };
 
     int    constexpr ImageWidth  { static_cast<int>( LabMaximumA - LabMinimumA ) + 1 };
     int    constexpr ImageHeight { static_cast<int>( LabMaximumB - LabMinimumB ) + 1 };
 
-    double* GenerateLabImage( double* image, double const L ) {
-        double* ptr { image };
+    FloatT* GenerateLabImage( FloatT* image, FloatT const L ) {
+        FloatT* ptr { image };
 
         for ( int y { }; y < ImageHeight; ++y ) {
             for ( int x { }; x < ImageWidth; ++x ) {
                 *ptr++ = L;
-                *ptr++ = LabMinimumA + static_cast<double>( x );
-                *ptr++ = LabMinimumB + static_cast<double>( y );
+                *ptr++ = LabMinimumA + static_cast<FloatT>( x );
+                *ptr++ = LabMinimumB + static_cast<FloatT>( y );
             }
         }
 
@@ -66,18 +68,18 @@ int main( ) {
         cmsHPROFILE hInProfile  { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
         cmsHPROFILE hOutProfile { cmsCreate_sRGBProfile( )              };
 
-        hTransform = cmsCreateTransform( hInProfile, TYPE_Lab_DBL, hOutProfile, TYPE_RGB_8, INTENT_PERCEPTUAL, 0 );
+        hTransform = cmsCreateTransform( hInProfile, InputFormat, hOutProfile, TYPE_RGB_8, INTENT_PERCEPTUAL, 0 );
 
         cmsCloseProfile( hInProfile );
         cmsCloseProfile( hOutProfile );
     }
 
 
-    double*  inputBuffer  { new  double[3 * ImageWidth * ImageHeight] };
+    FloatT*  inputBuffer  { new  FloatT[3 * ImageWidth * ImageHeight] };
     uint8_t* outputBuffer { new uint8_t[3 * ImageWidth * ImageHeight] };
 
     for ( int L = 0; L <= 100; L += 5 ) {
-        GenerateLabImage( inputBuffer, static_cast<double>( L ) );
+        GenerateLabImage( inputBuffer, static_cast<FloatT>( L ) );
         cmsDoTransform( hTransform, inputBuffer, outputBuffer, ImageWidth * ImageHeight );
 
         std::string fileName { ( OutputFilePath.empty( ) ? std::string { } : OutputFilePath + '\\' ) + "test-" + PadLeft( std::to_string( L ), '0', 3 ) + ".ppm" };
