@@ -205,6 +205,7 @@
     <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
