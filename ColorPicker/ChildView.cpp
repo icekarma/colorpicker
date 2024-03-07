@@ -7,9 +7,14 @@
 // Z color strip: 19x256
 
 // Selection  Z   X   Y
+// -- ColorSpace::Lab:
 // L*         L*  a*  b*
 // a*         a*  b*  L*
 // b*         b*  a*  L*
+// -- ColorSpace::sRGB:
+// R          R   B   G
+// G          G   B   R
+// B          B   R   G
 
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
