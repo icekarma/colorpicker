@@ -22,9 +22,9 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_WM_PAINT( )
 END_MESSAGE_MAP( )
 
-//void CChildView::DoDataExchange( CDataExchange* pDX ) {
-//    CFormView::DoDataExchange( pDX );
-//}
+void CChildView::DoDataExchange( CDataExchange* pDX ) {
+    CFormView::DoDataExchange( pDX );
+}
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     if ( !CWnd::PreCreateWindow( cs ) ) {
