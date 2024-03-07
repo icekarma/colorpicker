@@ -10,12 +10,12 @@ class CChildView:
 public:
 
 #if defined AFX_DESIGN_TIME
-    enum { IDD = IDD_CHILDVIEW };
+    enum { IDD = IDD_CHILDVIEW_2 };
 #endif
 
 protected:
 
-    CChildView( ): CFormView { IDD_CHILDVIEW } { /*empty*/ }
+    CChildView( ): CFormView { IDD_CHILDVIEW_2 } { /*empty*/ }
 
     virtual ~CChildView( ) { /*empty*/ }
 
