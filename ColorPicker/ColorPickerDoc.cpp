@@ -3,8 +3,6 @@
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
 
-//#include <propkey.h>
-
 IMPLEMENT_DYNCREATE( CColorPickerDoc, CDocument )
 
 BEGIN_MESSAGE_MAP( CColorPickerDoc, CDocument )
