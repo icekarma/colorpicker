@@ -12,7 +12,7 @@
 namespace {
 
     using FloatT = float;
-    uint32_t const InputFormat = TYPE_Lab_FLT;
+    uint32_t const LabPixelFormat = TYPE_Lab_FLT;
 
     std::string const OutputFilePath { "TestSet5" };
 
@@ -63,24 +63,26 @@ namespace {
 }
 
 int main( ) {
-    cmsHTRANSFORM hTransform;
+    cmsHTRANSFORM hLabToSrgbTransform;
+    cmsHTRANSFORM hSrgbToLabTransform;
+
     {
-        cmsHPROFILE hInProfile  { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
-        cmsHPROFILE hOutProfile { cmsCreate_sRGBProfile( )              };
+        cmsHPROFILE hLabProfile { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
+        cmsHPROFILE hRgbProfile { cmsCreate_sRGBProfile( )              };
 
-        hTransform = cmsCreateTransform( hInProfile, InputFormat, hOutProfile, TYPE_RGB_8, INTENT_PERCEPTUAL, 0 );
+        hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat, hRgbProfile, TYPE_RGB_8,     INTENT_PERCEPTUAL, 0 );
+        hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, TYPE_RGB_8,     hLabProfile, LabPixelFormat, INTENT_PERCEPTUAL, 0 );
 
-        cmsCloseProfile( hInProfile );
-        cmsCloseProfile( hOutProfile );
+        cmsCloseProfile( hLabProfile );
+        cmsCloseProfile( hRgbProfile );
     }
-
 
     FloatT*  inputBuffer  { new  FloatT[3 * ImageWidth * ImageHeight] };
     uint8_t* outputBuffer { new uint8_t[3 * ImageWidth * ImageHeight] };
 
     for ( int L = 0; L <= 100; L += 5 ) {
         GenerateLabImage( inputBuffer, static_cast<FloatT>( L ) );
-        cmsDoTransform( hTransform, inputBuffer, outputBuffer, ImageWidth * ImageHeight );
+        cmsDoTransform( hLabToSrgbTransform, inputBuffer, outputBuffer, ImageWidth * ImageHeight );
 
         std::string fileName { ( OutputFilePath.empty( ) ? std::string { } : OutputFilePath + '\\' ) + "test-" + PadLeft( std::to_string( L ), '0', 3 ) + ".ppm" };
         if ( !WriteImageToFile( fileName, outputBuffer, sizeof uint8_t * 3 * ImageWidth * ImageHeight, ImageWidth, ImageHeight ) ) {
@@ -90,6 +92,8 @@ int main( ) {
 
     delete[] outputBuffer;
     delete[] inputBuffer;
-    cmsDeleteTransform( hTransform );
+
+    cmsDeleteTransform( hLabToSrgbTransform );
+    cmsDeleteTransform( hSrgbToLabTransform );
     return 0;
 }
