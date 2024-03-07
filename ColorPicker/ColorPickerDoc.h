@@ -14,6 +14,5 @@ protected:
     virtual ~CColorPickerDoc( ) { /*empty*/ }
 
     virtual BOOL OnNewDocument( );
-    //virtual void Serialize( CArchive& ar );
 
 };
