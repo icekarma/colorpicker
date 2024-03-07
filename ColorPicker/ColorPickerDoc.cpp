@@ -13,8 +13,10 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
 		return FALSE;
 	}
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+	// Reinitialization (SDI applications will reuse this document)
+
+	LabColor  = { };
+	SrgbColor = { };
 
 	return TRUE;
 }
