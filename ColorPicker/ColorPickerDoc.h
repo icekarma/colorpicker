@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Color.h"
+
 class CColorPickerDoc:
     public CDocument
 {
@@ -14,5 +16,10 @@ protected:
     virtual ~CColorPickerDoc( ) { /*empty*/ }
 
     virtual BOOL OnNewDocument( );
+
+public:
+
+    LabColor<double>   LabColor  { };
+    SrgbColor<uint8_t> SrgbColor { };
 
 };
