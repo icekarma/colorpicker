@@ -20,6 +20,7 @@ IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_WM_PAINT( )
+    ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
 END_MESSAGE_MAP( )
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
@@ -43,4 +44,8 @@ void CChildView::OnPaint( ) {
     CPaintDC dc { this };
 
     // TODO
+}
+
+void CChildView::OnCloseButtonClicked( ) {
+    ::PostQuitMessage( 0 );
 }

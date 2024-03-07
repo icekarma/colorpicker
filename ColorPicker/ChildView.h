@@ -25,5 +25,6 @@ protected:
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 
     afx_msg void OnPaint( );
+    afx_msg void OnCloseButtonClicked( );
 
 };
