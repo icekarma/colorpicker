@@ -11,10 +11,10 @@
 
 namespace {
 
+    std::string const OutputFilePath { "TestSet5" };
+
     using FloatT = float;
     uint32_t const LabPixelFormat = TYPE_Lab_FLT;
-
-    std::string const OutputFilePath { "TestSet5" };
 
     FloatT constexpr LabMinimumA { -128.0 };
     FloatT constexpr LabMaximumA {  127.0 };
