@@ -1,7 +1,5 @@
 #pragma once
 
-#include "ChildView.h"
-
 class CMainFrame:
     public CFrameWnd
 {
@@ -11,8 +9,6 @@ class CMainFrame:
 
 public:
 
-    //CMainFrame( ) noexcept { /*empty*/ }
-
     virtual ~CMainFrame( ) { /*empty*/ }
 
 protected:
@@ -20,7 +16,10 @@ protected:
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 
     //virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
-    //afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
-    //afx_msg void OnSetFocus( CWnd* pOldWnd );
+
+#if defined DEBUG_WINDOW_SIZE
+    afx_msg void OnSizing( UINT fwSide, LPRECT pRect );
+    afx_msg void OnSize( UINT nType, int cx, int cy );
+#endif // defined DEBUG_WINDOW_SIZE
 
 };
