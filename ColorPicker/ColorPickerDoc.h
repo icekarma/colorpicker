@@ -19,7 +19,10 @@ protected:
 
 public:
 
-    LabColor<double>   LabColor  { };
-    SrgbColor<uint8_t> SrgbColor { };
+    // If you change LabColor, you must change SrgbColor too!
+    LabColorValue  LabColor  { };
+
+    // If you change SrgbColor, you must change LabColor too!
+    SrgbColorValue SrgbColor { };
 
 };
