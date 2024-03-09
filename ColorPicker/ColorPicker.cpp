@@ -1,9 +1,10 @@
 #include "pch.h"
 
 #include "ColorPicker.h"
-#include "AboutDlg.h"
-#include "MainFrame.h"
 #include "ColorPickerDoc.h"
+#include "MainFrame.h"
+#include "ChildView.h"
+#include "AboutDlg.h"
 
 BEGIN_MESSAGE_MAP( CColorPickerApp, CWinApp )
     ON_COMMAND( ID_APP_ABOUT, &CColorPickerApp::OnAppAbout )
