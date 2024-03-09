@@ -21,6 +21,9 @@ protected:
 
 protected:
 
+    void _AdjustPosition( CWnd* ctrl, SIZE const& adjust );
+    void _AdjustSize( CWnd* ctrl, SIZE const& adjust );
+
     virtual void DoDataExchange( CDataExchange* pDX );
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 

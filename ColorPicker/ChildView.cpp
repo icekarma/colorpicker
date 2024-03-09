@@ -23,6 +23,25 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
 END_MESSAGE_MAP( )
 
+void CChildView::_AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    ctrl->GetWindowPlacement( &wp );
+    CRect rect { wp.rcNormalPosition };
+    rect.OffsetRect( adjust );
+    wp.rcNormalPosition = rect;
+    ctrl->SetWindowPlacement( &wp );
+}
+
+void CChildView::_AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    ctrl->GetWindowPlacement( &wp );
+    wp.rcNormalPosition.right  += adjust.cx;
+    wp.rcNormalPosition.bottom += adjust.cy;
+    ctrl->SetWindowPlacement( &wp );
+}
+
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 }
