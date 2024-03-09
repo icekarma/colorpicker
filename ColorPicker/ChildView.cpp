@@ -44,6 +44,30 @@ void CChildView::_AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
+
+    DDX_Control( pDX, IDC_GROUPBOX_LAB,   m_groupBoxLab );
+    DDX_Control( pDX, IDC_LAB_L_VALUE,    m_editLabLValue );
+    DDX_Control( pDX, IDC_LAB_A_VALUE,    m_editLabAValue );
+    DDX_Control( pDX, IDC_LAB_B_VALUE,    m_editLabBValue );
+    DDX_Control( pDX, IDC_LAB_L_CHANNEL,  m_buttonLabLChannel );
+    DDX_Control( pDX, IDC_LAB_A_CHANNEL,  m_buttonLabAChannel );
+    DDX_Control( pDX, IDC_LAB_B_CHANNEL,  m_buttonLabBChannel );
+
+    DDX_Control( pDX, IDC_GROUPBOX_SRGB,  m_groupBoxSrgb );
+    DDX_Control( pDX, IDC_SRGB_R_VALUE,   m_editSrgbRValue );
+    DDX_Control( pDX, IDC_SRGB_G_VALUE,   m_editSrgbGValue );
+    DDX_Control( pDX, IDC_SRGB_B_VALUE,   m_editSrgbBValue );
+    DDX_Control( pDX, IDC_SRGB_R_CHANNEL, m_buttonSrgbRChannel );
+    DDX_Control( pDX, IDC_SRGB_G_CHANNEL, m_buttonSrgbGChannel );
+    DDX_Control( pDX, IDC_SRGB_B_CHANNEL, m_buttonSrgbBChannel );
+
+    DDX_Text( pDX, IDC_LAB_L_VALUE,  m_nLabLValue );
+    DDX_Text( pDX, IDC_LAB_A_VALUE,  m_nLabAValue );
+    DDX_Text( pDX, IDC_LAB_B_VALUE,  m_nLabBValue );
+
+    DDX_Text( pDX, IDC_SRGB_R_VALUE, m_nSrgbRValue );
+    DDX_Text( pDX, IDC_SRGB_G_VALUE, m_nSrgbGValue );
+    DDX_Text( pDX, IDC_SRGB_B_VALUE, m_nSrgbBValue );
 }
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {

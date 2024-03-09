@@ -30,4 +30,38 @@ protected:
     afx_msg void OnPaint( );
     afx_msg void OnCloseButtonClicked( );
 
+    CStatic  m_groupBoxLab;
+    CButton  m_buttonLabLChannel;
+    CButton  m_buttonLabAChannel;
+    CButton  m_buttonLabBChannel;
+    CEdit    m_editLabLValue;
+    CEdit    m_editLabAValue;
+    CEdit    m_editLabBValue;
+
+    CStatic  m_groupBoxSrgb;
+    CButton  m_buttonSrgbRChannel;
+    CButton  m_buttonSrgbGChannel;
+    CButton  m_buttonSrgbBChannel;
+    CEdit    m_editSrgbRValue;
+    CEdit    m_editSrgbGValue;
+    CEdit    m_editSrgbBValue;
+
+    int      m_nLabLValue  { };
+    int      m_nLabAValue  { };
+    int      m_nLabBValue  { };
+
+    int      m_nSrgbRValue { };
+    int      m_nSrgbGValue { };
+    int      m_nSrgbBValue { };
+
+    CButton* m_buttonLabChannels[3]  { &m_buttonLabLChannel,  &m_buttonLabAChannel,  &m_buttonLabBChannel  };
+    CEdit*   m_editLabValues[3]      { &m_editLabLValue,      &m_editLabAValue,      &m_editLabBValue      };
+
+    int*     m_nLabValues[3]         { &m_nLabLValue,         &m_nLabAValue,         &m_nLabBValue         };
+
+    CButton* m_buttonSrgbChannels[3] { &m_buttonSrgbRChannel, &m_buttonSrgbGChannel, &m_buttonSrgbBChannel };
+    CEdit*   m_editSrgbValues[3]     { &m_editSrgbRValue,     &m_editSrgbGValue,     &m_editSrgbBValue     };
+
+    int*     m_nSrgbValues[3]        { &m_nSrgbRValue,        &m_nSrgbGValue,        &m_nSrgbBValue        };
+
 };
