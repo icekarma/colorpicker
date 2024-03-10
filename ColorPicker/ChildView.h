@@ -26,6 +26,7 @@ protected:
 
     virtual void DoDataExchange( CDataExchange* pDX );
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+    virtual void OnInitialUpdate( );
 
     afx_msg void OnPaint( );
     afx_msg void OnCloseButtonClicked( );
