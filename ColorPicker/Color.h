@@ -1,5 +1,67 @@
 #pragma once
 
+#include <lcms2.h>
+
+//================================================
+// Preprocessor macros
+//================================================
+
+#undef  LAB_COLOR_USE_FLOAT
+#define LAB_COLOR_USE_DOUBLE
+
+#if ( !defined LAB_COLOR_USE_FLOAT && !defined LAB_COLOR_USE_DOUBLE ) || ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_DOUBLE )
+#   error Must define only ONE of LAB_COLOR_USE_FLOAT or LAB_COLOR_USE_DOUBLE.
+#endif
+
+//================================================
+// Forward declarations
+//================================================
+
+template<typename T>
+class LabColor;
+
+template<typename T>
+class SrgbColor;
+
+//================================================
+// Type aliases
+//================================================
+
+#if defined LAB_COLOR_USE_FLOAT
+using FloatT = float;
+#elif defined LAB_COLOR_USE_DOUBLE
+using FloatT = double;
+#endif
+
+using LabColorValue  = LabColor<FloatT>;
+using SrgbColorValue = SrgbColor<uint8_t>;
+
+//================================================
+// Constants
+//================================================
+
+cmsUInt32Number constexpr LabPixelFormat {
+#if defined LAB_COLOR_USE_FLOAT
+    TYPE_Lab_FLT
+#elif defined LAB_COLOR_USE_DOUBLE
+    TYPE_Lab_DBL
+#endif
+};
+
+FloatT constexpr LabMinimumL {    0.0 }; FloatT constexpr LabMaximumL {  100.0 };
+FloatT constexpr LabMinimumA { -128.0 }; FloatT constexpr LabMaximumA {  127.0 };
+FloatT constexpr LabMinimumB { -128.0 }; FloatT constexpr LabMaximumB {  127.0 };
+
+//================================================
+// Late #include
+//================================================
+
+#include "TransformsManager.h"
+
+//================================================
+// Types
+//================================================
+
 enum class ColorSpace {
     unknown = 0,
     Lab     = 1,
