@@ -20,8 +20,8 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.style     &= ~WindowStylesToRemove;
     cs.dwExStyle &= ~ExtendedWindowStylesToRemove;
     cs.lpszClass  = AfxRegisterWndClass( 0 );
-    cs.cx         = 535;
-    cs.cy         = 384;
+    cs.cx         = 432;
+    cs.cy         = 371;
 
     return TRUE;
 }

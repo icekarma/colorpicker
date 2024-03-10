@@ -47,6 +47,11 @@ protected:
     CEdit    m_editSrgbGValue;
     CEdit    m_editSrgbBValue;
 
+    CStatic  m_XyGrid;
+    CStatic  m_ZStrip;
+
+    CButton  m_buttonClose;
+
     int      m_nLabLValue  { };
     int      m_nLabAValue  { };
     int      m_nLabBValue  { };
