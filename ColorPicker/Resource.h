@@ -8,18 +8,20 @@
 #define IDR_ColorPickerTYPE             130
 #define IDD_CHILDVIEW                   310
 #define IDD_CHILDVIEW_2                 311
-#define IDC_LAB_L_CHANNEL               1000
-#define IDC_LAB_A_CHANNEL               1001
-#define IDC_LAB_B_CHANNEL               1002
-#define IDC_SRGB_R_CHANNEL              1010
-#define IDC_SRGB_G_CHANNEL              1011
-#define IDC_SRGB_B_CHANNEL              1012
-#define IDC_LAB_L_VALUE                 2000
-#define IDC_LAB_A_VALUE                 2001
-#define IDC_LAB_B_VALUE                 2002
-#define IDC_SRGB_R_VALUE                2010
-#define IDC_SRGB_G_VALUE                2011
-#define IDC_SRGB_B_VALUE                2012
+#define IDC_GROUPBOX_LAB                1000
+#define IDC_GROUPBOX_SRGB               1001
+#define IDC_LAB_L_CHANNEL               2000
+#define IDC_LAB_A_CHANNEL               2001
+#define IDC_LAB_B_CHANNEL               2002
+#define IDC_SRGB_R_CHANNEL              2010
+#define IDC_SRGB_G_CHANNEL              2011
+#define IDC_SRGB_B_CHANNEL              2012
+#define IDC_LAB_L_VALUE                 3000
+#define IDC_LAB_A_VALUE                 3001
+#define IDC_LAB_B_VALUE                 3002
+#define IDC_SRGB_R_VALUE                3010
+#define IDC_SRGB_G_VALUE                3011
+#define IDC_SRGB_B_VALUE                3012
 
 // Next default values for new objects
 // 
@@ -27,7 +29,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        312
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1113
+#define _APS_NEXT_CONTROL_VALUE         4000
 #define _APS_NEXT_SYMED_VALUE           312
 #endif
 #endif
