@@ -8,7 +8,10 @@
 
 #include "targetver.h"
 
+#include <cstdint>
+
 #include <algorithm>
+#include <type_traits>
 
 using std::max;
 using std::min;
@@ -39,9 +42,46 @@ using std::min;
 #   endif
 #endif
 
-#if defined _DEBUG
+#if defined _DEBUG && defined DEBUG_NEW
 #   if defined new
 #       undef new
 #   endif
 #   define new DEBUG_NEW
 #endif
+
+#include "Debug.h"
+
+//================================================
+// Constants
+//================================================
+
+LONG  const         WindowStylesToRemove = WS_BORDER        | WS_DLGFRAME         | WS_THICKFRAME       | WS_HSCROLL           | WS_VSCROLL       | WS_MINIMIZEBOX   | WS_MAXIMIZEBOX;
+DWORD const ExtendedWindowStylesToRemove = WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME | WS_EX_LEFTSCROLLBAR | WS_EX_RIGHTSCROLLBAR | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE;
+
+//================================================
+// Concepts
+//================================================
+
+template<typename T>
+concept Enumeration = std::is_enum_v<T>;
+
+template<typename T>
+concept FloatingPoint = std::is_floating_point_v<T>;
+
+//================================================
+// Overloaded operators
+//================================================
+
+template<Enumeration T>
+std::underlying_type_t<T> constexpr operator+( T const rhs ) {
+    return static_cast<std::underlying_type_t<T>>( rhs );
+}
+
+//================================================
+// Functions
+//================================================
+
+template<FloatingPoint T>
+int iround( T const value ) {
+    return static_cast<int>( round( value ) );
+}
