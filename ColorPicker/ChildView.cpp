@@ -29,9 +29,10 @@ void CChildView::_AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
     ctrl->GetWindowPlacement( &wp );
-    CRect rect { wp.rcNormalPosition };
-    rect.OffsetRect( adjust );
-    wp.rcNormalPosition = rect;
+    wp.rcNormalPosition.left   += adjust.cx;
+    wp.rcNormalPosition.top    += adjust.cy;
+    wp.rcNormalPosition.right  += adjust.cx;
+    wp.rcNormalPosition.bottom += adjust.cy;
     ctrl->SetWindowPlacement( &wp );
 }
 
