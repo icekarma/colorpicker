@@ -21,15 +21,39 @@ protected:
 
 protected:
 
+    //============================================
+    // Methods
+    //============================================
+
+    //
+    // Class methods
+    //
+
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust );
     void _AdjustSize( CWnd* ctrl, SIZE const& adjust );
+
+    //
+    // Overrides
+    //
 
     virtual void DoDataExchange( CDataExchange* pDX ) override;
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs )  override;
     virtual void OnInitialUpdate( )                   override;
 
+    //
+    // Event handlers
+    //
+
     afx_msg void OnPaint( );
     afx_msg void OnCloseButtonClicked( );
+
+    //============================================
+    // Member variables
+    //============================================
+
+    //
+    // Controls
+    //
 
     CStatic  m_groupBoxLab;
     CButton  m_buttonLabLChannel;
@@ -52,6 +76,10 @@ protected:
 
     CButton  m_buttonClose;
 
+    //
+    // Values
+    //
+
     int      m_nLabLValue  { };
     int      m_nLabAValue  { };
     int      m_nLabBValue  { };
@@ -59,6 +87,10 @@ protected:
     int      m_nSrgbRValue { };
     int      m_nSrgbGValue { };
     int      m_nSrgbBValue { };
+
+    //
+    // Control arrays
+    //
 
     CButton* m_buttonLabChannels[3]  { &m_buttonLabLChannel,  &m_buttonLabAChannel,  &m_buttonLabBChannel  };
     CEdit*   m_editLabValues[3]      { &m_editLabLValue,      &m_editLabAValue,      &m_editLabBValue      };
