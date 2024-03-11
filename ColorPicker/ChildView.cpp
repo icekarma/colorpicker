@@ -66,8 +66,8 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     DDX_Control( pDX, IDC_SRGB_G_CHANNEL, m_buttonSrgbGChannel );
     DDX_Control( pDX, IDC_SRGB_B_CHANNEL, m_buttonSrgbBChannel );
 
-    DDX_Control( pDX, IDC_COLOR_XY_GRID,  m_XyGrid             );
-    DDX_Control( pDX, IDC_COLOR_Z_STRIP,  m_ZStrip             );
+    DDX_Control( pDX, IDC_COLOR_XY_GRID,  m_staticXyGrid       );
+    DDX_Control( pDX, IDC_COLOR_Z_STRIP,  m_staticZStrip       );
 
     DDX_Control( pDX, IDCLOSE,            m_buttonClose        );
 
@@ -119,9 +119,9 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2  );
     _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1  );
 
-    _AdjustSize    ( &m_ZStrip,             { -1, -1 } );
-    _AdjustPosition( &m_XyGrid,             { -1,  0 } );
-    _AdjustSize    ( &m_XyGrid,             { -1, -1 } );
+    _AdjustSize    ( &m_staticZStrip,       { -1, -1 } );
+    _AdjustPosition( &m_staticXyGrid,       { -1,  0 } );
+    _AdjustSize    ( &m_staticXyGrid,       { -1, -1 } );
 
     _AdjustPosition( &m_buttonClose,        { -1, -2 } );
 

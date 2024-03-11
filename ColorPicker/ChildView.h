@@ -47,8 +47,8 @@ protected:
     CEdit    m_editSrgbGValue;
     CEdit    m_editSrgbBValue;
 
-    CStatic  m_XyGrid;
-    CStatic  m_ZStrip;
+    CStatic  m_staticXyGrid;
+    CStatic  m_staticZStrip;
 
     CButton  m_buttonClose;
 
