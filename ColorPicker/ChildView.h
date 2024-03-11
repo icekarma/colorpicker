@@ -102,4 +102,11 @@ protected:
 
     int*     m_nSrgbValues[3]        { &m_nSrgbRValue,        &m_nSrgbGValue,        &m_nSrgbBValue        };
 
+    //
+    // Images
+    //
+
+    CImage m_imageXyGrid;
+    CImage m_imageZStrip;
+
 };
