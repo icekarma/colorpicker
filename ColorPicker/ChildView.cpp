@@ -1,7 +1,11 @@
 ﻿#include "pch.h"
 
 #include "ColorPicker.h"
+#include "ColorPickerDoc.h"
 #include "ChildView.h"
+
+#include "Color.h"
+#include "TransformsManager.h"
 
 #include "Debug.h"
 
@@ -58,6 +62,37 @@ void CChildView::_AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
     wp.rcNormalPosition.right  += adjust.cx;
     wp.rcNormalPosition.bottom += adjust.cy;
     ctrl->SetWindowPlacement( &wp );
+}
+
+void CChildView::_GenerateLabXyGrid( ) {
+    uint8_t* rgbImage { new uint8_t[256 * 256 * 3] };
+    FloatT*  labImage { new  FloatT[256 * 256 * 3] };
+    FloatT*  labPtr   { labImage };
+
+    for ( int y { }; y < 256; ++y ) {
+        for ( int x { }; x < 256; ++x ) {
+            *labPtr++ = static_cast<FloatT>( m_nLabLValue );
+            *labPtr++ = LabMinimumA + static_cast<FloatT>( x );
+            *labPtr++ = LabMinimumB + static_cast<FloatT>( y );
+        }
+    }
+
+    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labImage, rgbImage, 256 * 256 );
+    m_bitmapXyGrid.SetBitmapBits( 256 * 256 * 3, rgbImage );
+    m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
+    m_staticXyGrid.Invalidate( );
+
+    delete[] labImage;
+    delete[] rgbImage;
+}
+
+void CChildView::_GenerateLabZStrip( ) {
+}
+
+void CChildView::_GenerateRgbXyGrid( ) {
+}
+
+void CChildView::_GenerateRgbZStrip( ) {
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
@@ -141,6 +176,20 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_buttonClose,        { -1, -2 } );
 
     m_editLabLValue.SetFocus( );
+
+    if ( !m_bitmapXyGrid.CreateBitmap( 256, 256, 1, 24, nullptr ) ) {
+        debug( "CChildView::OnInitialUpdate: m_bitmapXyGrid.CreateBitmap failed\n" );
+        return;
+    }
+    _GenerateLabXyGrid( );
+    m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
+
+    if ( !m_bitmapZStrip.CreateBitmap( 20, 256, 1, 24, nullptr ) ) {
+        debug( "CChildView::OnInitialUpdate: m_bitmapZStrip.CreateBitmap failed\n" );
+        return;
+    }
+    _GenerateLabZStrip( );
+    m_staticZStrip.SetBitmap( m_bitmapZStrip );
 }
 
 void CChildView::OnPaint( ) {
