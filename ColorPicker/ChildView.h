@@ -24,9 +24,9 @@ protected:
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust );
     void _AdjustSize( CWnd* ctrl, SIZE const& adjust );
 
-    virtual void DoDataExchange( CDataExchange* pDX );
-    virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
-    virtual void OnInitialUpdate( );
+    virtual void DoDataExchange( CDataExchange* pDX ) override;
+    virtual BOOL PreCreateWindow( CREATESTRUCT& cs )  override;
+    virtual void OnInitialUpdate( )                   override;
 
     afx_msg void OnPaint( );
     afx_msg void OnCloseButtonClicked( );
