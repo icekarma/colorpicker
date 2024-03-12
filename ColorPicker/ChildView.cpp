@@ -8,20 +8,19 @@
 #include "Color.h"
 #include "TransformsManager.h"
 
-//================================================//
-// TODO * TODO * TODO * TODO * TODO * TODO * TODO //
-//                                                //
-//                                                //
-// * Add a hexadecimal representation of the sRGB //
-//   colour value.                                //
-// * Option for 0..255 vs 0..100                  //
-// * Option for floating point with 1dp           //
-// * Per-channel gradients, à la                  //
-//   https://imgur.com/a/BWOAht9 ?                //
-//                                                //
-//                                                //
-// TODO * TODO * TODO * TODO * TODO * TODO * TODO //
-//================================================//
+//==============================================================//
+// TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO //
+//                                                              //
+//                                                              //
+// * Add a hexadecimal representation of the sRGB colour value. //
+// * Option for 0..255 vs 0..100                                //
+// * Option for floating point with 1dp                         //
+// * Per-channel gradients, à la https://imgur.com/a/BWOAht9 ?  //
+// * Color library                                              //
+//                                                              //
+//                                                              //
+// TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO //
+//==============================================================//
 
 // XY color grid: 256x256
 // Z color strip: 20x256
