@@ -81,35 +81,6 @@ void CChildView::_SetSize( CWnd* ctrl, SIZE const& size ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
-void CChildView::_GenerateLabXyGrid( ) {
-    uint8_t* rgbImage { new uint8_t[ImageWidth * ImageHeight * ImageSrgbBytesPerPixel] };
-    FloatT*  labImage { new  FloatT[ImageWidth * ImageHeight * ImageLabValuesPerPixel] };
-    FloatT*  ptr      { labImage };
-
-    for ( int y { }; y < ImageHeight; ++y ) {
-        for ( int x { }; x < ImageWidth; ++x ) {
-            *ptr++ = static_cast<FloatT>( m_nLabLValue    );
-            *ptr++ = static_cast<FloatT>( LabMinimumA + x );
-            *ptr++ = static_cast<FloatT>( LabMinimumB + y );
-        }
-    }
-
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labImage, rgbImage, ImageWidth * ImageHeight );
-    m_bitmapXyGrid.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbBytesPerPixel, rgbImage );
-
-    delete[] labImage;
-    delete[] rgbImage;
-}
-
-void CChildView::_GenerateLabZStrip( ) {
-}
-
-void CChildView::_GenerateRgbXyGrid( ) {
-}
-
-void CChildView::_GenerateRgbZStrip( ) {
-}
-
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 
