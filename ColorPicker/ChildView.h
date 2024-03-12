@@ -31,6 +31,9 @@ protected:
 
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust );
     void _AdjustSize( CWnd* ctrl, SIZE const& adjust );
+    void _SetPosition( CWnd* ctrl, POINT const& pt );
+    void _SetSize( CWnd* ctrl, SIZE const& size );
+
     void _GenerateLabXyGrid( );
     void _GenerateLabZStrip( );
     void _GenerateRgbXyGrid( );

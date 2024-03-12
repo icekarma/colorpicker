@@ -62,6 +62,25 @@ void CChildView::_AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
+void CChildView::_SetPosition( CWnd* ctrl, POINT const& pt ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    ctrl->GetWindowPlacement( &wp );
+    CRect rect { wp.rcNormalPosition };
+    rect.MoveToXY( pt );
+    wp.rcNormalPosition = rect;
+    ctrl->SetWindowPlacement( &wp );
+}
+
+void CChildView::_SetSize( CWnd* ctrl, SIZE const& size ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    ctrl->GetWindowPlacement( &wp );
+    wp.rcNormalPosition.right  = wp.rcNormalPosition.left + size.cx;
+    wp.rcNormalPosition.bottom = wp.rcNormalPosition.top  + size.cy;
+    ctrl->SetWindowPlacement( &wp );
+}
+
 void CChildView::_GenerateLabXyGrid( ) {
     uint8_t* rgbImage { new uint8_t[256 * 256 * 3] };
     FloatT*  labImage { new  FloatT[256 * 256 * 3] };
