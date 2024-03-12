@@ -16,8 +16,4 @@ public:
 
     virtual ~CAboutDlg( ) { /*empty*/ }
 
-protected:
-
-    //virtual void DoDataExchange( CDataExchange* pDX );
-
 };
