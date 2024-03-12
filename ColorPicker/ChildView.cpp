@@ -82,22 +82,20 @@ void CChildView::_SetSize( CWnd* ctrl, SIZE const& size ) {
 }
 
 void CChildView::_GenerateLabXyGrid( ) {
-    uint8_t* rgbImage { new uint8_t[256 * 256 * 3] };
-    FloatT*  labImage { new  FloatT[256 * 256 * 3] };
-    FloatT*  labPtr   { labImage };
+    uint8_t* rgbImage { new uint8_t[ImageWidth * ImageHeight * ImageSrgbBytesPerPixel] };
+    FloatT*  labImage { new  FloatT[ImageWidth * ImageHeight * ImageLabValuesPerPixel] };
+    FloatT*  ptr      { labImage };
 
-    for ( int y { }; y < 256; ++y ) {
-        for ( int x { }; x < 256; ++x ) {
-            *labPtr++ = static_cast<FloatT>( m_nLabLValue );
-            *labPtr++ = LabMinimumA + static_cast<FloatT>( x );
-            *labPtr++ = LabMinimumB + static_cast<FloatT>( y );
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<FloatT>( m_nLabLValue    );
+            *ptr++ = static_cast<FloatT>( LabMinimumA + x );
+            *ptr++ = static_cast<FloatT>( LabMinimumB + y );
         }
     }
 
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labImage, rgbImage, 256 * 256 );
-    m_bitmapXyGrid.SetBitmapBits( 256 * 256 * 3, rgbImage );
-    m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
-    m_staticXyGrid.Invalidate( );
+    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labImage, rgbImage, ImageWidth * ImageHeight );
+    m_bitmapXyGrid.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbBytesPerPixel, rgbImage );
 
     delete[] labImage;
     delete[] rgbImage;
