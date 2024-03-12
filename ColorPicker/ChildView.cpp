@@ -38,7 +38,7 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_WM_PAINT( )
+    //ON_WM_PAINT( )
     ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
 END_MESSAGE_MAP( )
 
@@ -190,12 +190,12 @@ void CChildView::OnInitialUpdate( ) {
     m_staticZStrip.SetBitmap( m_bitmapZStrip );
 }
 
-void CChildView::OnPaint( ) {
-    // Do not call CWnd::OnPaint() for painting messages
-    CPaintDC dc { this };
-
-    // TODO
-}
+//void CChildView::OnPaint( ) {
+//    // Do not call CWnd::OnPaint() for painting messages
+//    CPaintDC dc { this };
+//
+//    // TODO
+//}
 
 void CChildView::OnCloseButtonClicked( ) {
     ::PostQuitMessage( 0 );

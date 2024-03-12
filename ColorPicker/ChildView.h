@@ -48,7 +48,7 @@ protected:
     // Event handlers
     //
 
-    afx_msg void OnPaint( );
+    //afx_msg void OnPaint( );
     afx_msg void OnCloseButtonClicked( );
 
     //============================================
