@@ -1,8 +1,9 @@
 ﻿#include "pch.h"
 
+#include "ChildView.h"
+
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
-#include "ChildView.h"
 
 #include "Color.h"
 #include "TransformsManager.h"

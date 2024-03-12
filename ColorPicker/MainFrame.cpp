@@ -1,7 +1,8 @@
 #include "pch.h"
 
-#include "ColorPicker.h"
 #include "MainFrame.h"
+
+#include "ColorPicker.h"
 
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 

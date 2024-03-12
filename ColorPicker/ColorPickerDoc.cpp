@@ -1,7 +1,8 @@
 #include "pch.h"
 
-#include "ColorPicker.h"
 #include "ColorPickerDoc.h"
+
+#include "ColorPicker.h"
 
 IMPLEMENT_DYNCREATE( CColorPickerDoc, CDocument )
 
