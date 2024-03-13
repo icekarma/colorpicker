@@ -1,5 +1,11 @@
 #pragma once
 
+#include "XyGrid.h"
+#include "ZStrip.h"
+
+class CXyGrid;
+class CZStrip;
+
 class CChildView:
     public CFormView
 {
@@ -94,21 +100,50 @@ protected:
     // Control arrays
     //
 
+    // Lab color
+
     CButton* m_buttonLabChannels[3]  { &m_buttonLabLChannel,  &m_buttonLabAChannel,  &m_buttonLabBChannel  };
     CEdit*   m_editLabValues[3]      { &m_editLabLValue,      &m_editLabAValue,      &m_editLabBValue      };
 
     int*     m_nLabValues[3]         { &m_nLabLValue,         &m_nLabAValue,         &m_nLabBValue         };
+
+    // sRGB color
 
     CButton* m_buttonSrgbChannels[3] { &m_buttonSrgbRChannel, &m_buttonSrgbGChannel, &m_buttonSrgbBChannel };
     CEdit*   m_editSrgbValues[3]     { &m_editSrgbRValue,     &m_editSrgbGValue,     &m_editSrgbBValue     };
 
     int*     m_nSrgbValues[3]        { &m_nSrgbRValue,        &m_nSrgbGValue,        &m_nSrgbBValue        };
 
+    // All
+
+    CButton* m_buttonAllChannels[6]  { &m_buttonLabLChannel,  &m_buttonLabAChannel,  &m_buttonLabBChannel,
+                                       &m_buttonSrgbRChannel, &m_buttonSrgbGChannel, &m_buttonSrgbBChannel };
+    CEdit*   m_editAllValues[6]      { &m_editLabLValue,      &m_editLabAValue,      &m_editLabBValue,
+                                       &m_editSrgbRValue,     &m_editSrgbGValue,     &m_editSrgbBValue     };
+
+    int*     m_nAllValues[6]         { &m_nLabLValue,         &m_nLabAValue,         &m_nLabBValue,
+                                       &m_nSrgbRValue,        &m_nSrgbGValue,        &m_nSrgbBValue        };
+
+    //
+    // Channel mapping
+    //
+
+    int      m_nXChannel { 0 };
+    int      m_nYChannel { 1 };
+    int      m_nZChannel { 2 };
+
     //
     // Bitmaps
     //
 
-    CBitmap m_bitmapXyGrid;
-    CBitmap m_bitmapZStrip;
+    CBitmap  m_bitmapXyGrid;
+    CBitmap  m_bitmapZStrip;
+
+    //
+    // Bitmap generators
+    //
+
+    CXyGrid* m_pXyGrid { };
+    CZStrip* m_pZStrip { };
 
 };

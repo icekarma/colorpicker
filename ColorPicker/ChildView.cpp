@@ -137,45 +137,50 @@ void CChildView::OnInitialUpdate( ) {
     SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
     SIZE adjustUp2 { 0, -2 }; SIZE adjustDn2 { 0, 2 };
 
-    _AdjustPosition( &m_editLabBValue,      adjustUp2  );
-    //djustPosition( &m_editLabLValue,      adjust0    );
-    //djustPosition( &m_editLabAValue,      adjust0    );
-    //djustPosition( &m_editLabBValue,      adjust0    );
-    _AdjustPosition( &m_buttonLabLChannel,  adjustDn1  );
-    _AdjustPosition( &m_buttonLabAChannel,  adjustUp1  );
-    _AdjustPosition( &m_buttonLabBChannel,  adjustUp2  );
-    _AdjustSize    ( &m_groupBoxLab,        adjustUp1  );
+    _AdjustPosition( &m_editLabBValue,      adjustUp2    );
+    //djustPosition( &m_editLabLValue,      adjust0      );
+    //djustPosition( &m_editLabAValue,      adjust0      );
+    //djustPosition( &m_editLabBValue,      adjust0      );
+    _AdjustPosition( &m_buttonLabLChannel,  adjustDn1    );
+    _AdjustPosition( &m_buttonLabAChannel,  adjustUp1    );
+    _AdjustPosition( &m_buttonLabBChannel,  adjustUp2    );
+    _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
 
-    _AdjustPosition( &m_groupBoxSrgb,       adjustDn2  );
-    _AdjustPosition( &m_editSrgbRValue,     adjustDn2  );
-    _AdjustPosition( &m_editSrgbGValue,     adjustDn2  );
-    _AdjustPosition( &m_editSrgbBValue,     adjustUp1  );
-    _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2  );
-    //djustPosition( &m_buttonSrgbGChannel, adjust0    );
-    _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2  );
-    _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1  );
+    _AdjustPosition( &m_groupBoxSrgb,       adjustDn2    );
+    _AdjustPosition( &m_editSrgbRValue,     adjustDn2    );
+    _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
+    _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
+    _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2    );
+    //djustPosition( &m_buttonSrgbGChannel, adjust0      );
+    _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2    );
+    _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1    );
 
-    _AdjustSize    ( &m_staticZStrip,       { -1, -1 } );
-    _AdjustPosition( &m_staticXyGrid,       { -1,  0 } );
-    _AdjustSize    ( &m_staticXyGrid,       { -1, -1 } );
+    _SetSize       ( &m_staticZStrip,       {  20, 256 } );
 
-    _AdjustPosition( &m_buttonClose,        { -1, -2 } );
+    _AdjustPosition( &m_staticXyGrid,       {  -1,   0 } );
+    _SetSize       ( &m_staticXyGrid,       { 256, 256 } );
+
+    _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
 
     m_editLabLValue.SetFocus( );
 
-    if ( !m_bitmapXyGrid.CreateBitmap( 256, 256, 1, 24, nullptr ) ) {
-        debug( "CChildView::OnInitialUpdate: m_bitmapXyGrid.CreateBitmap failed\n" );
-        return;
-    }
-    _GenerateLabXyGrid( );
-    m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
-
-    if ( !m_bitmapZStrip.CreateBitmap( 20, 256, 1, 24, nullptr ) ) {
+    if ( m_bitmapZStrip.CreateBitmap( 20, 256, 1, 32, nullptr ) ) {
+        m_staticZStrip.SetBitmap( m_bitmapZStrip );
+    } else {
         debug( "CChildView::OnInitialUpdate: m_bitmapZStrip.CreateBitmap failed\n" );
-        return;
     }
-    _GenerateLabZStrip( );
-    m_staticZStrip.SetBitmap( m_bitmapZStrip );
+
+    if ( m_bitmapXyGrid.CreateBitmap( 256, 256, 1, 32, nullptr ) ) {
+        m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
+    } else {
+        debug( "CChildView::OnInitialUpdate: m_bitmapXyGrid.CreateBitmap failed\n" );
+    }
+
+    CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+    m_pZStrip = new CZStrip { pDoc, &m_bitmapZStrip };
+    m_pZStrip->Update( );
+    m_pXyGrid = new CXyGrid { pDoc, &m_bitmapXyGrid };
+    m_pXyGrid->Update( );
 }
 
 //void CChildView::OnPaint( ) {
