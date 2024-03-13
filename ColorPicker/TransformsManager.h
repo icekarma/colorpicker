@@ -12,8 +12,8 @@ public:
         cmsHPROFILE hLabProfile { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
         cmsHPROFILE hRgbProfile { cmsCreate_sRGBProfile( )              };
 
-        _hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat, hRgbProfile, TYPE_RGB_8,     INTENT_PERCEPTUAL, 0 );
-        _hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, TYPE_RGB_8,     hLabProfile, LabPixelFormat, INTENT_PERCEPTUAL, 0 );
+        _hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat,  hRgbProfile, SrgbPixelFormat, INTENT_PERCEPTUAL, 0 );
+        _hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, SrgbPixelFormat, hLabProfile, LabPixelFormat,  INTENT_PERCEPTUAL, 0 );
 
         cmsCloseProfile( hLabProfile );
         cmsCloseProfile( hRgbProfile );
