@@ -51,9 +51,21 @@ cmsUInt32Number constexpr  LabPixelFormat {
 #endif
 };
 
-FloatT constexpr LabMinimumL {    0.0 }; FloatT constexpr LabMaximumL {  100.0 };
-FloatT constexpr LabMinimumA { -128.0 }; FloatT constexpr LabMaximumA {  127.0 };
-FloatT constexpr LabMinimumB { -128.0 }; FloatT constexpr LabMaximumB {  127.0 };
+int constexpr LabMinimumL {    0 }; int constexpr LabMaximumL {  100 };
+int constexpr LabMinimumA { -128 }; int constexpr LabMaximumA {  127 };
+int constexpr LabMinimumB { -128 }; int constexpr LabMaximumB {  127 };
+
+int constexpr LabMinima[3] {
+    LabMinimumL,
+    LabMinimumA,
+    LabMinimumB,
+};
+
+int constexpr LabMaxima[3] {
+    LabMaximumL,
+    LabMaximumA,
+    LabMaximumB,
+};
 
 //================================================
 // Late #include
