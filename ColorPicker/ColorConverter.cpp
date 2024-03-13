@@ -13,23 +13,19 @@ TransformsManager Transforms;
 //================================================
 
 SrgbColorValue ConvertColor( LabColorValue const& color ) {
-    double  inputValues[3];
-    uint8_t outputValues[3];
+    FloatT  labValues[ImageLabValuesPerPixel];
+    uint8_t srgbValues[ImageSrgbBytesPerPixel];
 
-    color.GetChannelValues( inputValues );
-
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), inputValues, outputValues, 1 );
-
-    return SrgbColorValue { outputValues[0], outputValues[1], outputValues[2] };
+    color.GetChannelValues( labValues );
+    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labValues, srgbValues, 1 );
+    return { srgbValues[2], srgbValues[1], srgbValues[0] };
 }
 
 LabColorValue ConvertColor( SrgbColorValue const& color ) {
-    uint8_t inputValues[3];
-    double  outputValues[3];
+    uint8_t srgbValues[ImageSrgbBytesPerPixel];
+    FloatT  labValues[ImageLabValuesPerPixel];
 
-    color.GetChannelValues( inputValues );
-
-    cmsDoTransform( Transforms.GetSrgbToLabTransform( ), inputValues, outputValues, 1 );
-
-    return LabColorValue { outputValues[0], outputValues[1], outputValues[2] };
+    color.GetChannelValues( srgbValues );
+    cmsDoTransform( Transforms.GetSrgbToLabTransform( ), srgbValues, labValues, 1 );
+    return { labValues[0], labValues[1], labValues[2] };
 }
