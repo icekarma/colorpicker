@@ -42,7 +42,8 @@ using SrgbColorValue = SrgbColor<uint8_t>;
 // Constants
 //================================================
 
-cmsUInt32Number constexpr LabPixelFormat {
+cmsUInt32Number constexpr SrgbPixelFormat { TYPE_BGRA_8 };
+cmsUInt32Number constexpr  LabPixelFormat {
 #if defined LAB_COLOR_USE_FLOAT
     TYPE_Lab_FLT
 #elif defined LAB_COLOR_USE_DOUBLE
