@@ -4,16 +4,19 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 ## Ice Karma's additions
-ConversionTest/TestSet?/
-lcms2-2.16/
 BlackPointCompensationTests.pdf
 CIC18_UnboundedCMM.pdf
-LittleCMS2.16 API.pdf
-LittleCMS2.16 Plugin API.pdf
-LittleCMS2.16 tutorial.pdf
-lcms2-2.16.zip
-pscolorpicker.png
+ColorPicker/PsPicker1L.png
+ColorPicker/PsPicker2a.png
+ColorPicker/PsPicker3b.png
 ConsoleKlondike
+ConversionTest/TestSet?/
+lcms2-2.16/
+lcms2-2.16.zip
+LittleCMS2.16\ API.pdf
+LittleCMS2.16\ Plugin\ API.pdf
+LittleCMS2.16\ tutorial.pdf
+pscolorpicker.png
 
 # User-specific files
 *.rsuser
