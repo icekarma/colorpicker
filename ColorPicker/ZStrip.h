@@ -25,6 +25,9 @@ private:
     CColorPickerDoc const* m_pDoc          { };
     CBitmap*               m_pBitmap       { };
 
+    int const ImageWidth  {  20 };
+    int const ImageHeight { 256 };
+
     int                    m_nLastChannel  { -1 };
     LabColorValue          m_LastLabValue;
     SrgbColorValue         m_lastSrgbValue;
