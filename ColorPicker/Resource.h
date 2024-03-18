@@ -7,7 +7,6 @@
 #define IDR_MAINFRAME                   128
 #define IDR_ColorPickerTYPE             130
 #define IDD_CHILDVIEW                   310
-#define IDD_CHILDVIEW_2                 311
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
 #define IDC_LAB_L_CHANNEL               2000
@@ -29,9 +28,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_RESOURCE_VALUE        311
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         4002
-#define _APS_NEXT_SYMED_VALUE           312
+#define _APS_NEXT_CONTROL_VALUE         5000
+#define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif
