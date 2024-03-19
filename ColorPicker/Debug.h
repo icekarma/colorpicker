@@ -5,15 +5,17 @@
 #undef DEBUG_TO_STDOUT
 #undef DEBUG_TO_STDERR
 
-template<typename ExceptionT>
-concept ExceptionType = std::is_base_of_v<std::exception, ExceptionT>;
+template<typename T> concept ExceptionType = std::is_base_of_v<std::exception, T>;
 
 template<typename... Args>
 std::string FormatString( std::string const& format, Args... args ) {
     using CharT = std::string::value_type;
 
-    size_t bufferSize { 256 };
+    size_t bufferSize { 4096 };
     auto   buffer     { static_cast<CharT*>( malloc( bufferSize * sizeof CharT ) ) };
+    if ( !buffer ) {
+        throw std::runtime_error( "FormatString ran out of memory" );
+    }
 
     do {
         __pragma( warning( disable: 4774 ) )
@@ -36,7 +38,7 @@ template<typename... Args>
 std::wstring FormatString( std::wstring const& format, Args... args ) {
     using CharT = std::wstring::value_type;
 
-    size_t bufferSize { 256 };
+    size_t bufferSize { 4096 };
     auto   buffer     { static_cast<CharT*>( malloc( bufferSize * sizeof CharT ) ) };
 
     do {
@@ -58,10 +60,10 @@ std::wstring FormatString( std::wstring const& format, Args... args ) {
 
 inline void _LogDebugMessage( std::string const& message ) {
 #if defined DEBUG_TO_STDOUT
-    fputs( message.c_str( ), stdout );
+    fwrite( message.c_str( ), 1, message.length( ), stdout );
 #endif // defined DEBUG_TO_STDOUT
 #if defined DEBUG_TO_STDERR
-    fputs( message.c_str( ), stderr );
+    fwrite( message.c_str( ), 1, message.length( ), stderr );
 #endif // defined DEBUG_TO_STDERR
 
     OutputDebugStringA( message.c_str( ) );
@@ -69,10 +71,10 @@ inline void _LogDebugMessage( std::string const& message ) {
 
 inline void _LogDebugMessage( std::wstring const& message ) {
 #if defined DEBUG_TO_STDOUT
-    fputws( message.c_str( ), stdout );
+    fwrite( message.c_str( ), 2, message.length( ), stdout );
 #endif // defined DEBUG_TO_STDOUT
 #if defined DEBUG_TO_STDERR
-    fputws( message.c_str( ), stderr );
+    fwrite( message.c_str( ), 2, message.length( ), stderr );
 #endif // defined DEBUG_TO_STDERR
 
     OutputDebugStringW( message.c_str( ) );
