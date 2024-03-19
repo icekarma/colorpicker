@@ -4,6 +4,8 @@
 
 #include <cstdint>
 
+#include <array>
+
 //================================================
 // Preprocessor macros
 //================================================
@@ -38,6 +40,9 @@ using FloatT = double;
 using LabColorValue  = LabColor<FloatT>;
 using SrgbColorValue = SrgbColor<uint8_t>;
 
+template<typename T>
+using Triplet = std::array<T, 3>;
+
 //================================================
 // Constants
 //================================================
@@ -51,21 +56,21 @@ cmsUInt32Number constexpr  LabPixelFormat {
 #endif
 };
 
-int constexpr LabMinimumL {    0 }; int constexpr LabMaximumL {  100 };
-int constexpr LabMinimumA { -128 }; int constexpr LabMaximumA {  127 };
-int constexpr LabMinimumB { -128 }; int constexpr LabMaximumB {  127 };
+int constexpr LabMinimumL   {    0 }; int constexpr LabMaximumL  { 100 }; int constexpr LabRangeL  { LabMaximumL  - LabMinimumL  + 1 };
+int constexpr LabMinimumA   { -128 }; int constexpr LabMaximumA  { 127 }; int constexpr LabRangeA  { LabMaximumA  - LabMinimumA  + 1 };
+int constexpr LabMinimumB   { -128 }; int constexpr LabMaximumB  { 127 }; int constexpr LabRangeB  { LabMaximumB  - LabMinimumB  + 1 };
 
-int constexpr LabMinima[3] {
-    LabMinimumL,
-    LabMinimumA,
-    LabMinimumB,
-};
+int constexpr SrgbMinimumR  {    0 }; int constexpr SrgbMaximumR { 255 }; int constexpr SrgbRangeR { SrgbMaximumR - SrgbMinimumR + 1 };
+int constexpr SrgbMinimumG  {    0 }; int constexpr SrgbMaximumG { 255 }; int constexpr SrgbRangeG { SrgbMaximumG - SrgbMinimumG + 1 };
+int constexpr SrgbMinimumB  {    0 }; int constexpr SrgbMaximumB { 255 }; int constexpr SrgbRangeB { SrgbMaximumB - SrgbMinimumB + 1 };
 
-int constexpr LabMaxima[3] {
-    LabMaximumL,
-    LabMaximumA,
-    LabMaximumB,
-};
+int constexpr LabMinima[3]  { LabMinimumL,  LabMinimumA,  LabMinimumB  };
+int constexpr LabMaxima[3]  { LabMaximumL,  LabMaximumA,  LabMaximumB  };
+int constexpr LabRanges[3]  { LabRangeL,    LabRangeA,    LabRangeB    };
+
+int constexpr SrgbMinima[3] { SrgbMinimumR, SrgbMinimumG, SrgbMinimumB };
+int constexpr SrgbMaxima[3] { SrgbMaximumR, SrgbMaximumG, SrgbMaximumB };
+int constexpr SrgbRanges[3] { SrgbRangeR,   SrgbRangeG,   SrgbRangeB   };
 
 //================================================
 // Late #include
@@ -78,21 +83,38 @@ int constexpr LabMaxima[3] {
 //================================================
 
 enum class ColorSpace {
-    unknown = 0,
-    Lab     = 1,
-    sRGB    = 2,
+    unknown = -1,
+    Lab     =  0,
+    sRGB    =  1,
 };
 
 enum class LabChannels {
-    L = 0,
-    a = 1,
-    b = 2,
+    unknown = -1,
+    L       =  0,
+    a       =  1,
+    b       =  2,
 };
 
 enum class SrgbChannels {
-    R = 0,
-    G = 1,
-    B = 2,
+    unknown = -1,
+    R       =  0,
+    G       =  1,
+    B       =  2,
+};
+
+enum class AllChannels {
+    unknown = -1,
+    LabL    =  0,
+    LabA    =  1,
+    LabB    =  2,
+    SrgbR   =  3,
+    SrgbG   =  4,
+    SrgbB   =  5,
+
+    LabMin  = AllChannels::LabL,
+    LabMax  = AllChannels::LabB,
+    SrgbMin = AllChannels::SrgbR,
+    SrgbMax = AllChannels::SrgbB,
 };
 
 //================================================
@@ -110,16 +132,13 @@ public:
 
     Color( )                                          noexcept { /*empty*/ }
     Color( ValueT const, ValueT const, ValueT const ) noexcept { /*empty*/ }
-    Color( ValueT const[3] )                          noexcept { /*empty*/ }
+    Color( Triplet<ValueT> const )                    noexcept { /*empty*/ }
 
-    virtual ColorSpace constexpr GetColorSpace( )                                         const noexcept = 0;
-    virtual int        constexpr GetChannelCount( )                                       const noexcept = 0;
+    virtual ColorSpace constexpr GetColorSpace( )   const noexcept = 0;
+    virtual int        constexpr GetChannelCount( ) const noexcept = 0;
 
-    virtual ValueT               GetChannelValue( int const channel )                     const noexcept = 0;
-    virtual void                 SetChannelValue( int const channel, ValueT const value )       noexcept = 0;
-
-    virtual void                 GetChannelValues( ValueT values[3] )                     const noexcept = 0;
-    virtual void                 SetChannelValues( ValueT const values[3] )                     noexcept = 0;
+    virtual void                 GetChannelValues( Triplet<ValueT>& values ) const noexcept = 0;
+    virtual void                 SetChannelValues( Triplet<ValueT> const values )  noexcept = 0;
 
 };
 
@@ -134,6 +153,8 @@ class LabColor:
 
 public:
 
+    using PixelT = FloatT;
+
     LabColor( ) noexcept:
         LabColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
@@ -147,7 +168,7 @@ public:
     }
 
     LabColor( LabColor&& rhs ) noexcept:
-        LabColor { rhs._values }
+        LabColor { std::move( rhs._values ) }
     {
         /*empty*/
     }
@@ -158,24 +179,20 @@ public:
         /*empty*/
     }
 
-    LabColor( ValueT const channels[3] ) noexcept:
+    LabColor( Triplet<ValueT> const channels ) noexcept:
         LabColor { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
     {
         /*empty*/
     }
 
     LabColor& operator=( LabColor const& rhs ) noexcept {
-        _values[+LabChannels::L] = rhs._values[+LabChannels::L];
-        _values[+LabChannels::a] = rhs._values[+LabChannels::a];
-        _values[+LabChannels::b] = rhs._values[+LabChannels::b];
+        _values = rhs._values;
 
         return *this;
     }
 
     LabColor& operator=( LabColor&& rhs ) noexcept {
-        _values[+LabChannels::L] = rhs._values[+LabChannels::L];
-        _values[+LabChannels::a] = rhs._values[+LabChannels::a];
-        _values[+LabChannels::b] = rhs._values[+LabChannels::b];
+        _values = std::move( rhs._values );
 
         return *this;
     }
@@ -188,31 +205,27 @@ public:
         return 3;
     }
 
-    virtual ValueT GetChannelValue( int const channel ) const noexcept {
-        assert( ( channel >= 0 ) && ( channel < 3 ) );
-        return _values[channel];
+    virtual ValueT GetChannelValue( LabChannels const channel ) const noexcept {
+        assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
+        return _values[+channel];
     }
 
-    virtual void SetChannelValue( int const channel, ValueT const value ) noexcept {
-        assert( ( channel >= 0 ) && ( channel < 3 ) );
-        _values[channel] = value;
+    virtual void SetChannelValue( LabChannels const channel, ValueT const value ) noexcept {
+        assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
+        _values[+channel] = value;
     }
 
-    virtual void GetChannelValues( ValueT values[3] ) const noexcept {
-        values[+LabChannels::L] = _values[+LabChannels::L];
-        values[+LabChannels::a] = _values[+LabChannels::a];
-        values[+LabChannels::b] = _values[+LabChannels::b];
+    virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
+        values = _values;
     }
 
-    virtual void SetChannelValues( ValueT const values[3] ) noexcept {
-        _values[+LabChannels::L] = values[+LabChannels::L];
-        _values[+LabChannels::a] = values[+LabChannels::a];
-        _values[+LabChannels::b] = values[+LabChannels::b];
+    virtual void SetChannelValues( Triplet<ValueT> const values ) noexcept {
+        _values = values;
     }
 
 protected:
 
-    ValueT _values[3];
+    Triplet<ValueT> _values;
 
 };
 
@@ -227,6 +240,8 @@ class SrgbColor:
 
 public:
 
+    using PixelT = uint8_t;
+
     SrgbColor( ) noexcept:
         SrgbColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
@@ -234,13 +249,13 @@ public:
     }
 
     SrgbColor( SrgbColor const& rhs ) noexcept:
-        SrgbColor { rhs._values }
+        _values ( rhs._values )
     {
         /*empty*/
     }
 
     SrgbColor( SrgbColor&& rhs ) noexcept:
-        SrgbColor { rhs._values }
+        _values ( std::move( rhs._values ) )
     {
         /*empty*/
     }
@@ -251,24 +266,20 @@ public:
         /*empty*/
     }
 
-    SrgbColor( ValueT const channels[3] ) noexcept:
+    SrgbColor( Triplet<ValueT> const channels ) noexcept:
         SrgbColor { channels[+SrgbChannels::R], channels[+SrgbChannels::G], channels[+SrgbChannels::B] }
     {
         /*empty*/
     }
 
     SrgbColor& operator=( SrgbColor const& rhs ) noexcept {
-        _values[+SrgbChannels::R] = rhs._values[+SrgbChannels::R];
-        _values[+SrgbChannels::G] = rhs._values[+SrgbChannels::G];
-        _values[+SrgbChannels::B] = rhs._values[+SrgbChannels::B];
+        _values = rhs._values;
 
         return *this;
     }
 
     SrgbColor& operator=( SrgbColor&& rhs ) noexcept {
-        _values[+SrgbChannels::R] = rhs._values[+SrgbChannels::R];
-        _values[+SrgbChannels::G] = rhs._values[+SrgbChannels::G];
-        _values[+SrgbChannels::B] = rhs._values[+SrgbChannels::B];
+        _values = std::move( rhs._values );
 
         return *this;
     }
@@ -281,32 +292,26 @@ public:
         return 3;
     }
 
-    virtual ValueT GetChannelValue( int const channel ) const noexcept {
-        assert( ( channel >= 0 ) && ( channel < 3 ) );
-
-        return _values[channel];
+    virtual ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
+        assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
+        return _values[+channel];
     }
 
-    virtual void SetChannelValue( int const channel, ValueT const value ) noexcept {
-        assert( ( channel >= 0 ) && ( channel < 3 ) );
-
-        _values[channel] = value;
+    virtual void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
+        assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
+        _values[+channel] = value;
     }
 
-    virtual void GetChannelValues( ValueT values[3] ) const noexcept {
-        values[+SrgbChannels::R] = _values[+SrgbChannels::R];
-        values[+SrgbChannels::G] = _values[+SrgbChannels::G];
-        values[+SrgbChannels::B] = _values[+SrgbChannels::B];
+    virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
+        values = _values;
     }
 
-    virtual void SetChannelValues( ValueT const values[3] ) noexcept {
-        _values[+SrgbChannels::R] = values[+SrgbChannels::R];
-        _values[+SrgbChannels::G] = values[+SrgbChannels::G];
-        _values[+SrgbChannels::B] = values[+SrgbChannels::B];
+    virtual void SetChannelValues( Triplet<ValueT> const values ) noexcept {
+        _values = values;
     }
 
 protected:
 
-    ValueT _values[3];
+    Triplet<ValueT> _values;
 
 };
