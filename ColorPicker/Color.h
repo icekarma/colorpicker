@@ -157,6 +157,9 @@ public:
     virtual ColorSpace constexpr GetColorSpace( )   const noexcept = 0;
     virtual int        constexpr GetChannelCount( ) const noexcept = 0;
 
+    virtual ValueT               GetChannelValue( AllChannels const channel )               const noexcept = 0;
+    virtual void                 SetChannelValue( AllChannels const channel, ValueT const value ) noexcept = 0;
+
     virtual void                 GetChannelValues( Triplet<ValueT>& values ) const noexcept = 0;
     virtual void                 SetChannelValues( Triplet<ValueT> const values )  noexcept = 0;
 
@@ -233,6 +236,16 @@ public:
     virtual void SetChannelValue( LabChannels const channel, ValueT const value ) noexcept {
         assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
         _values[+channel] = value;
+    }
+
+    virtual ValueT GetChannelValue( AllChannels const channel ) const noexcept {
+        assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
+        return _values[+AllChannelsToLabChannels( channel )];
+    }
+
+    virtual void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept {
+        assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
+        _values[+AllChannelsToLabChannels( channel )] = value;
     }
 
     virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
@@ -320,6 +333,16 @@ public:
     virtual void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
         assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
         _values[+channel] = value;
+    }
+
+    virtual ValueT GetChannelValue( AllChannels const channel ) const noexcept {
+        assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
+        return _values[+AllChannelsToSrgbChannels( channel )];
+    }
+
+    virtual void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept {
+        assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
+        _values[+AllChannelsToSrgbChannels( channel )] = value;
     }
 
     virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
