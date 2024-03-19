@@ -22,11 +22,11 @@ public:
         SrgbColor =               color;
     }
 
-    LabColorValue GetColorAsLab( ) const {
+    LabColorValue GetLabColor( ) const {
         return LabColor;
     }
 
-    SrgbColorValue GetColorAsSrgb( ) const {
+    SrgbColorValue GetSrgbColor( ) const {
         return SrgbColor;
     }
 
