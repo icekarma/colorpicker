@@ -65,6 +65,7 @@ protected:
     void UpdateBitmaps( );
     void FetchLab( );
     void FetchSrgb( );
+    void SetChannelValue( AllChannels channel, int value );
 
     //============================================
     // Member variables

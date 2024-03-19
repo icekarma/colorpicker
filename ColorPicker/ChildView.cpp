@@ -262,6 +262,33 @@ void CChildView::FetchSrgb( ) {
     m_editSrgbBValue.GetWindowTextW( strB ); m_nSrgbBValue = wcstol( strB.GetBuffer( ), nullptr, 10 );
 }
 
+void CChildView::SetChannelValue( AllChannels channel, int value ) {
+    CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+
+    switch ( channel ) {
+        case AllChannels::LabL:
+        case AllChannels::LabA:
+        case AllChannels::LabB: {
+            auto color { pDoc->GetLabColor( ) };
+            color.SetChannelValue( AllChannelsToLabChannels( channel ), value );
+            pDoc->SetColor( color );
+            break;
+        }
+
+        case AllChannels::SrgbR:
+        case AllChannels::SrgbG:
+        case AllChannels::SrgbB: {
+            auto color { pDoc->GetSrgbColor( ) };
+            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), value );
+            pDoc->SetColor( color );
+            break;
+        }
+
+        default:
+            break;
+    }
+}
+
 void CChildView::OnColorValueChange( UINT const uId ) {
     static unsigned busy { };
     if ( !InterlockedExchange( &busy, 1 ) ) {
