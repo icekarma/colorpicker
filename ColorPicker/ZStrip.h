@@ -1,9 +1,6 @@
 #pragma once
 
-#include "ChildView.h"
 #include "ColorPickerDoc.h"
-
-class CChildView;
 
 class CZStrip {
 
@@ -11,25 +8,53 @@ public:
 
     CZStrip( ) = delete;
 
-    CZStrip( CColorPickerDoc* pDoc, CBitmap* pBitmap ):
+    CZStrip( CColorPickerDoc const* pDoc, CBitmap* pBitmap ):
         m_pDoc    { pDoc    },
         m_pBitmap { pBitmap }
     {
         /*empty*/
     }
 
+    ~CZStrip( ) {
+        if ( m_LabImage ) {
+            delete[] m_LabImage;
+            m_LabImage = nullptr;
+        }
+
+        if ( m_SrgbImage ) {
+            delete[] m_SrgbImage;
+            m_SrgbImage = nullptr;
+        }
+    }
+
+    void SetChannel( AllChannels const channel ) {
+        m_channel = channel;
+    }
+
     void Update( );
+
+    int const static ImageWidth  {  20 };
+    int const static ImageHeight { 256 };
 
 private:
 
-    CColorPickerDoc const* m_pDoc          { };
-    CBitmap*               m_pBitmap       { };
+    using  LabPixelT =  LabColorValue::PixelT;
+    using SrgbPixelT = SrgbColorValue::PixelT;
 
-    int const ImageWidth  {  20 };
-    int const ImageHeight { 256 };
+    void _UpdateLabL( );
+    void _UpdateLabA( );
+    void _UpdateLabB( );
 
-    int                    m_nLastChannel  { -1 };
-    LabColorValue          m_LastLabValue;
-    SrgbColorValue         m_lastSrgbValue;
+    void _UpdateSrgbR( );
+    void _UpdateSrgbG( );
+    void _UpdateSrgbB( );
+
+    CColorPickerDoc const* m_pDoc;
+    CBitmap*               m_pBitmap;
+
+    AllChannels            m_channel   { AllChannels::unknown };
+
+    LabPixelT*             m_LabImage  { new  LabPixelT[ImageWidth * ImageHeight *  ImageLabValuesPerPixel] };
+    SrgbPixelT*            m_SrgbImage { new SrgbPixelT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
 
 };
