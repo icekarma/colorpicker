@@ -118,6 +118,26 @@ enum class AllChannels {
 };
 
 //================================================
+// Methods
+//================================================
+
+LabChannels inline constexpr AllChannelsToLabChannels( AllChannels const channel ) {
+    return (LabChannels) ( +channel - +AllChannels::LabMin );
+}
+
+SrgbChannels inline constexpr AllChannelsToSrgbChannels( AllChannels const channel ) {
+    return (SrgbChannels) ( +channel - +AllChannels::SrgbMin );
+}
+
+AllChannels inline constexpr LabChannelsToAllChannels( LabChannels const channel ) {
+    return (AllChannels) ( +channel + +AllChannels::LabMin );
+}
+
+AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel ) {
+    return (AllChannels) ( +channel + +AllChannels::SrgbMin );
+}
+
+//================================================
 // Classes
 //================================================
 
