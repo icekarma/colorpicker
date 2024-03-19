@@ -62,7 +62,7 @@ LONG  constexpr         WindowStylesToRemove { WS_BORDER        | WS_DLGFRAME   
 DWORD constexpr ExtendedWindowStylesToRemove { WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME | WS_EX_LEFTSCROLLBAR | WS_EX_RIGHTSCROLLBAR | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE                  };
 
 int   constexpr ImageLabValuesPerPixel       {   3 };
-int   constexpr ImageSrgbBytesPerPixel       {   4 };
+int   constexpr ImageSrgbValuesPerPixel      {   4 };
 
 //================================================
 // Concepts
