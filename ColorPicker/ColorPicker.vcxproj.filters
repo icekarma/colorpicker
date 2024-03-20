@@ -57,6 +57,9 @@
     <ClInclude Include="ZStrip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StaticBitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ZStrip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticBitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
