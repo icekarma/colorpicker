@@ -72,11 +72,6 @@ int constexpr SrgbMinima[3] { SrgbMinimumR, SrgbMinimumG, SrgbMinimumB };
 int constexpr SrgbMaxima[3] { SrgbMaximumR, SrgbMaximumG, SrgbMaximumB };
 int constexpr SrgbRanges[3] { SrgbRangeR,   SrgbRangeG,   SrgbRangeB   };
 
-//================================================
-// Late #include
-//================================================
-
-#include "TransformsManager.h"
 
 //================================================
 // Types
@@ -140,6 +135,46 @@ AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const chann
 //================================================
 // Classes
 //================================================
+
+//
+// Class TransformsManager
+//
+
+class TransformsManager {
+
+public:
+
+    TransformsManager( ) {
+        cmsHPROFILE hLabProfile { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
+        cmsHPROFILE hRgbProfile { cmsCreate_sRGBProfile( )              };
+
+        _hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat,  hRgbProfile, SrgbPixelFormat, INTENT_PERCEPTUAL, 0 );
+        _hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, SrgbPixelFormat, hLabProfile, LabPixelFormat,  INTENT_PERCEPTUAL, 0 );
+
+        cmsCloseProfile( hLabProfile );
+        cmsCloseProfile( hRgbProfile );
+    }
+
+    ~TransformsManager( ) {
+        if ( _hLabToSrgbTransform ) {
+            cmsDeleteTransform( _hLabToSrgbTransform );
+            _hLabToSrgbTransform = nullptr;
+        }
+        if ( _hSrgbToLabTransform ) {
+            cmsDeleteTransform( _hSrgbToLabTransform );
+            _hSrgbToLabTransform = nullptr;
+        }
+    }
+
+    cmsHTRANSFORM GetLabToSrgbTransform( ) const { return _hLabToSrgbTransform; }
+    cmsHTRANSFORM GetSrgbToLabTransform( ) const { return _hSrgbToLabTransform; }
+
+protected:
+
+    cmsHTRANSFORM _hLabToSrgbTransform { };
+    cmsHTRANSFORM _hSrgbToLabTransform { };
+
+};
 
 //
 // Template class Color
@@ -358,3 +393,9 @@ protected:
     Triplet<ValueT> _values;
 
 };
+
+//================================================
+// Extern declarations
+//================================================
+
+extern TransformsManager Transforms;

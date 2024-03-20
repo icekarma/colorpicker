@@ -45,9 +45,6 @@
     <ClInclude Include="ColorConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TransformsManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>

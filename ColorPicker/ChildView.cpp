@@ -6,7 +6,6 @@
 #include "ColorPickerDoc.h"
 
 #include "Color.h"
-#include "TransformsManager.h"
 
 #include <array>
 #include <string>
