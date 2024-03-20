@@ -344,26 +344,22 @@ void CChildView::OnColorValueChange( UINT const uId ) {
 }
 
 afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {
-    StaticBitmapMouseMoveArgs* args       { reinterpret_cast<StaticBitmapMouseMoveArgs*>( lParam ) };
-    HWND                       hwndSender { reinterpret_cast<HWND>( wParam ) };
-
-    if ( hwndSender == m_staticZStrip.GetSafeHwnd( ) ) {
-        OnZStripMouseMove( args->nFlags, args->point );
-    } else if ( hwndSender == m_staticXyGrid.GetSafeHwnd( ) ) {
-        OnXyGridMouseMove( args->nFlags, args->point );
+    if ( wParam == IDC_Z_STRIP ) {
+        OnZStripMouseMove( LOWORD( lParam ), HIWORD( lParam ) );
+    } else if ( wParam == IDC_XY_GRID ) {
+        OnXyGridMouseMove( LOWORD( lParam ), HIWORD( lParam ) );
     }
-    delete args;
 
     return 0;
 }
 
-void CChildView::OnZStripMouseMove( UINT nFlags, CPoint point ) {
-    debug( "CChildView::OnZStripMouseMove: nFlags: 0x%08X (%u), point: (%d,%d)\n", nFlags, nFlags, point.x, point.y );
-    SetChannelValue( m_channelZ, point.y );
+void CChildView::OnZStripMouseMove( int x, int y ) {
+    debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
+    SetChannelValue( m_channelZ, y );
 }
 
-void CChildView::OnXyGridMouseMove( UINT nFlags, CPoint point ) {
-    debug( "CChildView::OnXyGridMouseMove: nFlags: 0x%08X (%u), point: (%d,%d)\n", nFlags, nFlags, point.x, point.y );
-    SetChannelValue( m_channelX, point.x );
-    SetChannelValue( m_channelY, point.y );
+void CChildView::OnXyGridMouseMove( int x, int y ) {
+    debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
+    SetChannelValue( m_channelX, x );
+    SetChannelValue( m_channelY, y );
 }

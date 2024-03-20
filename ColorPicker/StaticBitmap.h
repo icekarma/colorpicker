@@ -1,11 +1,6 @@
 #pragma once
 
-UINT const ZSBN_MOUSEMOVE { WM_USER + 0x801 };
-
-struct StaticBitmapMouseMoveArgs {
-    UINT   nFlags;
-    CPoint point;
-};
+UINT const ZSBN_MOUSEMOVE { WM_USER + 0x7FE };
 
 class CStaticBitmap: public CStatic {
 
@@ -24,8 +19,11 @@ public:
 
 protected:
 
-    CRect m_rcClient;
-    HWND  m_hWndTarget   { };
-    bool  m_fLButtonDown { };
+    void _Notify( CPoint ptNew );
+
+    CRect  m_rcClient;
+    HWND   m_hWndTarget   { };
+    bool   m_fLButtonDown { };
+    CPoint m_ptLast       { -1, -1 };
 
 };

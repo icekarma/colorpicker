@@ -57,8 +57,8 @@ protected:
     afx_msg void OnChannelButtonClicked( UINT uId );
     afx_msg void OnColorValueChange( UINT uId );
     afx_msg LRESULT OnZsbnMouseMove( WPARAM wParam, LPARAM lParam );
-    afx_msg void OnZStripMouseMove( UINT nFlags, CPoint point );
-    afx_msg void OnXyGridMouseMove( UINT nFlags, CPoint point );
+    afx_msg void OnZStripMouseMove( int x, int y );
+    afx_msg void OnXyGridMouseMove( int x, int y );
 
     //
     // Own methods
