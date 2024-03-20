@@ -27,9 +27,8 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED   ( IDCLOSE,     &CChildView::OnCloseButtonClicked )
-    ON_STN_CLICKED  ( IDC_Z_STRIP, &CChildView::OnZStripClicked      )
-    ON_STN_CLICKED  ( IDC_XY_GRID, &CChildView::OnXyGridClicked      )
+    ON_BN_CLICKED   ( IDCLOSE,        &CChildView::OnCloseButtonClicked )
+    ON_MESSAGE      ( ZSBN_MOUSEMOVE, &CChildView::OnZsbnMouseMove      )
 
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_CHANGE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueChange     )
@@ -165,6 +164,9 @@ void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
     CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+
+    m_staticZStrip.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
+    m_staticXyGrid.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
 
     //ZE adjust0   { 0,  0 };
     SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
@@ -341,12 +343,27 @@ void CChildView::OnColorValueChange( UINT const uId ) {
     InterlockedExchange( &busy, 0 );
 }
 
-void CChildView::OnZStripClicked( ) {
-    debug( "CChildView::OnZStripClicked\n" );
+afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {
+    StaticBitmapMouseMoveArgs* args       { reinterpret_cast<StaticBitmapMouseMoveArgs*>( lParam ) };
+    HWND                       hwndSender { reinterpret_cast<HWND>( wParam ) };
+
+    if ( hwndSender == m_staticZStrip.GetSafeHwnd( ) ) {
+        OnZStripMouseMove( args->nFlags, args->point );
+    } else if ( hwndSender == m_staticXyGrid.GetSafeHwnd( ) ) {
+        OnXyGridMouseMove( args->nFlags, args->point );
+    }
+    delete args;
+
+    return 0;
 }
 
-void CChildView::OnXyGridClicked( ) {
-    DWORD  dw { ::GetMessagePos( ) };
-    CPoint pt { LOWORD( dw ),HIWORD( dw ) };
-    debug( "CChildView::OnXyGridClicked: pt: (%d,%d)\n", pt.x, pt.y );
+void CChildView::OnZStripMouseMove( UINT nFlags, CPoint point ) {
+    debug( "CChildView::OnZStripMouseMove: nFlags: 0x%08X (%u), point: (%d,%d)\n", nFlags, nFlags, point.x, point.y );
+    SetChannelValue( m_channelZ, point.y );
+}
+
+void CChildView::OnXyGridMouseMove( UINT nFlags, CPoint point ) {
+    debug( "CChildView::OnXyGridMouseMove: nFlags: 0x%08X (%u), point: (%d,%d)\n", nFlags, nFlags, point.x, point.y );
+    SetChannelValue( m_channelX, point.x );
+    SetChannelValue( m_channelY, point.y );
 }
