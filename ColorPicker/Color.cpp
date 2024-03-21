@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "ColorConverter.h"
+#include "Color.h"
 
 //================================================
 // Global variables

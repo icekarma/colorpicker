@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Color.h"
-#include "ColorConverter.h"
 
 class CColorPickerDoc:
     public CDocument

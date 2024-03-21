@@ -217,7 +217,6 @@
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="ChildView.h" />
-    <ClInclude Include="ColorConverter.h" />
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="StaticBitmap.h" />
@@ -233,7 +232,7 @@
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="ChildView.cpp" />
-    <ClCompile Include="ColorConverter.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDoc.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
