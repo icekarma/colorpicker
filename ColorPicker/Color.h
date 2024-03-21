@@ -41,6 +41,9 @@ using Triplet = std::array<T, 3>;
 // Constants
 //================================================
 
+int constexpr ImageLabValuesPerPixel  { 3 };
+int constexpr ImageSrgbValuesPerPixel { 4 };
+
 cmsUInt32Number constexpr SrgbPixelFormat { TYPE_BGRA_8 };
 cmsUInt32Number constexpr  LabPixelFormat {
 #if defined LAB_COLOR_USE_FLOAT
