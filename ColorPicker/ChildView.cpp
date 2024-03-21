@@ -278,7 +278,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
         case AllChannels::LabA:
         case AllChannels::LabB: {
             auto color { pDoc->GetLabColor( ) };
-            color.SetChannelValue( AllChannelsToLabChannels( channel ), value );
+            color.SetChannelValue( AllChannelsToLabChannels( channel ), static_cast<LabValueT>( value ) );
             pDoc->SetColor( color );
             break;
         }
@@ -287,7 +287,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
         case AllChannels::SrgbG:
         case AllChannels::SrgbB: {
             auto color { pDoc->GetSrgbColor( ) };
-            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), value );
+            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), static_cast<SrgbValueT>( value ) );
             pDoc->SetColor( color );
             break;
         }
