@@ -103,6 +103,13 @@ enum class AllChannels {
 };
 
 //================================================
+// Function prototypes
+//================================================
+
+LabColorValue  ConvertColor( SrgbColorValue const& color );
+SrgbColorValue ConvertColor( LabColorValue  const& color );
+
+//================================================
 // Methods
 //================================================
 
