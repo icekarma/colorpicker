@@ -158,7 +158,7 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
-    CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     m_staticZStrip.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
     m_staticXyGrid.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
@@ -260,7 +260,7 @@ void CChildView::FetchSrgb( ) {
 }
 
 void CChildView::SetChannelValue( AllChannels channel, int value ) {
-    CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     switch ( channel ) {
         case AllChannels::LabL:
@@ -292,7 +292,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         return;
     }
 
-    CColorPickerDoc* pDoc { DYNAMIC_DOWNCAST( CColorPickerDoc, GetDocument( ) ) };
+    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE:
