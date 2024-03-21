@@ -182,18 +182,14 @@ class Color {
 
 public:
 
-    Color( )                                          noexcept { /*empty*/ }
-    Color( ValueT const, ValueT const, ValueT const ) noexcept { /*empty*/ }
-    Color( Triplet<ValueT> const )                    noexcept { /*empty*/ }
+    virtual constexpr ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
+    virtual constexpr int             GetChannelCount( )                                               const noexcept = 0;
 
-    virtual ColorSpace constexpr GetColorSpace( )   const noexcept = 0;
-    virtual int        constexpr GetChannelCount( ) const noexcept = 0;
+    virtual constexpr ValueT          GetChannelValue( AllChannels const channel )                     const noexcept = 0;
+    virtual constexpr void            SetChannelValue( AllChannels const channel, ValueT const value )       noexcept = 0;
 
-    virtual ValueT               GetChannelValue( AllChannels const channel )               const noexcept = 0;
-    virtual void                 SetChannelValue( AllChannels const channel, ValueT const value ) noexcept = 0;
-
-    virtual void                 GetChannelValues( Triplet<ValueT>& values ) const noexcept = 0;
-    virtual void                 SetChannelValues( Triplet<ValueT> const values )  noexcept = 0;
+    virtual constexpr Triplet<ValueT> GetChannelValues( )                                              const noexcept = 0;
+    virtual constexpr void            SetChannelValues( Triplet<ValueT> const& values )                      noexcept = 0;
 
 };
 
@@ -208,83 +204,81 @@ class LabColor:
 
 public:
 
-    using PixelT = FloatT;
-
-    LabColor( ) noexcept:
+    constexpr LabColor( ) noexcept:
         LabColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
         /*empty*/
     }
 
-    LabColor( LabColor const& rhs ) noexcept:
+    constexpr LabColor( LabColor const& rhs ) noexcept:
         LabColor { rhs._values }
     {
         /*empty*/
     }
 
-    LabColor( LabColor&& rhs ) noexcept:
+    constexpr LabColor( LabColor&& rhs ) noexcept:
         LabColor { std::move( rhs._values ) }
     {
         /*empty*/
     }
 
-    LabColor( ValueT const L, ValueT const a, ValueT const b ) noexcept:
+    constexpr LabColor( ValueT const L, ValueT const a, ValueT const b ) noexcept:
         _values { L, a, b }
     {
         /*empty*/
     }
 
-    LabColor( Triplet<ValueT> const channels ) noexcept:
+    constexpr LabColor( Triplet<ValueT> const channels ) noexcept:
         LabColor { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
     {
         /*empty*/
     }
 
-    LabColor& operator=( LabColor const& rhs ) noexcept {
+    constexpr LabColor& operator=( LabColor const& rhs ) noexcept {
         _values = rhs._values;
 
         return *this;
     }
 
-    LabColor& operator=( LabColor&& rhs ) noexcept {
+    constexpr LabColor& operator=( LabColor&& rhs ) noexcept {
         _values = std::move( rhs._values );
 
         return *this;
     }
 
-    virtual ColorSpace constexpr GetColorSpace( ) const noexcept {
+    virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::Lab;
     }
 
-    virtual int constexpr GetChannelCount( ) const noexcept {
+    virtual int constexpr GetChannelCount( ) const noexcept override {
         return 3;
     }
 
-    virtual ValueT GetChannelValue( LabChannels const channel ) const noexcept {
+    constexpr ValueT GetChannelValue( LabChannels const channel ) const noexcept {
         assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
         return _values[+channel];
     }
 
-    virtual void SetChannelValue( LabChannels const channel, ValueT const value ) noexcept {
+    constexpr void SetChannelValue( LabChannels const channel, ValueT const value ) noexcept {
         assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
         _values[+channel] = value;
     }
 
-    virtual ValueT GetChannelValue( AllChannels const channel ) const noexcept {
+    virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
         assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
         return _values[+AllChannelsToLabChannels( channel )];
     }
 
-    virtual void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept {
+    virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
         assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
         _values[+AllChannelsToLabChannels( channel )] = value;
     }
 
-    virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
-        values = _values;
+    virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
+        return _values;
     }
 
-    virtual void SetChannelValues( Triplet<ValueT> const values ) noexcept {
+    virtual constexpr void SetChannelValues( Triplet<ValueT> const& values ) noexcept override {
         _values = values;
     }
 
@@ -305,83 +299,81 @@ class SrgbColor:
 
 public:
 
-    using PixelT = uint8_t;
-
-    SrgbColor( ) noexcept:
+    constexpr SrgbColor( ) noexcept:
         SrgbColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
         /*empty*/
     }
 
-    SrgbColor( SrgbColor const& rhs ) noexcept:
+    constexpr SrgbColor( SrgbColor const& rhs ) noexcept:
         _values ( rhs._values )
     {
         /*empty*/
     }
 
-    SrgbColor( SrgbColor&& rhs ) noexcept:
+    constexpr SrgbColor( SrgbColor&& rhs ) noexcept:
         _values ( std::move( rhs._values ) )
     {
         /*empty*/
     }
 
-    SrgbColor( ValueT const R, ValueT const G, ValueT const B ) noexcept:
+    constexpr SrgbColor( ValueT const R, ValueT const G, ValueT const B ) noexcept:
         _values { R, G, B }
     {
         /*empty*/
     }
 
-    SrgbColor( Triplet<ValueT> const channels ) noexcept:
+    constexpr SrgbColor( Triplet<ValueT> const channels ) noexcept:
         SrgbColor { channels[+SrgbChannels::R], channels[+SrgbChannels::G], channels[+SrgbChannels::B] }
     {
         /*empty*/
     }
 
-    SrgbColor& operator=( SrgbColor const& rhs ) noexcept {
+    constexpr SrgbColor& operator=( SrgbColor const& rhs ) noexcept {
         _values = rhs._values;
 
         return *this;
     }
 
-    SrgbColor& operator=( SrgbColor&& rhs ) noexcept {
+    constexpr SrgbColor& operator=( SrgbColor&& rhs ) noexcept {
         _values = std::move( rhs._values );
 
         return *this;
     }
 
-    virtual ColorSpace constexpr GetColorSpace( ) const noexcept {
+    virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::sRGB;
     }
 
-    virtual int constexpr GetChannelCount( ) const noexcept {
+    virtual int constexpr GetChannelCount( ) const noexcept override {
         return 3;
     }
 
-    virtual ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
+    constexpr ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
         assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
         return _values[+channel];
     }
 
-    virtual void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
+    constexpr void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
         assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
         _values[+channel] = value;
     }
 
-    virtual ValueT GetChannelValue( AllChannels const channel ) const noexcept {
+    virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
         assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
         return _values[+AllChannelsToSrgbChannels( channel )];
     }
 
-    virtual void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept {
+    virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
         assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
         _values[+AllChannelsToSrgbChannels( channel )] = value;
     }
 
-    virtual void GetChannelValues( Triplet<ValueT>& values ) const noexcept {
-        values = _values;
+    virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
+        return _values;
     }
 
-    virtual void SetChannelValues( Triplet<ValueT> const values ) noexcept {
+    virtual constexpr void SetChannelValues( Triplet<ValueT> const& values ) noexcept override {
         _values = values;
     }
 
@@ -392,7 +384,7 @@ protected:
 };
 
 //================================================
-// Extern declarations
+// External data
 //================================================
 
 extern TransformsManager Transforms;
