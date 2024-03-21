@@ -1,11 +1,5 @@
 #pragma once
 
-#include <lcms2.h>
-
-#include <cstdint>
-
-#include <array>
-
 //================================================
 // Preprocessor macros
 //================================================

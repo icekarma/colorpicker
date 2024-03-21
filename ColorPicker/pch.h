@@ -8,11 +8,17 @@
 
 #include "targetver.h"
 
+#include <cerrno>
 #include <cmath>
 #include <cstdint>
 
 #include <algorithm>
+#include <array>
+#include <memory>
+#include <stdexcept>
+#include <string>
 #include <type_traits>
+#include <unordered_map>
 
 using std::max;
 using std::min;
@@ -43,14 +49,16 @@ using std::min;
 #   endif
 #endif
 
+#include <lcms2.h>
+
+#include "Resource.h"
+
 #if defined _DEBUG && defined DEBUG_NEW
 #   if defined new
 #       undef new
 #   endif
 #   define new DEBUG_NEW
 #endif
-
-#include "Resource.h"
 
 #include "Debug.h"
 

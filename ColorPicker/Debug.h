@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <stdexcept>
-
 #undef DEBUG_TO_STDOUT
 #undef DEBUG_TO_STDERR
 
