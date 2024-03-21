@@ -292,7 +292,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
 
 void CChildView::OnColorValueChange( UINT const uId ) {
     static unsigned busy { };
-    if ( !InterlockedExchange( &busy, 1 ) ) {
+    if ( InterlockedExchange( &busy, 1 ) ) {
         return;
     }
 
