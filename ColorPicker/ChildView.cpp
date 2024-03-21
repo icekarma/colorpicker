@@ -243,20 +243,31 @@ void CChildView::UpdateBitmaps( ) {
     }
 }
 
-void CChildView::FetchLab( ) {
-    CString strL, strA, strB;
+void CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
+    int cbText { edit.GetWindowTextLengthW( ) };
+    if ( cbText < 1 ) {
+        return;
+    }
 
-    m_editLabLValue.GetWindowTextW( strL ); m_nLabLValue = wcstol( strL.GetBuffer( ), nullptr, 10 );
-    m_editLabAValue.GetWindowTextW( strA ); m_nLabAValue = wcstol( strA.GetBuffer( ), nullptr, 10 );
-    m_editLabBValue.GetWindowTextW( strB ); m_nLabBValue = wcstol( strB.GetBuffer( ), nullptr, 10 );
+    std::unique_ptr<wchar_t> _text { new wchar_t[cbText + 1] };
+    wchar_t* pwszText = _text.get( );
+    wchar_t* pwszEnd { };
+    if ( edit.GetWindowTextW( pwszText, cbText ) < 1 ) {
+        return;
+    }
+
+    errno = 0;
+    long tmp = wcstol( pwszText, &pwszEnd, 10 );
+    if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+        return;
+    }
+
+    result = static_cast<int>( tmp );
 }
 
-void CChildView::FetchSrgb( ) {
-    CString strR, strG, strB;
-
-    m_editSrgbRValue.GetWindowTextW( strR ); m_nSrgbRValue = wcstol( strR.GetBuffer( ), nullptr, 10 );
-    m_editSrgbGValue.GetWindowTextW( strG ); m_nSrgbGValue = wcstol( strG.GetBuffer( ), nullptr, 10 );
-    m_editSrgbBValue.GetWindowTextW( strB ); m_nSrgbBValue = wcstol( strB.GetBuffer( ), nullptr, 10 );
+void CChildView::PutValueToEdit( CEdit& edit, int const value ) {
+    std::wstring wstrValue { std::to_wstring( value ) };
+    edit.SetWindowTextW( wstrValue.c_str( ) );
 }
 
 void CChildView::SetChannelValue( AllChannels channel, int value ) {
@@ -298,7 +309,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         case IDC_LAB_L_VALUE:
         case IDC_LAB_A_VALUE:
         case IDC_LAB_B_VALUE: {
-            FetchLab( );
+            GetValueFromEdit( m_editLabLValue, m_nLabLValue );
+            GetValueFromEdit( m_editLabAValue, m_nLabAValue );
+            GetValueFromEdit( m_editLabBValue, m_nLabBValue );
             pDoc->SetColor( LabColorValue { (FloatT) m_nLabLValue, (FloatT) m_nLabAValue, (FloatT) m_nLabBValue } );
 
             Triplet<SrgbColorValue::PixelT> values;
@@ -307,17 +320,19 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             m_nSrgbGValue = values[+SrgbChannels::G];
             m_nSrgbBValue = values[+SrgbChannels::B];
 
-            wchar_t buf[15];
-            wsprintf( buf, L"%d", m_nSrgbRValue ); m_editSrgbRValue.SetWindowTextW( buf );
-            wsprintf( buf, L"%d", m_nSrgbGValue ); m_editSrgbGValue.SetWindowTextW( buf );
-            wsprintf( buf, L"%d", m_nSrgbBValue ); m_editSrgbBValue.SetWindowTextW( buf );
+            PutValueToEdit( m_editSrgbRValue, m_nSrgbRValue );
+            PutValueToEdit( m_editSrgbGValue, m_nSrgbGValue );
+            PutValueToEdit( m_editSrgbBValue, m_nSrgbBValue );
+
             break;
         }
 
         case IDC_SRGB_R_VALUE:
         case IDC_SRGB_G_VALUE:
         case IDC_SRGB_B_VALUE: {
-            FetchSrgb( );
+            GetValueFromEdit( m_editSrgbRValue, m_nSrgbRValue );
+            GetValueFromEdit( m_editSrgbGValue, m_nSrgbGValue );
+            GetValueFromEdit( m_editSrgbBValue, m_nSrgbBValue );
             pDoc->SetColor( SrgbColorValue { (uint8_t) m_nSrgbRValue, (uint8_t) m_nSrgbGValue, (uint8_t) m_nSrgbBValue } );
 
             Triplet<LabColorValue::PixelT> values;
@@ -326,10 +341,11 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             m_nLabAValue = static_cast<int>( values[+LabChannels::a] );
             m_nLabBValue = static_cast<int>( values[+LabChannels::b] );
 
-            wchar_t buf[15];
-            wsprintf( buf, L"%d", m_nLabLValue ); m_editLabLValue.SetWindowTextW( buf );
-            wsprintf( buf, L"%d", m_nLabAValue ); m_editLabAValue.SetWindowTextW( buf );
-            wsprintf( buf, L"%d", m_nLabBValue ); m_editLabBValue.SetWindowTextW( buf );
+            PutValueToEdit( m_editLabLValue, m_nLabLValue );
+            PutValueToEdit( m_editLabAValue, m_nLabAValue );
+            PutValueToEdit( m_editLabBValue, m_nLabBValue );
+
+            break;
         }
     }
 

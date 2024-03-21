@@ -65,8 +65,8 @@ protected:
     //
 
     void UpdateBitmaps( );
-    void FetchLab( );
-    void FetchSrgb( );
+    void GetValueFromEdit( CEdit const& edit, int& result );
+    void PutValueToEdit( CEdit& edit, int const value );
     void SetChannelValue( AllChannels channel, int value );
 
     //============================================
