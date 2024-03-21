@@ -63,23 +63,6 @@ cmsUInt32Number constexpr  LabPixelFormat {
 #endif
 };
 
-int constexpr LabMinimumL   {    0 }; int constexpr LabMaximumL  { 100 }; int constexpr LabRangeL  { LabMaximumL  - LabMinimumL  + 1 };
-int constexpr LabMinimumA   { -128 }; int constexpr LabMaximumA  { 127 }; int constexpr LabRangeA  { LabMaximumA  - LabMinimumA  + 1 };
-int constexpr LabMinimumB   { -128 }; int constexpr LabMaximumB  { 127 }; int constexpr LabRangeB  { LabMaximumB  - LabMinimumB  + 1 };
-
-int constexpr SrgbMinimumR  {    0 }; int constexpr SrgbMaximumR { 255 }; int constexpr SrgbRangeR { SrgbMaximumR - SrgbMinimumR + 1 };
-int constexpr SrgbMinimumG  {    0 }; int constexpr SrgbMaximumG { 255 }; int constexpr SrgbRangeG { SrgbMaximumG - SrgbMinimumG + 1 };
-int constexpr SrgbMinimumB  {    0 }; int constexpr SrgbMaximumB { 255 }; int constexpr SrgbRangeB { SrgbMaximumB - SrgbMinimumB + 1 };
-
-int constexpr LabMinima[3]  { LabMinimumL,  LabMinimumA,  LabMinimumB  };
-int constexpr LabMaxima[3]  { LabMaximumL,  LabMaximumA,  LabMaximumB  };
-int constexpr LabRanges[3]  { LabRangeL,    LabRangeA,    LabRangeB    };
-
-int constexpr SrgbMinima[3] { SrgbMinimumR, SrgbMinimumG, SrgbMinimumB };
-int constexpr SrgbMaxima[3] { SrgbMaximumR, SrgbMaximumG, SrgbMaximumB };
-int constexpr SrgbRanges[3] { SrgbRangeR,   SrgbRangeG,   SrgbRangeB   };
-
-
 //================================================
 // Types
 //================================================
