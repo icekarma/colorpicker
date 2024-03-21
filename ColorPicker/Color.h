@@ -5,10 +5,15 @@
 //================================================
 
 #undef  LAB_COLOR_USE_FLOAT
-#define LAB_COLOR_USE_DOUBLE
+#undef  LAB_COLOR_USE_DOUBLE
+#define LAB_COLOR_USE_UINT8
 
-#if ( !defined LAB_COLOR_USE_FLOAT && !defined LAB_COLOR_USE_DOUBLE ) || ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_DOUBLE )
-#   error Must define only ONE of LAB_COLOR_USE_FLOAT or LAB_COLOR_USE_DOUBLE.
+#if ( !defined LAB_COLOR_USE_FLOAT && !defined LAB_COLOR_USE_DOUBLE && !defined LAB_COLOR_USE_UINT8 ) || ( ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_DOUBLE ) || ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_UINT8 ) || ( defined LAB_COLOR_USE_DOUBLE && defined LAB_COLOR_USE_UINT8 ) )
+#   error Must define only ONE of LAB_COLOR_USE_FLOAT, LAB_COLOR_USE_DOUBLE, or LAB_COLOR_USE_UINT8.
+#endif
+
+#if defined LAB_COLOR_USE_FLOAT || defined LAB_COLOR_USE_DOUBLE
+#   define FLOATING_POINT_LAB_COLOR
 #endif
 
 //================================================
@@ -26,12 +31,15 @@ class SrgbColor;
 //================================================
 
 #if defined LAB_COLOR_USE_FLOAT
-using FloatT = float;
+using LabValueT = float;
 #elif defined LAB_COLOR_USE_DOUBLE
-using FloatT = double;
+using LabValueT = double;
+#elif defined LAB_COLOR_USE_UINT8
+using LabValueT = uint8_t;
 #endif
+using SrgbValueT = uint8_t;
 
-using LabColorValue  = LabColor<FloatT>;
+using LabColorValue  = LabColor<LabValueT>;
 using SrgbColorValue = SrgbColor<uint8_t>;
 
 template<typename T>
@@ -50,6 +58,8 @@ cmsUInt32Number constexpr  LabPixelFormat {
     TYPE_Lab_FLT
 #elif defined LAB_COLOR_USE_DOUBLE
     TYPE_Lab_DBL
+#elif defined LAB_COLOR_USE_UINT8
+    TYPE_Lab_8
 #endif
 };
 
