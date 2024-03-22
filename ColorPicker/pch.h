@@ -14,7 +14,6 @@
 
 #include <algorithm>
 #include <array>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
