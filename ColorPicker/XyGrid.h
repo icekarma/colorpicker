@@ -16,9 +16,9 @@ public:
     }
 
     ~CXyGrid( ) {
-        if ( m_LabImage ) {
-            delete[] m_LabImage;
-            m_LabImage = nullptr;
+        if ( m_RawLabImage ) {
+            delete[] m_RawLabImage;
+            m_RawLabImage = nullptr;
         }
 
         if ( m_SrgbImage ) {
@@ -40,9 +40,6 @@ public:
 
 private:
 
-    using  LabPixelT =  LabColorValue::PixelT;
-    using SrgbPixelT = SrgbColorValue::PixelT;
-
     void _UpdateLabL( );
     void _UpdateLabA( );
     void _UpdateLabB( );
@@ -54,11 +51,11 @@ private:
     CColorPickerDoc const* m_pDoc;
     CBitmap*               m_pBitmap;
 
-    AllChannels            m_channelX         { AllChannels::unknown };
-    AllChannels            m_channelY         { AllChannels::unknown };
-    AllChannels            m_channelZ         { AllChannels::unknown };
+    AllChannels            m_channelX    { AllChannels::unknown };
+    AllChannels            m_channelY    { AllChannels::unknown };
+    AllChannels            m_channelZ    { AllChannels::unknown };
 
-    LabPixelT*             m_LabImage         { new  LabPixelT[ImageWidth * ImageHeight *  ImageLabValuesPerPixel] };
-    SrgbPixelT*            m_SrgbImage        { new SrgbPixelT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
+    RawLabValueT*          m_RawLabImage { new RawLabValueT[ImageWidth * ImageHeight *  ImageLabValuesPerPixel] };
+    SrgbValueT*            m_SrgbImage   { new   SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
 
 };
