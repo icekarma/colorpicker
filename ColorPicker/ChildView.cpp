@@ -243,26 +243,32 @@ void CChildView::UpdateBitmaps( ) {
     }
 }
 
-void CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
+bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     int cbText { edit.GetWindowTextLengthW( ) };
     if ( cbText < 1 ) {
-        return;
+        return false;
     }
 
-    std::unique_ptr<wchar_t> _text { new wchar_t[cbText + 1] };
-    wchar_t* pwszText = _text.get( );
-    wchar_t* pwszEnd { };
+    wchar_t* pwszText { new wchar_t[cbText + 1] };
+    if ( !pwszText ) {
+        return false;
+    }
     if ( edit.GetWindowTextW( pwszText, cbText ) < 1 ) {
-        return;
+        delete[] pwszText;
+        return false;
     }
 
     errno = 0;
+    wchar_t* pwszEnd { };
     long tmp = wcstol( pwszText, &pwszEnd, 10 );
     if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
-        return;
+        delete[] pwszText;
+        return false;
     }
 
     result = static_cast<int>( tmp );
+    delete[] pwszText;
+    return true;
 }
 
 void CChildView::PutValueToEdit( CEdit& edit, int const value ) {
