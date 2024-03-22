@@ -35,54 +35,48 @@ void CZStrip::Update( ) {
 }
 
 void CZStrip::_UpdateLabL( ) {
-    LabPixelT* ptr { m_LabImage };
-
-    Triplet<LabPixelT> channels;
-    m_pDoc->GetLabColor( ).GetChannelValues( channels );
+    RawLabValueT*         ptr      { m_RawLabImage };
+    Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         for ( int x { }; x < ImageWidth; ++x ) {
-            *ptr++ = static_cast<LabPixelT>( LabMinimumL + y * LabRanges[+LabChannels::L] / ImageHeight );
-            *ptr++ = static_cast<LabPixelT>( channels[1] );
-            *ptr++ = static_cast<LabPixelT>( channels[2] );
+            *ptr++ = static_cast<RawLabValueT>( y           );
+            *ptr++ = static_cast<RawLabValueT>( channels[1] );
+            *ptr++ = static_cast<RawLabValueT>( channels[2] );
         }
     }
 
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), m_LabImage, m_SrgbImage, ImageWidth * ImageHeight );
+    Transforms.TransformLabToSrgb( m_RawLabImage, m_SrgbImage, ImageWidth * ImageHeight );
 }
 
 void CZStrip::_UpdateLabA( ) {
-    LabPixelT* ptr { m_LabImage };
-
-    Triplet<LabPixelT> channels;
-    m_pDoc->GetLabColor( ).GetChannelValues( channels );
+    RawLabValueT*         ptr      { m_RawLabImage };
+    Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         for ( int x { }; x < ImageWidth; ++x ) {
-            *ptr++ = static_cast<LabPixelT>( channels[0] );
-            *ptr++ = static_cast<LabPixelT>( LabMinimumA + y * LabRanges[+LabChannels::a] / ImageHeight );
-            *ptr++ = static_cast<LabPixelT>( channels[2] );
+            *ptr++ = static_cast<RawLabValueT>( channels[0] );
+            *ptr++ = static_cast<RawLabValueT>( y           );
+            *ptr++ = static_cast<RawLabValueT>( channels[2] );
         }
     }
 
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), m_LabImage, m_SrgbImage, ImageWidth * ImageHeight );
+    Transforms.TransformLabToSrgb( m_RawLabImage, m_SrgbImage, ImageWidth * ImageHeight );
 }
 
 void CZStrip::_UpdateLabB( ) {
-    LabPixelT* ptr { m_LabImage };
-
-    Triplet<LabPixelT> channels;
-    m_pDoc->GetLabColor( ).GetChannelValues( channels );
+    RawLabValueT*         ptr      { m_RawLabImage };
+    Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         for ( int x { }; x < ImageWidth; ++x ) {
-            *ptr++ = static_cast<LabPixelT>( channels[0] );
-            *ptr++ = static_cast<LabPixelT>( channels[1] );
-            *ptr++ = static_cast<LabPixelT>( LabMinimumB + y * LabRanges[+LabChannels::b] / ImageHeight );
+            *ptr++ = static_cast<RawLabValueT>( channels[0] );
+            *ptr++ = static_cast<RawLabValueT>( channels[1] );
+            *ptr++ = static_cast<RawLabValueT>( y           );
         }
     }
 
-    cmsDoTransform( Transforms.GetLabToSrgbTransform( ), m_LabImage, m_SrgbImage, ImageWidth * ImageHeight );
+    Transforms.TransformLabToSrgb( m_RawLabImage, m_SrgbImage, ImageWidth * ImageHeight );
 }
 
 void CZStrip::_UpdateSrgbR( ) {
