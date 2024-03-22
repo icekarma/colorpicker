@@ -312,10 +312,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             GetValueFromEdit( m_editLabLValue, m_nLabLValue );
             GetValueFromEdit( m_editLabAValue, m_nLabAValue );
             GetValueFromEdit( m_editLabBValue, m_nLabBValue );
-            pDoc->SetColor( LabColorValue { (FloatT) m_nLabLValue, (FloatT) m_nLabAValue, (FloatT) m_nLabBValue } );
+            pDoc->SetColor( LabColorValue { static_cast<LabValueT>( m_nLabLValue ), static_cast<LabValueT>( m_nLabAValue ), static_cast<LabValueT>( m_nLabBValue ) } );
 
-            Triplet<SrgbColorValue::PixelT> values;
-            pDoc->GetSrgbColor( ).GetChannelValues( values );
+            Triplet<SrgbValueT> values { pDoc->GetSrgbColor( ).GetChannelValues( ) };
             m_nSrgbRValue = values[+SrgbChannels::R];
             m_nSrgbGValue = values[+SrgbChannels::G];
             m_nSrgbBValue = values[+SrgbChannels::B];
@@ -323,7 +322,6 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             PutValueToEdit( m_editSrgbRValue, m_nSrgbRValue );
             PutValueToEdit( m_editSrgbGValue, m_nSrgbGValue );
             PutValueToEdit( m_editSrgbBValue, m_nSrgbBValue );
-
             break;
         }
 
@@ -333,10 +331,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             GetValueFromEdit( m_editSrgbRValue, m_nSrgbRValue );
             GetValueFromEdit( m_editSrgbGValue, m_nSrgbGValue );
             GetValueFromEdit( m_editSrgbBValue, m_nSrgbBValue );
-            pDoc->SetColor( SrgbColorValue { (uint8_t) m_nSrgbRValue, (uint8_t) m_nSrgbGValue, (uint8_t) m_nSrgbBValue } );
+            pDoc->SetColor( SrgbColorValue { static_cast<SrgbValueT>( m_nSrgbRValue ), static_cast<SrgbValueT>( m_nSrgbGValue ), static_cast<SrgbValueT>( m_nSrgbBValue ) } );
 
-            Triplet<LabColorValue::PixelT> values;
-            pDoc->GetLabColor( ).GetChannelValues( values );
+            Triplet<LabValueT> values { pDoc->GetLabColor( ).GetChannelValues( ) };
             m_nLabLValue = static_cast<int>( values[+LabChannels::L] );
             m_nLabAValue = static_cast<int>( values[+LabChannels::a] );
             m_nLabBValue = static_cast<int>( values[+LabChannels::b] );
@@ -344,7 +341,6 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             PutValueToEdit( m_editLabLValue, m_nLabLValue );
             PutValueToEdit( m_editLabAValue, m_nLabAValue );
             PutValueToEdit( m_editLabBValue, m_nLabBValue );
-
             break;
         }
     }

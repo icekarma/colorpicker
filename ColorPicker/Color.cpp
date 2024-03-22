@@ -13,19 +13,17 @@ TransformsManager Transforms;
 //================================================
 
 SrgbColorValue ConvertColor( LabColorValue const& color ) {
-    Triplet<FloatT> labValues { };
-    uint8_t         srgbValues[ImageSrgbValuesPerPixel];
+    SrgbValueT         srgbValues[ImageSrgbValuesPerPixel];
+    Triplet<LabValueT> labValues { color.GetChannelValues( ) };
 
-    color.GetChannelValues( labValues );
     cmsDoTransform( Transforms.GetLabToSrgbTransform( ), labValues.data( ), srgbValues, 1 );
     return { srgbValues[2], srgbValues[1], srgbValues[0] };
 }
 
 LabColorValue ConvertColor( SrgbColorValue const& color ) {
-    Triplet<uint8_t> srgbValues { };
-    FloatT           labValues[ImageLabValuesPerPixel];
+    LabValueT           labValues[ImageLabValuesPerPixel];
+    Triplet<SrgbValueT> srgbValues { color.GetChannelValues( ) };
 
-    color.GetChannelValues( srgbValues );
     cmsDoTransform( Transforms.GetSrgbToLabTransform( ), srgbValues.data( ), labValues, 1 );
     return { labValues[0], labValues[1], labValues[2] };
 }
