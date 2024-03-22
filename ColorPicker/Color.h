@@ -1,22 +1,6 @@
 #pragma once
 
 //================================================
-// Preprocessor macros
-//================================================
-
-#undef  LAB_COLOR_USE_FLOAT
-#undef  LAB_COLOR_USE_DOUBLE
-#define LAB_COLOR_USE_UINT8
-
-#if ( !defined LAB_COLOR_USE_FLOAT && !defined LAB_COLOR_USE_DOUBLE && !defined LAB_COLOR_USE_UINT8 ) || ( ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_DOUBLE ) || ( defined LAB_COLOR_USE_FLOAT && defined LAB_COLOR_USE_UINT8 ) || ( defined LAB_COLOR_USE_DOUBLE && defined LAB_COLOR_USE_UINT8 ) )
-#   error Must define only ONE of LAB_COLOR_USE_FLOAT, LAB_COLOR_USE_DOUBLE, or LAB_COLOR_USE_UINT8.
-#endif
-
-#if defined LAB_COLOR_USE_FLOAT || defined LAB_COLOR_USE_DOUBLE
-#   define FLOATING_POINT_LAB_COLOR
-#endif
-
-//================================================
 // Forward declarations
 //================================================
 
@@ -30,38 +14,25 @@ class SrgbColor;
 // Type aliases
 //================================================
 
-#if defined LAB_COLOR_USE_FLOAT
-using LabValueT = float;
-#elif defined LAB_COLOR_USE_DOUBLE
-using LabValueT = double;
-#elif defined LAB_COLOR_USE_UINT8
-using LabValueT = uint8_t;
-#endif
-using SrgbValueT = uint8_t;
+using LabValueT      =  int8_t;
+using RawLabValueT   = uint8_t;
+using SrgbValueT     = uint8_t;
 
 using LabColorValue  = LabColor<LabValueT>;
-using SrgbColorValue = SrgbColor<uint8_t>;
+using SrgbColorValue = SrgbColor<SrgbValueT>;
 
 template<typename T>
-using Triplet = std::array<T, 3>;
+using Triplet        = std::array<T, 3>;
 
 //================================================
 // Constants
 //================================================
 
-int constexpr ImageLabValuesPerPixel  { 3 };
-int constexpr ImageSrgbValuesPerPixel { 4 };
+int             constexpr  ImageLabValuesPerPixel { 3 };
+int             constexpr ImageSrgbValuesPerPixel { 4 };
 
-cmsUInt32Number constexpr SrgbPixelFormat { TYPE_BGRA_8 };
-cmsUInt32Number constexpr  LabPixelFormat {
-#if defined LAB_COLOR_USE_FLOAT
-    TYPE_Lab_FLT
-#elif defined LAB_COLOR_USE_DOUBLE
-    TYPE_Lab_DBL
-#elif defined LAB_COLOR_USE_UINT8
-    TYPE_Lab_8
-#endif
-};
+cmsUInt32Number constexpr  LabPixelFormat         { TYPE_Lab_8  };
+cmsUInt32Number constexpr SrgbPixelFormat         { TYPE_BGRA_8 };
 
 //================================================
 // Types
@@ -88,26 +59,15 @@ enum class SrgbChannels {
 };
 
 enum class AllChannels {
-    unknown = -1,
-    LabL    =  0,
-    LabA    =  1,
-    LabB    =  2,
-    SrgbR   =  3,
-    SrgbG   =  4,
-    SrgbB   =  5,
+    LabL    =  0, LabA    =  1, LabB    =  2,
+    SrgbR   =  3, SrgbG   =  4, SrgbB   =  5,
 
+    unknown = -1,
     LabMin  = AllChannels::LabL,
     LabMax  = AllChannels::LabB,
     SrgbMin = AllChannels::SrgbR,
     SrgbMax = AllChannels::SrgbB,
 };
-
-//================================================
-// Function prototypes
-//================================================
-
-LabColorValue  ConvertColor( SrgbColorValue const& color );
-SrgbColorValue ConvertColor( LabColorValue  const& color );
 
 //================================================
 // Methods
@@ -129,52 +89,28 @@ AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const chann
     return (AllChannels) ( +channel + +AllChannels::SrgbMin );
 }
 
+Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& channels ) {
+    return {
+        static_cast<RawLabValueT>( static_cast<int>( channels[0] ) * 256 / 100 ),
+        static_cast<RawLabValueT>( static_cast<int>( channels[1] ) + 128       ),
+        static_cast<RawLabValueT>( static_cast<int>( channels[2] ) + 128       )
+    };
+}
+
+Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& channels ) {
+    return {
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[0] ) ) * 100 / 256 ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[1] ) ) - 128       ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[2] ) ) - 128       )
+    };
+}
+
 //================================================
 // Classes
 //================================================
 
 //
-// Class TransformsManager
-//
-
-class TransformsManager {
-
-public:
-
-    TransformsManager( ) {
-        cmsHPROFILE hLabProfile { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
-        cmsHPROFILE hRgbProfile { cmsCreate_sRGBProfile( )              };
-
-        _hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat,  hRgbProfile, SrgbPixelFormat, INTENT_PERCEPTUAL, 0 );
-        _hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, SrgbPixelFormat, hLabProfile, LabPixelFormat,  INTENT_PERCEPTUAL, 0 );
-
-        cmsCloseProfile( hLabProfile );
-        cmsCloseProfile( hRgbProfile );
-    }
-
-    ~TransformsManager( ) {
-        if ( _hLabToSrgbTransform ) {
-            cmsDeleteTransform( _hLabToSrgbTransform );
-            _hLabToSrgbTransform = nullptr;
-        }
-        if ( _hSrgbToLabTransform ) {
-            cmsDeleteTransform( _hSrgbToLabTransform );
-            _hSrgbToLabTransform = nullptr;
-        }
-    }
-
-    cmsHTRANSFORM GetLabToSrgbTransform( ) const { return _hLabToSrgbTransform; }
-    cmsHTRANSFORM GetSrgbToLabTransform( ) const { return _hSrgbToLabTransform; }
-
-protected:
-
-    cmsHTRANSFORM _hLabToSrgbTransform { };
-    cmsHTRANSFORM _hSrgbToLabTransform { };
-
-};
-
-//
-// Template class Color
+// Abstract base template class Color
 //
 
 template<typename ValueT>
@@ -380,6 +316,70 @@ public:
 protected:
 
     Triplet<ValueT> _values;
+
+};
+
+//
+// Class TransformsManager
+//
+
+class TransformsManager {
+
+public:
+
+    TransformsManager( ) {
+        cmsHPROFILE hLabProfile { cmsCreateLab4Profile( cmsD50_xyY( ) ) };
+        cmsHPROFILE hRgbProfile { cmsCreate_sRGBProfile( )              };
+
+        _hLabToSrgbTransform = cmsCreateTransform( hLabProfile, LabPixelFormat,  hRgbProfile, SrgbPixelFormat, INTENT_PERCEPTUAL, 0 );
+        _hSrgbToLabTransform = cmsCreateTransform( hRgbProfile, SrgbPixelFormat, hLabProfile, LabPixelFormat,  INTENT_PERCEPTUAL, 0 );
+
+        cmsCloseProfile( hLabProfile );
+        cmsCloseProfile( hRgbProfile );
+    }
+
+    ~TransformsManager( ) {
+        if ( _hLabToSrgbTransform ) {
+            cmsDeleteTransform( _hLabToSrgbTransform );
+            _hLabToSrgbTransform = nullptr;
+        }
+        if ( _hSrgbToLabTransform ) {
+            cmsDeleteTransform( _hSrgbToLabTransform );
+            _hSrgbToLabTransform = nullptr;
+        }
+    }
+
+    cmsHTRANSFORM GetLabToSrgbTransform( ) const { return _hLabToSrgbTransform; }
+    cmsHTRANSFORM GetSrgbToLabTransform( ) const { return _hSrgbToLabTransform; }
+
+    void TransformLabToSrgb( void const* pInputBuffer, void* pOutputBuffer, unsigned cPixels ) {
+        cmsDoTransform( _hLabToSrgbTransform, pInputBuffer, pOutputBuffer, cPixels );
+    }
+
+    void TransformSrgbToLab( void const* pInputBuffer, void* pOutputBuffer, unsigned cPixels ) {
+        cmsDoTransform( _hSrgbToLabTransform, pInputBuffer, pOutputBuffer, cPixels );
+    }
+
+    SrgbColorValue ConvertColor( LabColorValue const& color ) {
+        SrgbValueT            srgbValues[ImageSrgbValuesPerPixel];
+        Triplet<RawLabValueT> labValues { ScaleLabColor( color.GetChannelValues( ) ) };
+
+        TransformLabToSrgb( labValues.data( ), srgbValues, 1 );
+        return { srgbValues[2], srgbValues[1], srgbValues[0] };
+    }
+
+    LabColorValue ConvertColor( SrgbColorValue const& color ) {
+        RawLabValueT        labValues[ImageLabValuesPerPixel];
+        Triplet<SrgbValueT> srgbValues { color.GetChannelValues( ) };
+
+        TransformSrgbToLab( srgbValues.data( ), labValues, 1 );
+        return ScaleLabColor( Triplet<RawLabValueT> { labValues[0], labValues[1], labValues[2] } );
+    }
+
+protected:
+
+    cmsHTRANSFORM _hLabToSrgbTransform { };
+    cmsHTRANSFORM _hSrgbToLabTransform { };
 
 };
 
