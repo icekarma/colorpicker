@@ -272,8 +272,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
 }
 
 void CChildView::PutValueToEdit( CEdit& edit, int const value ) {
-    std::wstring wstrValue { std::to_wstring( value ) };
-    edit.SetWindowTextW( wstrValue.c_str( ) );
+    edit.SetWindowTextW( std::to_wstring( value ).c_str( ) );
 }
 
 void CChildView::SetChannelValue( AllChannels channel, int value ) {
