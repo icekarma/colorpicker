@@ -5,13 +5,14 @@
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
 
-#undef TIMING
+#define TIMING
+
+#include "Timing.h"
 
 void CXyGrid::Update( ) {
 #if defined TIMING
-    uint64_t start, stop;
-    GetSystemTimeAsFileTime( reinterpret_cast<LPFILETIME>( &start ) );
-#endif // TIMING
+    Timing timing( "CXyGrid::Update", true );
+#endif // defined TIMING
 
     switch ( m_channelZ ) {
         case AllChannels::LabL:  _UpdateLabL( );  break;
@@ -29,10 +30,8 @@ void CXyGrid::Update( ) {
     m_pBitmap->SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
 
 #if defined TIMING
-    GetSystemTimeAsFileTime( reinterpret_cast<LPFILETIME>( &stop ) );
-    uint64_t delta = stop - start;
-    debug( "CXyGrid::Update: elapsed time %.4f ms; rate %.2f Hz\n", delta / 10'000.0, 1.0 / ( delta / 10'000'000.0 ) );
-#endif // TIMING
+    timing.Stop( );
+#endif // defined TIMING
 }
 
 void CXyGrid::_UpdateLabL( ) {
