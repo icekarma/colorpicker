@@ -12,13 +12,13 @@ class CColorPickerDoc:
 public:
 
     void SetColor( LabColorValue const& color ) {
-        LabColor  =               color;
-        SrgbColor = ConvertColor( color );
+        LabColor  = color;
+        SrgbColor = Transforms.ConvertColor( color );
     }
 
     void SetColor( SrgbColorValue const& color ) {
-        LabColor  = ConvertColor( color );
-        SrgbColor =               color;
+        LabColor  = Transforms.ConvertColor( color );
+        SrgbColor = color;
     }
 
     LabColorValue GetLabColor( ) const {
