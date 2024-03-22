@@ -54,6 +54,9 @@
     <ClInclude Include="StaticBitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Timing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">

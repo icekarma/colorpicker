@@ -220,6 +220,7 @@
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="StaticBitmap.h" />
+    <ClInclude Include="Timing.h" />
     <ClInclude Include="XyGrid.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="MainFrame.h" />
