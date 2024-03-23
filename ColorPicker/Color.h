@@ -1,28 +1,15 @@
 #pragma once
 
 //================================================
-// Forward declarations
-//================================================
-
-template<typename T>
-class LabColor;
-
-template<typename T>
-class SrgbColor;
-
-//================================================
 // Type aliases
 //================================================
 
-using LabValueT      =  int8_t;
-using RawLabValueT   = uint8_t;
-using SrgbValueT     = uint8_t;
-
-using LabColorValue  = LabColor<LabValueT>;
-using SrgbColorValue = SrgbColor<SrgbValueT>;
+using LabValueT    =  int8_t;
+using RawLabValueT = uint8_t;
+using SrgbValueT   = uint8_t;
 
 template<typename T>
-using Triplet        = std::array<T, 3>;
+using Triplet      = std::array<T, 3>;
 
 //================================================
 // Constants
@@ -114,7 +101,7 @@ Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& 
 //
 
 template<typename ValueT>
-class Color {
+class ColorTemplate {
 
 public:
 
@@ -134,55 +121,55 @@ public:
 //
 
 template<typename ValueT>
-class LabColor:
-    public Color<ValueT>
+class LabColorTemplate:
+    public ColorTemplate<ValueT>
 {
 
 public:
 
-    constexpr LabColor( ) noexcept:
-        LabColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
+    constexpr LabColorTemplate( ) noexcept:
+        LabColorTemplate { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
         /*empty*/
     }
 
-    constexpr LabColor( LabColor const& rhs ) noexcept:
-        LabColor { rhs._values }
+    constexpr LabColorTemplate( LabColorTemplate const& rhs ) noexcept:
+        LabColorTemplate { rhs._values }
     {
         /*empty*/
     }
 
-    constexpr LabColor( LabColor&& rhs ) noexcept:
-        LabColor { std::move( rhs._values ) }
+    constexpr LabColorTemplate( LabColorTemplate&& rhs ) noexcept:
+        LabColorTemplate { std::move( rhs._values ) }
     {
         /*empty*/
     }
 
-    constexpr LabColor( ValueT const L, ValueT const a, ValueT const b ) noexcept:
+    constexpr LabColorTemplate( ValueT const L, ValueT const a, ValueT const b ) noexcept:
         _values { L, a, b }
     {
         /*empty*/
     }
 
-    constexpr LabColor( int const L, int const a, int const b ) noexcept:
+    constexpr LabColorTemplate( int const L, int const a, int const b ) noexcept:
         _values { static_cast<LabValueT>( L ), static_cast<LabValueT>( a ), static_cast<LabValueT>( b ) }
     {
         /*empty*/
     }
 
-    constexpr LabColor( Triplet<ValueT> const channels ) noexcept:
-        LabColor { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
+    constexpr LabColorTemplate( Triplet<ValueT> const channels ) noexcept:
+        LabColorTemplate { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
     {
         /*empty*/
     }
 
-    constexpr LabColor& operator=( LabColor const& rhs ) noexcept {
+    constexpr LabColorTemplate& operator=( LabColorTemplate const& rhs ) noexcept {
         _values = rhs._values;
 
         return *this;
     }
 
-    constexpr LabColor& operator=( LabColor&& rhs ) noexcept {
+    constexpr LabColorTemplate& operator=( LabColorTemplate&& rhs ) noexcept {
         _values = std::move( rhs._values );
 
         return *this;
@@ -230,60 +217,63 @@ protected:
 
 };
 
+using    LabColor = LabColorTemplate<   LabValueT>;
+using RawLabColor = LabColorTemplate<RawLabValueT>;
+
 //
 // Template class SrgbColor
 //
 
 template<typename ValueT>
-class SrgbColor:
-    public Color<ValueT>
+class SrgbColorTemplate:
+    public ColorTemplate<ValueT>
 {
 
 public:
 
-    constexpr SrgbColor( ) noexcept:
-        SrgbColor { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
+    constexpr SrgbColorTemplate( ) noexcept:
+        SrgbColorTemplate { static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ), static_cast<ValueT>( 0 ) }
     {
         /*empty*/
     }
 
-    constexpr SrgbColor( SrgbColor const& rhs ) noexcept:
+    constexpr SrgbColorTemplate( SrgbColorTemplate const& rhs ) noexcept:
         _values ( rhs._values )
     {
         /*empty*/
     }
 
-    constexpr SrgbColor( SrgbColor&& rhs ) noexcept:
+    constexpr SrgbColorTemplate( SrgbColorTemplate&& rhs ) noexcept:
         _values ( std::move( rhs._values ) )
     {
         /*empty*/
     }
 
-    constexpr SrgbColor( ValueT const R, ValueT const G, ValueT const B ) noexcept:
+    constexpr SrgbColorTemplate( ValueT const R, ValueT const G, ValueT const B ) noexcept:
         _values { R, G, B }
     {
         /*empty*/
     }
 
-    constexpr SrgbColor( int const R, int const G, int const B ) noexcept:
+    constexpr SrgbColorTemplate( int const R, int const G, int const B ) noexcept:
         _values { static_cast<SrgbValueT>( R ), static_cast<SrgbValueT>( G ), static_cast<SrgbValueT>( B ) }
     {
         /*empty*/
     }
 
-    constexpr SrgbColor( Triplet<ValueT> const channels ) noexcept:
-        SrgbColor { channels[+SrgbChannels::R], channels[+SrgbChannels::G], channels[+SrgbChannels::B] }
+    constexpr SrgbColorTemplate( Triplet<ValueT> const channels ) noexcept:
+        SrgbColorTemplate { channels[+SrgbChannels::R], channels[+SrgbChannels::G], channels[+SrgbChannels::B] }
     {
         /*empty*/
     }
 
-    constexpr SrgbColor& operator=( SrgbColor const& rhs ) noexcept {
+    constexpr SrgbColorTemplate& operator=( SrgbColorTemplate const& rhs ) noexcept {
         _values = rhs._values;
 
         return *this;
     }
 
-    constexpr SrgbColor& operator=( SrgbColor&& rhs ) noexcept {
+    constexpr SrgbColorTemplate& operator=( SrgbColorTemplate&& rhs ) noexcept {
         _values = std::move( rhs._values );
 
         return *this;
@@ -331,6 +321,8 @@ protected:
 
 };
 
+using SrgbColor = SrgbColorTemplate<SrgbValueT>;
+
 //
 // Class TransformsManager
 //
@@ -372,7 +364,7 @@ public:
         cmsDoTransform( _hSrgbToLabTransform, pInputBuffer, pOutputBuffer, cPixels );
     }
 
-    SrgbColorValue ConvertColor( LabColorValue const& color ) {
+    SrgbColor ConvertColor( LabColor const& color ) {
         SrgbValueT            srgbValues[ImageSrgbValuesPerPixel];
         Triplet<RawLabValueT> labValues { ScaleLabColor( color.GetChannelValues( ) ) };
 
@@ -380,7 +372,7 @@ public:
         return { srgbValues[2], srgbValues[1], srgbValues[0] };
     }
 
-    LabColorValue ConvertColor( SrgbColorValue const& color ) {
+    LabColor ConvertColor( SrgbColor const& color ) {
         RawLabValueT        labValues[ImageLabValuesPerPixel];
         Triplet<SrgbValueT> srgbValues { color.GetChannelValues( ) };
 
