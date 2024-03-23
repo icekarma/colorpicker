@@ -246,16 +246,27 @@ void CChildView::UpdateBitmaps( ) {
 bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     int cbText { edit.GetWindowTextLengthW( ) };
     if ( cbText < 1 ) {
+        debug( "CChildView::GetValueFromEdit: bail 1\n" );
         return false;
     }
+    ++cbText;
 
     wchar_t* pwszText { new wchar_t[cbText + 1] };
     if ( !pwszText ) {
+        debug( "CChildView::GetValueFromEdit: bail 2\n" );
         return false;
     }
     if ( edit.GetWindowTextW( pwszText, cbText ) < 1 ) {
         delete[] pwszText;
+        debug( "CChildView::GetValueFromEdit: bail 3\n" );
         return false;
+    }
+
+    for ( int index { cbText - 1 }; index >= 0; --index ) {
+        if ( !iswspace( pwszText[index] ) ) {
+            break;
+        }
+        pwszText[index] = '\0';
     }
 
     errno = 0;
@@ -263,6 +274,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     long tmp = wcstol( pwszText, &pwszEnd, 10 );
     if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
         delete[] pwszText;
+        debug( "CChildView::GetValueFromEdit: bail 4\n" );
         return false;
     }
 
