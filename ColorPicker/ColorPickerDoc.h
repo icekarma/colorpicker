@@ -29,21 +29,21 @@ public:
         return m_SrgbColor;
     }
 
-    void SetChannels( int const x, int const y, int const z ) {
+    void SetChannels( AllChannels const x, AllChannels const y, AllChannels const z ) {
         m_nChannelX = x;
         m_nChannelY = y;
         m_nChannelZ = z;
     }
 
-    void GetChannels( int& x, int& y, int& z ) const {
+    void GetChannels( AllChannels& x, AllChannels& y, AllChannels& z ) const {
         x = m_nChannelX;
         y = m_nChannelY;
         z = m_nChannelZ;
     }
 
-    int GetChannelX( ) const { return m_nChannelX; }
-    int GetChannelY( ) const { return m_nChannelY; }
-    int GetChannelZ( ) const { return m_nChannelZ; }
+    AllChannels GetChannelX( ) const { return m_nChannelX; }
+    AllChannels GetChannelY( ) const { return m_nChannelY; }
+    AllChannels GetChannelZ( ) const { return m_nChannelZ; }
 
 protected:
 
@@ -57,8 +57,8 @@ protected:
     LabColor    m_LabColor;
     SrgbColor   m_SrgbColor;
 
-    int m_nChannelX { 0 };
-    int m_nChannelY { 1 };
-    int m_nChannelZ { 2 };
+    AllChannels m_nChannelX { AllChannels::LabL };
+    AllChannels m_nChannelY { AllChannels::LabA };
+    AllChannels m_nChannelZ { AllChannels::LabB };
 
 };
