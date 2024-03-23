@@ -164,6 +164,12 @@ public:
         /*empty*/
     }
 
+    constexpr LabColor( int const L, int const a, int const b ) noexcept:
+        _values { static_cast<LabValueT>( L ), static_cast<LabValueT>( a ), static_cast<LabValueT>( b ) }
+    {
+        /*empty*/
+    }
+
     constexpr LabColor( Triplet<ValueT> const channels ) noexcept:
         LabColor { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
     {
@@ -255,6 +261,12 @@ public:
 
     constexpr SrgbColor( ValueT const R, ValueT const G, ValueT const B ) noexcept:
         _values { R, G, B }
+    {
+        /*empty*/
+    }
+
+    constexpr SrgbColor( int const R, int const G, int const B ) noexcept:
+        _values { static_cast<SrgbValueT>( R ), static_cast<SrgbValueT>( G ), static_cast<SrgbValueT>( B ) }
     {
         /*empty*/
     }
