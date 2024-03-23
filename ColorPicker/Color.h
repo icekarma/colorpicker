@@ -91,7 +91,7 @@ AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const chann
 
 Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& channels ) {
     return {
-        static_cast<RawLabValueT>( static_cast<int>( channels[0] ) * 256 / 100 ),
+        static_cast<RawLabValueT>( static_cast<int>( channels[0] ) * 255 / 100 ),
         static_cast<RawLabValueT>( static_cast<int>( channels[1] ) + 128       ),
         static_cast<RawLabValueT>( static_cast<int>( channels[2] ) + 128       )
     };
@@ -99,7 +99,7 @@ Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& 
 
 Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& channels ) {
     return {
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[0] ) ) * 100 / 256 ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[0] ) ) * 100 / 255 ),
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[1] ) ) - 128       ),
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[2] ) ) - 128       )
     };
