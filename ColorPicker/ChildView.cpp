@@ -283,6 +283,17 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     return true;
 }
 
+bool CChildView::GetValueAndChangeStateFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+    int oldValue { nValue };
+
+    if ( !GetValueFromEdit( edit, nValue ) ) {
+        return false;
+    }
+
+    fChanged = oldValue != nValue;
+    return true;
+}
+
 void CChildView::PutValueToEdit( CEdit& edit, int const value ) const {
     edit.SetWindowTextW( std::to_wstring( value ).c_str( ) );
 }
