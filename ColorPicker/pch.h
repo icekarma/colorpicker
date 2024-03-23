@@ -62,8 +62,7 @@ DWORD constexpr ExtendedWindowStylesToRemove { WS_EX_CLIENTEDGE | WS_EX_DLGMODAL
 // Concepts
 //================================================
 
-template<typename T> concept Enumeration   = std::is_enum_v<T>;
-template<typename T> concept FloatingPoint = std::is_floating_point_v<T>;
+template<typename T> concept Enumeration = std::is_enum_v<T>;
 
 //================================================
 // Overloaded operators
@@ -75,7 +74,7 @@ std::underlying_type_t<T> constexpr operator+( T const rhs ) {
 }
 
 //================================================
-// Pseudo-"cast operators"
+// Pseudo-"cast operator"s
 //================================================
 
 template<typename ReturnT, typename ValueT>
@@ -86,11 +85,6 @@ inline ReturnT* dynamic_downcast( ValueT* p ) {
 //================================================
 // Functions
 //================================================
-
-template<FloatingPoint T>
-int iround( T const value ) {
-    return static_cast<int>( round( value ) );
-}
 
 //================================================
 // Linker directives
