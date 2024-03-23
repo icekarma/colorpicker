@@ -80,10 +80,43 @@ void CZStrip::_UpdateLabB( ) {
 }
 
 void CZStrip::_UpdateSrgbR( ) {
+    SrgbValueT*         ptr      { m_SrgbImage };
+    Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( channels[2] );
+            *ptr++ = static_cast<SrgbValueT>( channels[1] );
+            *ptr++ = static_cast<SrgbValueT>( y           );
+            *ptr++ = 0;
+        }
+    }
 }
 
 void CZStrip::_UpdateSrgbG( ) {
+    SrgbValueT*         ptr      { m_SrgbImage };
+    Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( channels[2] );
+            *ptr++ = static_cast<SrgbValueT>( y           );
+            *ptr++ = static_cast<SrgbValueT>( channels[0] );
+            *ptr++ = 0;
+        }
+    }
 }
 
 void CZStrip::_UpdateSrgbB( ) {
+    SrgbValueT*         ptr      { m_SrgbImage };
+    Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( y           );
+            *ptr++ = static_cast<SrgbValueT>( channels[1] );
+            *ptr++ = static_cast<SrgbValueT>( channels[0] );
+            *ptr++ = 0;
+        }
+    }
 }
