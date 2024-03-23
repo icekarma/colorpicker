@@ -348,7 +348,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( LabColorValue { m_nLabLValue, m_nLabAValue, m_nLabBValue } );
+                pDoc->SetColor( LabColor { m_nLabLValue, m_nLabAValue, m_nLabBValue } );
                 debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n", m_nLabLValue,  m_nLabAValue,  m_nLabBValue  );
                 debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue );
 
@@ -374,7 +374,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( SrgbColorValue { m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue } );
+                pDoc->SetColor( SrgbColor { m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue } );
                 debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue );
                 debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n", m_nLabLValue,  m_nLabAValue,  m_nLabBValue  );
 

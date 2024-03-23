@@ -11,22 +11,22 @@ class CColorPickerDoc:
 
 public:
 
-    void SetColor( LabColorValue const& color ) {
-        LabColor  = color;
-        SrgbColor = Transforms.ConvertColor( color );
+    void SetColor( LabColor const& color ) {
+        m_LabColor  = color;
+        m_SrgbColor = Transforms.ConvertColor( color );
     }
 
-    void SetColor( SrgbColorValue const& color ) {
-        LabColor  = Transforms.ConvertColor( color );
-        SrgbColor = color;
+    void SetColor( SrgbColor const& color ) {
+        m_LabColor  = Transforms.ConvertColor( color );
+        m_SrgbColor = color;
     }
 
-    LabColorValue GetLabColor( ) const {
-        return LabColor;
+    LabColor GetLabColor( ) const {
+        return m_LabColor;
     }
 
-    SrgbColorValue GetSrgbColor( ) const {
-        return SrgbColor;
+    SrgbColor GetSrgbColor( ) const {
+        return m_SrgbColor;
     }
 
     void SetChannels( int const x, int const y, int const z ) {
@@ -54,8 +54,8 @@ protected:
     virtual BOOL OnNewDocument( );
 
     // Use SetColor to change these, because it keeps their values synchronized!
-    LabColorValue  LabColor  { };
-    SrgbColorValue SrgbColor { };
+    LabColor    m_LabColor;
+    SrgbColor   m_SrgbColor;
 
     int m_nChannelX { 0 };
     int m_nChannelY { 1 };
