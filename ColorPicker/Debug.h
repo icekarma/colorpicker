@@ -3,7 +3,7 @@
 #undef DEBUG_TO_STDOUT
 #undef DEBUG_TO_STDERR
 
-template<typename T> concept ExceptionType = std::is_base_of_v<std::exception, T>;
+template<typename T> concept Exception = std::is_base_of_v<std::exception, T>;
 
 template<typename... Args>
 std::string FormatString( std::string const& format, Args... args ) {
@@ -101,7 +101,7 @@ void debug( wchar_t const* format, ArgsT... args ) {
 }
 
 // Records a message to the debugging facility, like debug(), then throws an exception of the provided type with the same message.
-template<ExceptionType ExceptionT, typename... ArgsT>
+template<Exception ExceptionT, typename... ArgsT>
 [[noreturn]] void die( char const* format, ArgsT... args ) {
     std::string const buf { FormatString( format, args... ) };
     _LogDebugMessage( buf );
@@ -109,7 +109,7 @@ template<ExceptionType ExceptionT, typename... ArgsT>
 }
 
 // Records a message to the debugging facility, like debug(), then throws an exception of the provided type with the same message.
-template<ExceptionType ExceptionT, typename... ArgsT>
+template<Exception ExceptionT, typename... ArgsT>
 [[noreturn]] void die( wchar_t const* format, ArgsT... args ) {
     std::wstring const buf { FormatString( format, args... ) };
     _LogDebugMessage( buf );
