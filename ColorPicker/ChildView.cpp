@@ -123,25 +123,6 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     // Do data exchange for values
 
     DDX_Radio( pDX, IDC_LAB_L_CHANNEL, m_nSelectedChannel );
-
-    DDX_Text(  pDX, IDC_LAB_L_VALUE,   m_nLabLValue       );
-    DDX_Text(  pDX, IDC_LAB_A_VALUE,   m_nLabAValue       );
-    DDX_Text(  pDX, IDC_LAB_B_VALUE,   m_nLabBValue       );
-
-    DDX_Text(  pDX, IDC_SRGB_R_VALUE,  m_nSrgbRValue      );
-    DDX_Text(  pDX, IDC_SRGB_G_VALUE,  m_nSrgbGValue      );
-    DDX_Text(  pDX, IDC_SRGB_B_VALUE,  m_nSrgbBValue      );
-
-    debug(
-        "==================================================\n"
-        "Selected channel: %d\n"
-        "L*a*b*:           (%4d, %4d, %4d)\n"
-        "RGB:              (%4d, %4d, %4d)\n"
-        "",
-        m_nSelectedChannel,
-        m_nLabLValue,  m_nLabAValue,  m_nLabBValue,
-        m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue
-    );
 }
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -355,23 +336,25 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         case IDC_LAB_B_VALUE: {
             Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
             Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+            Triplet<LabValueT>  newLabValues  { oldLabValues };
+            Triplet<SrgbValueT> newSrgbValues;
             bool                fChanged      { };
 
-            debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n", m_nLabLValue, m_nLabAValue, m_nLabBValue );
-            if ( uId == IDC_LAB_L_VALUE ) { GetValueAndChangeStateFromEdit( m_editLabLValue, m_nLabLValue, fChanged ); }
-            if ( uId == IDC_LAB_A_VALUE ) { GetValueAndChangeStateFromEdit( m_editLabAValue, m_nLabAValue, fChanged ); }
-            if ( uId == IDC_LAB_B_VALUE ) { GetValueAndChangeStateFromEdit( m_editLabBValue, m_nLabBValue, fChanged ); }
+            debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n", oldLabValues[+LabChannels::L], oldLabValues[+LabChannels::a], oldLabValues[+LabChannels::b] );
+            if ( uId == IDC_LAB_L_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editLabLValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::L] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_A_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editLabAValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::a] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_B_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editLabBValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::b] = static_cast<LabValueT>( n ); } }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( LabColor { m_nLabLValue, m_nLabAValue, m_nLabBValue } );
-                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n", m_nLabLValue,  m_nLabAValue,  m_nLabBValue  );
-                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue );
+                pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
 
-                Triplet<SrgbValueT> srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-                if ( srgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { m_nSrgbRValue = srgbValues[+SrgbChannels::R]; PutValueToEdit( m_editSrgbRValue, m_nSrgbRValue ); }
-                if ( srgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { m_nSrgbGValue = srgbValues[+SrgbChannels::G]; PutValueToEdit( m_editSrgbGValue, m_nSrgbGValue ); }
-                if ( srgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { m_nSrgbBValue = srgbValues[+SrgbChannels::B]; PutValueToEdit( m_editSrgbBValue, m_nSrgbBValue ); }
+                newSrgbValues = pDoc->GetSrgbColor( ).GetChannelValues( );
+                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+                if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
+                if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
+                if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
             }
             break;
         }
@@ -381,23 +364,25 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         case IDC_SRGB_B_VALUE: {
             Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
             Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+            Triplet<LabValueT>  newLabValues;
+            Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
             bool                fChanged      { };
 
-            debug( "CChildView::OnColorValueChange: sRGB, before update: (%4d, %4d, %4d)\n", m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue );
-            if ( uId == IDC_SRGB_R_VALUE ) { GetValueAndChangeStateFromEdit( m_editSrgbRValue, m_nSrgbRValue, fChanged ); }
-            if ( uId == IDC_SRGB_G_VALUE ) { GetValueAndChangeStateFromEdit( m_editSrgbGValue, m_nSrgbGValue, fChanged ); }
-            if ( uId == IDC_SRGB_B_VALUE ) { GetValueAndChangeStateFromEdit( m_editSrgbBValue, m_nSrgbBValue, fChanged ); }
+            debug( "CChildView::OnColorValueChange: sRGB, before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+            if ( uId == IDC_SRGB_R_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_G_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_B_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbBValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::B] = static_cast<SrgbValueT>( n ); } }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( SrgbColor { m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue } );
-                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", m_nSrgbRValue, m_nSrgbGValue, m_nSrgbBValue );
-                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n", m_nLabLValue,  m_nLabAValue,  m_nLabBValue  );
+                pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
 
-                Triplet<LabValueT> labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
-                if ( labValues[+LabChannels::L] != oldLabValues[+LabChannels::L] ) { m_nLabLValue = labValues[+LabChannels::L]; PutValueToEdit( m_editLabLValue, m_nLabLValue ); }
-                if ( labValues[+LabChannels::a] != oldLabValues[+LabChannels::a] ) { m_nLabAValue = labValues[+LabChannels::a]; PutValueToEdit( m_editLabAValue, m_nLabAValue ); }
-                if ( labValues[+LabChannels::b] != oldLabValues[+LabChannels::b] ) { m_nLabBValue = labValues[+LabChannels::b]; PutValueToEdit( m_editLabBValue, m_nLabBValue ); }
+                newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
+                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+                if ( newLabValues[+LabChannels::L] != oldLabValues[+LabChannels::L] ) { PutValueToEdit( m_editLabLValue, newLabValues[+LabChannels::L] ); }
+                if ( newLabValues[+LabChannels::a] != oldLabValues[+LabChannels::a] ) { PutValueToEdit( m_editLabAValue, newLabValues[+LabChannels::a] ); }
+                if ( newLabValues[+LabChannels::b] != oldLabValues[+LabChannels::b] ) { PutValueToEdit( m_editLabBValue, newLabValues[+LabChannels::b] ); }
             }
             break;
         }

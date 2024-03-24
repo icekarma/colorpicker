@@ -112,14 +112,6 @@ protected:
 
     int           m_nSelectedChannel     { };
 
-    int           m_nLabLValue           { };
-    int           m_nLabAValue           { };
-    int           m_nLabBValue           { };
-
-    int           m_nSrgbRValue          { };
-    int           m_nSrgbGValue          { };
-    int           m_nSrgbBValue          { };
-
     //
     // Bitmaps
     //
