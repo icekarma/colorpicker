@@ -23,6 +23,7 @@ void CStaticBitmap::_Notify( CPoint point ) {
 void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
 	m_fLButtonDown = true;
 	SetCapture( );
+
 	if ( m_hWndTarget ) {
 		_Notify( point );
 	}
@@ -34,6 +35,7 @@ void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
 	if ( m_hWndTarget && m_fLButtonDown ) {
 		_Notify( point );
 	}
+
 	m_fLButtonDown = false;
 	ReleaseCapture( );
 

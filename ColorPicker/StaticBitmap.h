@@ -19,7 +19,7 @@ public:
 
 protected:
 
-    void _Notify( CPoint ptNew );
+    void _Notify( CPoint point );
 
     CRect  m_rcClient;
     HWND   m_hWndTarget   { };
