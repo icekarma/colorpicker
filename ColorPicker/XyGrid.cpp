@@ -27,7 +27,7 @@ void CXyGrid::Update( ) {
             return;
     }
 
-    m_pBitmap->SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
+    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
 
 #if defined TIMING
     timing.Stop( );

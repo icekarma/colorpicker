@@ -8,11 +8,14 @@ public:
 
     CXyGrid( ) = delete;
 
-    CXyGrid( CColorPickerDoc* pDoc, CBitmap* pBitmap ):
-        m_pDoc    { pDoc    },
-        m_pBitmap { pBitmap }
+    CXyGrid( CColorPickerDoc* pDoc, CStatic* pStatic ):
+        m_pDoc { pDoc }
     {
-        /*empty*/
+        if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
+            pStatic->SetBitmap( m_bitmap );
+        } else {
+            debug( "CXyGrid::`ctor: CreateBitmap failed\n" );
+        }
     }
 
     ~CXyGrid( ) {
@@ -35,9 +38,6 @@ public:
 
     void Update( );
 
-    int const static ImageWidth  { 256 };
-    int const static ImageHeight { 256 };
-
 private:
 
     void _UpdateLabL( );
@@ -48,8 +48,11 @@ private:
     void _UpdateSrgbG( );
     void _UpdateSrgbB( );
 
+    int const              ImageWidth    { 256 };
+    int const              ImageHeight   { 256 };
+
     CColorPickerDoc const* m_pDoc;
-    CBitmap*               m_pBitmap;
+    CBitmap                m_bitmap;
 
     AllChannels            m_channelX    { AllChannels::unknown };
     AllChannels            m_channelY    { AllChannels::unknown };

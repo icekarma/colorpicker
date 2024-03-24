@@ -115,14 +115,6 @@ protected:
     int           m_nSelectedChannel     { };
 
     //
-    // Bitmaps
-    //
-
-    CBitmap       m_bitmapXyGrid;
-    CBitmap       m_bitmapZStrip;
-    CBitmap       m_bitmapSwatch;
-
-    //
     // Bitmap generators
     //
 

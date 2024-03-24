@@ -8,10 +8,14 @@ public:
 
     CSwatch( ) = delete;
 
-    CSwatch( CColorPickerDoc* pDoc, CBitmap* pBitmap ):
-        m_pDoc { pDoc },
-        m_pBitmap { pBitmap } {
-        /*empty*/
+    CSwatch( CColorPickerDoc* pDoc, CStatic* pStatic ):
+        m_pDoc { pDoc }
+    {
+        if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
+            pStatic->SetBitmap( m_bitmap );
+        } else {
+            debug( "CSwatch::`ctor: CreateBitmap failed\n" );
+        }
     }
 
     ~CSwatch( ) {
@@ -23,14 +27,14 @@ public:
 
     void Update( );
 
-    int const static ImageWidth  { 99 };
-    int const static ImageHeight { 52 };
-
 private:
 
-    CColorPickerDoc const* m_pDoc;
-    CBitmap*               m_pBitmap;
+    int const              ImageWidth  { 99 };
+    int const              ImageHeight { 52 };
 
-    SrgbValueT*            m_Image   { new SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
+    CColorPickerDoc const* m_pDoc;
+    CBitmap                m_bitmap;
+
+    SrgbValueT*            m_Image     { new SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
 
 };

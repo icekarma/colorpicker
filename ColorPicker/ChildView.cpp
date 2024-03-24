@@ -179,30 +179,15 @@ void CChildView::OnInitialUpdate( ) {
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
     m_editLabLValue.SetFocus( );
 
-    if ( m_bitmapZStrip.CreateBitmap( CZStrip::ImageWidth, CZStrip::ImageHeight, 1, 32, nullptr ) ) {
-        m_staticZStrip.SetBitmap( m_bitmapZStrip );
-    } else {
-        debug( "CChildView::OnInitialUpdate: m_bitmapZStrip.CreateBitmap failed\n" );
-    }
-    m_pZStrip = new CZStrip { pDoc, &m_bitmapZStrip };
+    m_pZStrip = new CZStrip { pDoc, &m_staticZStrip };
     m_pZStrip->SetChannel( m_channelZ );
     m_pZStrip->Update( );
 
-    if ( m_bitmapXyGrid.CreateBitmap( CXyGrid::ImageWidth, CXyGrid::ImageHeight, 1, 32, nullptr ) ) {
-        m_staticXyGrid.SetBitmap( m_bitmapXyGrid );
-    } else {
-        debug( "CChildView::OnInitialUpdate: m_bitmapXyGrid.CreateBitmap failed\n" );
-    }
-    m_pXyGrid = new CXyGrid { pDoc, &m_bitmapXyGrid };
+    m_pXyGrid = new CXyGrid { pDoc, &m_staticXyGrid };
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
     m_pXyGrid->Update( );
 
-    if ( m_bitmapSwatch.CreateBitmap( CSwatch::ImageWidth, CSwatch::ImageHeight, 1, 32, nullptr ) ) {
-        m_staticSwatch.SetBitmap( m_bitmapSwatch );
-    } else {
-        debug( "CChildView::OnInitialUpdate: m_bitmapSwatch.CreateBitmap failed\n" );
-    }
-    m_pSwatch = new CSwatch { pDoc, &m_bitmapSwatch };
+    m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
     m_pSwatch->Update( );
 
     debug( "CChildView::OnInitialUpdate: setting edit controls\n" );

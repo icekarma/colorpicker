@@ -26,7 +26,7 @@ void CSwatch::Update( ) {
         }
     }
 
-    m_pBitmap->SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_Image );
+    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_Image );
 
 #if defined TIMING
     timing.Stop( );
