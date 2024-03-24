@@ -204,6 +204,22 @@ void CChildView::OnInitialUpdate( ) {
     }
     m_pSwatch = new CSwatch { pDoc, &m_bitmapSwatch };
     m_pSwatch->Update( );
+
+    debug( "CChildView::OnInitialUpdate: setting edit controls\n" );
+    m_uBusy = 1;
+
+    Triplet<LabValueT> labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
+    PutValueToEdit( m_editLabLValue, labValues[+LabChannels::L] );
+    PutValueToEdit( m_editLabAValue, labValues[+LabChannels::a] );
+    PutValueToEdit( m_editLabBValue, labValues[+LabChannels::b] );
+
+    Triplet<SrgbValueT> srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    PutValueToEdit( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
+    PutValueToEdit( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
+    PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
+
+    m_uBusy = 0;
+    debug( "CChildView::OnInitialUpdate: done setting edit controls\n" );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
