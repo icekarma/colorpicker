@@ -2,6 +2,7 @@
 
 #include "XyGrid.h"
 #include "ZStrip.h"
+#include "Swatch.h"
 #include "StaticBitmap.h"
 
 class CChildView:
@@ -34,6 +35,11 @@ protected:
         if ( m_pZStrip ) {
             delete m_pZStrip;
             m_pZStrip = nullptr;
+        }
+
+        if ( m_pSwatch ) {
+            delete m_pSwatch;
+            m_pSwatch = nullptr;
         }
     }
 
@@ -96,6 +102,7 @@ protected:
 
     CStaticBitmap m_staticXyGrid;
     CStaticBitmap m_staticZStrip;
+    CStatic       m_staticSwatch;
 
     CButton       m_buttonClose;
 
@@ -119,6 +126,7 @@ protected:
 
     CBitmap       m_bitmapXyGrid;
     CBitmap       m_bitmapZStrip;
+    CBitmap       m_bitmapSwatch;
 
     //
     // Bitmap generators
@@ -126,6 +134,7 @@ protected:
 
     CXyGrid*      m_pXyGrid              { };
     CZStrip*      m_pZStrip              { };
+    CSwatch*      m_pSwatch              { };
 
     //
     // Channel mapping

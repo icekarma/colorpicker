@@ -57,6 +57,9 @@
     <ClInclude Include="Timing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Swatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Swatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

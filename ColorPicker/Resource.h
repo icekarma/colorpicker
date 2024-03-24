@@ -21,8 +21,9 @@
 #define IDC_SRGB_R_VALUE                3010
 #define IDC_SRGB_G_VALUE                3011
 #define IDC_SRGB_B_VALUE                3012
-#define IDC_XY_GRID               4000
-#define IDC_Z_STRIP               4001
+#define IDC_XY_GRID                     4000
+#define IDC_Z_STRIP                     4001
+#define IDC_SWATCH                      5000
 
 // Next default values for new objects
 // 
@@ -30,7 +31,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        311
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         5000
+#define _APS_NEXT_CONTROL_VALUE         6000
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

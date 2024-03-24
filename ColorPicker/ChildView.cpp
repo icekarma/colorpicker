@@ -115,21 +115,22 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
 
         DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
         DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
+        DDX_Control( pDX, IDC_SWATCH,         m_staticSwatch       );
 
         DDX_Control( pDX, IDCLOSE,            m_buttonClose        );
     }
 
     // Do data exchange for values
 
-    DDX_Radio  ( pDX, IDC_LAB_L_CHANNEL,  m_nSelectedChannel   );
+    DDX_Radio( pDX, IDC_LAB_L_CHANNEL, m_nSelectedChannel );
 
-    DDX_Text   ( pDX, IDC_LAB_L_VALUE,    m_nLabLValue         );
-    DDX_Text   ( pDX, IDC_LAB_A_VALUE,    m_nLabAValue         );
-    DDX_Text   ( pDX, IDC_LAB_B_VALUE,    m_nLabBValue         );
+    DDX_Text(  pDX, IDC_LAB_L_VALUE,   m_nLabLValue       );
+    DDX_Text(  pDX, IDC_LAB_A_VALUE,   m_nLabAValue       );
+    DDX_Text(  pDX, IDC_LAB_B_VALUE,   m_nLabBValue       );
 
-    DDX_Text   ( pDX, IDC_SRGB_R_VALUE,   m_nSrgbRValue        );
-    DDX_Text   ( pDX, IDC_SRGB_G_VALUE,   m_nSrgbGValue        );
-    DDX_Text   ( pDX, IDC_SRGB_B_VALUE,   m_nSrgbBValue        );
+    DDX_Text(  pDX, IDC_SRGB_R_VALUE,  m_nSrgbRValue      );
+    DDX_Text(  pDX, IDC_SRGB_G_VALUE,  m_nSrgbGValue      );
+    DDX_Text(  pDX, IDC_SRGB_B_VALUE,  m_nSrgbBValue      );
 
     debug(
         "==================================================\n"
@@ -190,6 +191,8 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_staticXyGrid,       {  -1,   0 } );
     _SetSize       ( &m_staticXyGrid,       { 256, 256 } );
 
+    //djustPosition( &m_staticSwatch,       adjust0      );
+
     _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
 
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
@@ -212,6 +215,14 @@ void CChildView::OnInitialUpdate( ) {
     m_pXyGrid = new CXyGrid { pDoc, &m_bitmapXyGrid };
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
     m_pXyGrid->Update( );
+
+    if ( m_bitmapSwatch.CreateBitmap( CSwatch::ImageWidth, CSwatch::ImageHeight, 1, 32, nullptr ) ) {
+        m_staticSwatch.SetBitmap( m_bitmapSwatch );
+    } else {
+        debug( "CChildView::OnInitialUpdate: m_bitmapSwatch.CreateBitmap failed\n" );
+    }
+    m_pSwatch = new CSwatch { pDoc, &m_bitmapSwatch };
+    m_pSwatch->Update( );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
@@ -240,6 +251,11 @@ void CChildView::UpdateBitmaps( ) {
         m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
         m_pXyGrid->Update( );
         m_staticXyGrid.Invalidate( );
+    }
+
+    if ( m_pSwatch ) {
+        m_pSwatch->Update( );
+        m_staticSwatch.Invalidate( );
     }
 }
 

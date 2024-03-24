@@ -220,6 +220,7 @@
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="StaticBitmap.h" />
+    <ClInclude Include="Swatch.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="XyGrid.h" />
     <ClInclude Include="Debug.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDoc.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
+    <ClCompile Include="Swatch.cpp" />
     <ClCompile Include="XyGrid.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="pch.cpp">
