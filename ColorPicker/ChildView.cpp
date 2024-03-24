@@ -323,8 +323,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
 }
 
 void CChildView::OnColorValueChange( UINT const uId ) {
-    static unsigned busy { };
-    if ( InterlockedExchange( &busy, 1 ) ) {
+    if ( InterlockedExchange( &m_uBusy, 1 ) ) {
         return;
     }
 
@@ -390,7 +389,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
 
     UpdateBitmaps( );
 
-    InterlockedExchange( &busy, 0 );
+    InterlockedExchange( &m_uBusy, 0 );
 }
 
 afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {

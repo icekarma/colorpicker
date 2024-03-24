@@ -80,6 +80,8 @@ protected:
     // Member variables
     //============================================
 
+    volatile unsigned m_uBusy { };
+
     //
     // Controls
     //
