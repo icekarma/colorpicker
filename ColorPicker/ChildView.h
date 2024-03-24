@@ -144,12 +144,4 @@ protected:
     AllChannels   m_channelY             { AllChannels::LabB };
     AllChannels   m_channelZ             { AllChannels::LabL };
 
-    //
-    // Control arrays
-    //
-
-    CButton*      m_buttonAllChannels[6] { &m_buttonLabLChannel, &m_buttonLabAChannel, &m_buttonLabBChannel, &m_buttonSrgbRChannel, &m_buttonSrgbGChannel, &m_buttonSrgbBChannel };
-    CEdit*        m_editAllValues[6]     { &m_editLabLValue,     &m_editLabAValue,     &m_editLabBValue,     &m_editSrgbRValue,     &m_editSrgbGValue,     &m_editSrgbBValue     };
-    int*          m_nAllValues[6]        { &m_nLabLValue,        &m_nLabAValue,        &m_nLabBValue,        &m_nSrgbRValue,        &m_nSrgbGValue,        &m_nSrgbBValue        };
-
 };
