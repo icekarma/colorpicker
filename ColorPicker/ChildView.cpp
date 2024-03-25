@@ -90,8 +90,6 @@ namespace {
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
-    debug( "CChildView::DoDataExchange\n" );
-
     CFormView::DoDataExchange( pDX );
 
     // Do data exchange for controls
@@ -190,7 +188,7 @@ void CChildView::OnInitialUpdate( ) {
     m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
     m_pSwatch->Update( );
 
-    debug( "CChildView::OnInitialUpdate: setting edit controls\n" );
+    // Set m_uBusy to prevent OnColorValueChange from interfering
     m_uBusy = 1;
 
     Triplet<LabValueT> labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
@@ -204,7 +202,6 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
 
     m_uBusy = 0;
-    debug( "CChildView::OnInitialUpdate: done setting edit controls\n" );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
@@ -244,19 +241,19 @@ void CChildView::UpdateBitmaps( ) {
 bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     int cbText { edit.GetWindowTextLengthW( ) };
     if ( cbText < 1 ) {
-        debug( "CChildView::GetValueFromEdit: bail 1\n" );
+        debug( "CChildView::GetValueFromEdit: bail 1: no text in control\n" );
         return false;
     }
     ++cbText;
 
     wchar_t* pwszText { new wchar_t[cbText + 1] };
     if ( !pwszText ) {
-        debug( "CChildView::GetValueFromEdit: bail 2\n" );
+        debug( "CChildView::GetValueFromEdit: bail 2: memory allocation failure\n" );
         return false;
     }
     if ( edit.GetWindowTextW( pwszText, cbText ) < 1 ) {
         delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 3\n" );
+        debug( "CChildView::GetValueFromEdit: bail 3: GetWindowText failed\n" );
         return false;
     }
 
@@ -272,7 +269,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     long tmp = wcstol( pwszText, &pwszEnd, 10 );
     if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
         delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 4\n" );
+        debug( "CChildView::GetValueFromEdit: bail 4: garbage in number\n" );
         return false;
     }
 
