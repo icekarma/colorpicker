@@ -73,8 +73,8 @@ protected:
     void UpdateBitmaps( );
     bool GetValueFromEdit( CEdit const& edit, int& result );
     bool GetValueAndChangeStateFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
-    void PutValueToEdit( CEdit& edit, int const value ) const;
-    void SetChannelValue( AllChannels channel, int value );
+    void PutValueToEdit( CEdit& edit, int const nValue ) const;
+    void SetChannelValue( AllChannels channel, int nValue );
 
     //============================================
     // Member variables

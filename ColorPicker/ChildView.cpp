@@ -279,21 +279,21 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
 }
 
 bool CChildView::GetValueAndChangeStateFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
-    int oldValue { nValue };
+    int nOldValue { nValue };
 
     if ( !GetValueFromEdit( edit, nValue ) ) {
         return false;
     }
 
-    fChanged = oldValue != nValue;
+    fChanged = nOldValue != nValue;
     return true;
 }
 
-void CChildView::PutValueToEdit( CEdit& edit, int const value ) const {
-    edit.SetWindowTextW( std::to_wstring( value ).c_str( ) );
+void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
+    edit.SetWindowTextW( std::to_wstring( nValue ).c_str( ) );
 }
 
-void CChildView::SetChannelValue( AllChannels channel, int value ) {
+void CChildView::SetChannelValue( AllChannels channel, int nValue ) {
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     switch ( channel ) {
@@ -301,7 +301,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
         case AllChannels::LabA:
         case AllChannels::LabB: {
             auto color { pDoc->GetLabColor( ) };
-            color.SetChannelValue( AllChannelsToLabChannels( channel ), static_cast<LabValueT>( value ) );
+            color.SetChannelValue( AllChannelsToLabChannels( channel ), static_cast<LabValueT>( nValue ) );
             pDoc->SetColor( color );
             break;
         }
@@ -310,7 +310,7 @@ void CChildView::SetChannelValue( AllChannels channel, int value ) {
         case AllChannels::SrgbG:
         case AllChannels::SrgbB: {
             auto color { pDoc->GetSrgbColor( ) };
-            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), static_cast<SrgbValueT>( value ) );
+            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), static_cast<SrgbValueT>( nValue ) );
             pDoc->SetColor( color );
             break;
         }
