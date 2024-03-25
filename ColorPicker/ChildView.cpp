@@ -260,7 +260,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
         return false;
     }
 
-    for ( int index { cbText - 1 }; index >= 0; --index ) {
+    for ( int index { cbText - 2 }; index >= 0; --index ) {
         if ( !iswspace( pwszText[index] ) ) {
             break;
         }
