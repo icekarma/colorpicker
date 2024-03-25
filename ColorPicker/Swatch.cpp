@@ -5,7 +5,7 @@
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
 
-#define TIMING
+#undef TIMING
 
 #include "Timing.h"
 
