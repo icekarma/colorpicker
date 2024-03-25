@@ -365,7 +365,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
             bool                fChanged      { };
 
-            debug( "CChildView::OnColorValueChange: sRGB, before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+            debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
             if ( uId == IDC_SRGB_R_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
             if ( uId == IDC_SRGB_G_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
             if ( uId == IDC_SRGB_B_VALUE ) { int n; if ( GetValueAndChangeStateFromEdit( m_editSrgbBValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::B] = static_cast<SrgbValueT>( n ); } }
