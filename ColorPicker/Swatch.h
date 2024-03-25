@@ -19,9 +19,9 @@ public:
     }
 
     ~CSwatch( ) {
-        if ( m_Image ) {
-            delete[] m_Image;
-            m_Image = nullptr;
+        if ( m_SrgbImage ) {
+            delete[] m_SrgbImage;
+            m_SrgbImage = nullptr;
         }
     }
 
@@ -35,6 +35,6 @@ private:
     CColorPickerDoc const* m_pDoc;
     CBitmap                m_bitmap;
 
-    SrgbValueT*            m_Image     { new SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
+    SrgbValueT*            m_SrgbImage { new SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
 
 };

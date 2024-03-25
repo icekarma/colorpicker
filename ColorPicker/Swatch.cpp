@@ -14,7 +14,7 @@ void CSwatch::Update( ) {
     Timing timing( "CXyGrid::Update", true );
 #endif // defined TIMING
 
-    SrgbValueT*         ptr   { m_Image };
+    SrgbValueT*         ptr   { m_SrgbImage };
     Triplet<SrgbValueT> color { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
@@ -26,7 +26,7 @@ void CSwatch::Update( ) {
         }
     }
 
-    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_Image );
+    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
 
 #if defined TIMING
     timing.Stop( );
