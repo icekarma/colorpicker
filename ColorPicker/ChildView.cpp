@@ -300,8 +300,13 @@ void CChildView::SetChannelValue( AllChannels channel, int nValue ) {
         case AllChannels::LabL:
         case AllChannels::LabA:
         case AllChannels::LabB: {
-            auto color { pDoc->GetLabColor( ) };
-            color.SetChannelValue( AllChannelsToLabChannels( channel ), static_cast<LabValueT>( nValue ) );
+            LabColor color { pDoc->GetLabColor( ) };
+            if ( channel == AllChannels::LabL ) {
+                nValue = nValue * 100 / 255;
+            } else {
+                nValue -= 128;
+            }
+            color.SetChannelValue( channel, static_cast<LabValueT>( nValue ) );
             pDoc->SetColor( color );
             break;
         }
@@ -309,8 +314,8 @@ void CChildView::SetChannelValue( AllChannels channel, int nValue ) {
         case AllChannels::SrgbR:
         case AllChannels::SrgbG:
         case AllChannels::SrgbB: {
-            auto color { pDoc->GetSrgbColor( ) };
-            color.SetChannelValue( AllChannelsToSrgbChannels( channel ), static_cast<SrgbValueT>( nValue ) );
+            SrgbColor color { pDoc->GetSrgbColor( ) };
+            color.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
             pDoc->SetColor( color );
             break;
         }
