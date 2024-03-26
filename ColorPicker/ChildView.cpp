@@ -189,7 +189,7 @@ void CChildView::OnInitialUpdate( ) {
     m_pSwatch->Update( );
 
     // Set m_uBusy to prevent OnColorValueChange from interfering
-    m_uBusy = 1;
+    InterlockedExchange( &m_uBusy, 1 );
 
     Triplet<LabValueT> labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
     PutValueToEdit( m_editLabLValue, labValues[+LabChannels::L] );
@@ -201,7 +201,7 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
 
-    m_uBusy = 0;
+    InterlockedExchange( &m_uBusy, 0 );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
