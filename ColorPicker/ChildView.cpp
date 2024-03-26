@@ -407,11 +407,49 @@ afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {
 
 void CChildView::OnZStripMouseMove( int x, int y ) {
     debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
+
+    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
     SetChannelValue( m_channelZ, y );
+
+    Triplet<LabValueT>  newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    Triplet<SrgbValueT> newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    InterlockedExchange( &m_uBusy, 1 );
+    if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
+    if (  newLabValues[ +LabChannels::a] !=  oldLabValues[ +LabChannels::a] ) { PutValueToEdit( m_editLabAValue,   newLabValues[ +LabChannels::a] ); }
+    if (  newLabValues[ +LabChannels::b] !=  oldLabValues[ +LabChannels::b] ) { PutValueToEdit( m_editLabBValue,   newLabValues[ +LabChannels::b] ); }
+    if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
+    if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
+    if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
+    InterlockedExchange( &m_uBusy, 0 );
+
+    UpdateBitmaps( );
 }
 
 void CChildView::OnXyGridMouseMove( int x, int y ) {
     debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
+
+    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
     SetChannelValue( m_channelX, x );
     SetChannelValue( m_channelY, y );
+
+    Triplet<LabValueT>  newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    Triplet<SrgbValueT> newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    InterlockedExchange( &m_uBusy, 1 );
+    if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
+    if (  newLabValues[ +LabChannels::a] !=  oldLabValues[ +LabChannels::a] ) { PutValueToEdit( m_editLabAValue,   newLabValues[ +LabChannels::a] ); }
+    if (  newLabValues[ +LabChannels::b] !=  oldLabValues[ +LabChannels::b] ) { PutValueToEdit( m_editLabBValue,   newLabValues[ +LabChannels::b] ); }
+    if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
+    if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
+    if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
+    InterlockedExchange( &m_uBusy, 0 );
+
+    UpdateBitmaps( );
 }
