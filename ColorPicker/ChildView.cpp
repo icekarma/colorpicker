@@ -317,6 +317,26 @@ void CChildView::SetChannelValue( AllChannels channel, int nValue ) {
     }
 }
 
+template<typename T>
+bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
+    int n { static_cast<int>( oldValue ) };
+    bool fChanged { };
+
+    if ( GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
+        newValue = static_cast<T>( n );
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template<typename T>
+void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
+    if ( newValue != oldValue ) {
+        PutValueToEdit( edit, static_cast<int>( newValue ) );
+    }
+}
+
 void CChildView::OnColorValueChange( UINT const uId ) {
     if ( InterlockedExchange( &m_uBusy, 1 ) ) {
         return;
