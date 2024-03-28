@@ -80,10 +80,43 @@ void CXyGrid::_UpdateLabB( ) {
 }
 
 void CXyGrid::_UpdateSrgbR( ) {
+    SrgbValueT* ptr { m_SrgbImage };
+    SrgbValueT  z   { m_pDoc->GetSrgbColor( ).GetChannelValues( )[+SrgbChannels::R] };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( x );
+            *ptr++ = static_cast<SrgbValueT>( y );
+            *ptr++ = static_cast<SrgbValueT>( z );
+            *ptr++ = 0;
+        }
+    }
 }
 
 void CXyGrid::_UpdateSrgbG( ) {
+    SrgbValueT* ptr { m_SrgbImage };
+    SrgbValueT  z   { m_pDoc->GetSrgbColor( ).GetChannelValues( )[+SrgbChannels::G] };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( x );
+            *ptr++ = static_cast<SrgbValueT>( z );
+            *ptr++ = static_cast<SrgbValueT>( y );
+            *ptr++ = 0;
+        }
+    }
 }
 
 void CXyGrid::_UpdateSrgbB( ) {
+    SrgbValueT* ptr { m_SrgbImage };
+    SrgbValueT  z   { m_pDoc->GetSrgbColor( ).GetChannelValues( )[+SrgbChannels::B] };
+
+    for ( int y { }; y < ImageHeight; ++y ) {
+        for ( int x { }; x < ImageWidth; ++x ) {
+            *ptr++ = static_cast<SrgbValueT>( z );
+            *ptr++ = static_cast<SrgbValueT>( y );
+            *ptr++ = static_cast<SrgbValueT>( x );
+            *ptr++ = 0;
+        }
+    }
 }
