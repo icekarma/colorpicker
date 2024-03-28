@@ -8,6 +8,7 @@
 
 #include "targetver.h"
 
+#include <cassert>
 #include <cerrno>
 #include <cmath>
 #include <cstdint>
