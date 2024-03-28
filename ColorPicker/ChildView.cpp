@@ -323,17 +323,16 @@ void CChildView::OnColorValueChange( UINT const uId ) {
     }
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    Triplet<LabValueT>  newLabValues  {  oldLabValues };
+    Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
+    bool fChanged { };
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE:
         case IDC_LAB_A_VALUE:
         case IDC_LAB_B_VALUE: {
-            Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-            Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-            Triplet<LabValueT>  newLabValues  { oldLabValues };
-            Triplet<SrgbValueT> newSrgbValues;
-            bool                fChanged      { };
-
             debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n", oldLabValues[+LabChannels::L], oldLabValues[+LabChannels::a], oldLabValues[+LabChannels::b] );
             if ( uId == IDC_LAB_L_VALUE ) { int n = oldLabValues[+LabChannels::L]; if ( GetValueAndChangedFromEdit( m_editLabLValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::L] = static_cast<LabValueT>( n ); } }
             if ( uId == IDC_LAB_A_VALUE ) { int n = oldLabValues[+LabChannels::a]; if ( GetValueAndChangedFromEdit( m_editLabAValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::a] = static_cast<LabValueT>( n ); } }
@@ -356,12 +355,6 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         case IDC_SRGB_R_VALUE:
         case IDC_SRGB_G_VALUE:
         case IDC_SRGB_B_VALUE: {
-            Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-            Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-            Triplet<LabValueT>  newLabValues;
-            Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
-            bool                fChanged      { };
-
             debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
             if ( uId == IDC_SRGB_R_VALUE ) { int n = oldSrgbValues[+SrgbChannels::R]; if ( GetValueAndChangedFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
             if ( uId == IDC_SRGB_G_VALUE ) { int n = oldSrgbValues[+SrgbChannels::G]; if ( GetValueAndChangedFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
