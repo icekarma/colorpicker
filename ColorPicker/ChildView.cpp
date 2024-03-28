@@ -342,32 +342,32 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         return;
     }
 
-    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
     Triplet<LabValueT>  newLabValues  {  oldLabValues };
     Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
     bool fChanged { };
 
+    debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+
     switch ( uId ) {
         case IDC_LAB_L_VALUE:
         case IDC_LAB_A_VALUE:
         case IDC_LAB_B_VALUE: {
-            debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n", oldLabValues[+LabChannels::L], oldLabValues[+LabChannels::a], oldLabValues[+LabChannels::b] );
-            if ( uId == IDC_LAB_L_VALUE ) { int n = oldLabValues[+LabChannels::L]; if ( GetValueAndChangedFromEdit( m_editLabLValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::L] = static_cast<LabValueT>( n ); } }
-            if ( uId == IDC_LAB_A_VALUE ) { int n = oldLabValues[+LabChannels::a]; if ( GetValueAndChangedFromEdit( m_editLabAValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::a] = static_cast<LabValueT>( n ); } }
-            if ( uId == IDC_LAB_B_VALUE ) { int n = oldLabValues[+LabChannels::b]; if ( GetValueAndChangedFromEdit( m_editLabBValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::b] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_L_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); }
+            if ( uId == IDC_LAB_A_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); }
+            if ( uId == IDC_LAB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] ); }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
 
                 newSrgbValues = pDoc->GetSrgbColor( ).GetChannelValues( );
-                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
-                if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
-                if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
-                if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
+                UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+                UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+                UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
             }
             break;
         }
@@ -375,25 +375,25 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         case IDC_SRGB_R_VALUE:
         case IDC_SRGB_G_VALUE:
         case IDC_SRGB_B_VALUE: {
-            debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
-            if ( uId == IDC_SRGB_R_VALUE ) { int n = oldSrgbValues[+SrgbChannels::R]; if ( GetValueAndChangedFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
-            if ( uId == IDC_SRGB_G_VALUE ) { int n = oldSrgbValues[+SrgbChannels::G]; if ( GetValueAndChangedFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
-            if ( uId == IDC_SRGB_B_VALUE ) { int n = oldSrgbValues[+SrgbChannels::B]; if ( GetValueAndChangedFromEdit( m_editSrgbBValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::B] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_R_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); }
+            if ( uId == IDC_SRGB_G_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); }
+            if ( uId == IDC_SRGB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] ); }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
 
                 newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
-                debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-                debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
-                if ( newLabValues[+LabChannels::L] != oldLabValues[+LabChannels::L] ) { PutValueToEdit( m_editLabLValue, newLabValues[+LabChannels::L] ); }
-                if ( newLabValues[+LabChannels::a] != oldLabValues[+LabChannels::a] ) { PutValueToEdit( m_editLabAValue, newLabValues[+LabChannels::a] ); }
-                if ( newLabValues[+LabChannels::b] != oldLabValues[+LabChannels::b] ) { PutValueToEdit( m_editLabBValue, newLabValues[+LabChannels::b] ); }
+                UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
+                UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
+                UpdateEditIfValueChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
             }
             break;
         }
     }
+
+    debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+    debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
     UpdateBitmaps( );
 
