@@ -401,10 +401,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
 }
 
 afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {
-    if ( wParam == IDC_Z_STRIP ) {
-        OnZStripMouseMove( LOWORD( lParam ), HIWORD( lParam ) );
-    } else if ( wParam == IDC_XY_GRID ) {
-        OnXyGridMouseMove( LOWORD( lParam ), HIWORD( lParam ) );
+    switch ( wParam ) {
+        case IDC_Z_STRIP: OnZStripMouseMove( LOWORD( lParam ), HIWORD( lParam ) ); break;
+        case IDC_XY_GRID: OnXyGridMouseMove( LOWORD( lParam ), HIWORD( lParam ) ); break;
     }
 
     return 0;
