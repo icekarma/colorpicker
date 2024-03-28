@@ -92,35 +92,27 @@ namespace {
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 
-    // Do data exchange for controls
+    DDX_Control( pDX, IDC_GROUPBOX_LAB,   m_groupBoxLab        );
+    DDX_Control( pDX, IDC_LAB_L_CHANNEL,  m_buttonLabLChannel  );
+    DDX_Control( pDX, IDC_LAB_A_CHANNEL,  m_buttonLabAChannel  );
+    DDX_Control( pDX, IDC_LAB_B_CHANNEL,  m_buttonLabBChannel  );
+    DDX_Control( pDX, IDC_LAB_L_VALUE,    m_editLabLValue      );
+    DDX_Control( pDX, IDC_LAB_A_VALUE,    m_editLabAValue      );
+    DDX_Control( pDX, IDC_LAB_B_VALUE,    m_editLabBValue      );
 
-    if ( !m_groupBoxLab.GetSafeHwnd( ) ) {
-        DDX_Control( pDX, IDC_GROUPBOX_LAB,   m_groupBoxLab        );
-        DDX_Control( pDX, IDC_LAB_L_CHANNEL,  m_buttonLabLChannel  );
-        DDX_Control( pDX, IDC_LAB_A_CHANNEL,  m_buttonLabAChannel  );
-        DDX_Control( pDX, IDC_LAB_B_CHANNEL,  m_buttonLabBChannel  );
-        DDX_Control( pDX, IDC_LAB_L_VALUE,    m_editLabLValue      );
-        DDX_Control( pDX, IDC_LAB_A_VALUE,    m_editLabAValue      );
-        DDX_Control( pDX, IDC_LAB_B_VALUE,    m_editLabBValue      );
+    DDX_Control( pDX, IDC_GROUPBOX_SRGB,  m_groupBoxSrgb       );
+    DDX_Control( pDX, IDC_SRGB_R_CHANNEL, m_buttonSrgbRChannel );
+    DDX_Control( pDX, IDC_SRGB_G_CHANNEL, m_buttonSrgbGChannel );
+    DDX_Control( pDX, IDC_SRGB_B_CHANNEL, m_buttonSrgbBChannel );
+    DDX_Control( pDX, IDC_SRGB_R_VALUE,   m_editSrgbRValue     );
+    DDX_Control( pDX, IDC_SRGB_G_VALUE,   m_editSrgbGValue     );
+    DDX_Control( pDX, IDC_SRGB_B_VALUE,   m_editSrgbBValue     );
 
-        DDX_Control( pDX, IDC_GROUPBOX_SRGB,  m_groupBoxSrgb       );
-        DDX_Control( pDX, IDC_SRGB_R_CHANNEL, m_buttonSrgbRChannel );
-        DDX_Control( pDX, IDC_SRGB_G_CHANNEL, m_buttonSrgbGChannel );
-        DDX_Control( pDX, IDC_SRGB_B_CHANNEL, m_buttonSrgbBChannel );
-        DDX_Control( pDX, IDC_SRGB_R_VALUE,   m_editSrgbRValue     );
-        DDX_Control( pDX, IDC_SRGB_G_VALUE,   m_editSrgbGValue     );
-        DDX_Control( pDX, IDC_SRGB_B_VALUE,   m_editSrgbBValue     );
+    DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
+    DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
+    DDX_Control( pDX, IDC_SWATCH,         m_staticSwatch       );
 
-        DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
-        DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
-        DDX_Control( pDX, IDC_SWATCH,         m_staticSwatch       );
-
-        DDX_Control( pDX, IDCLOSE,            m_buttonClose        );
-    }
-
-    // Do data exchange for values
-
-    DDX_Radio( pDX, IDC_LAB_L_CHANNEL, m_nSelectedChannel );
+    DDX_Control( pDX, IDCLOSE,            m_buttonClose        );
 }
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
