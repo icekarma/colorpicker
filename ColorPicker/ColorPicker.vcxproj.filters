@@ -1,114 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="01 Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="02 Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="03 Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorPicker.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainFrame.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChildView.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AboutDlg.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorPickerDoc.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XyGrid.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZStrip.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StaticBitmap.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timing.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Swatch.h">
-      <Filter>Header Files</Filter>
+      <Filter>02 Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainFrame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChildView.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AboutDlg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorPickerDoc.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XyGrid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ZStrip.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StaticBitmap.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Swatch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01 Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ColorPicker.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>03 Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ColorPicker.rc2">
-      <Filter>Resource Files</Filter>
+      <Filter>03 Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ColorPicker.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>03 Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>
