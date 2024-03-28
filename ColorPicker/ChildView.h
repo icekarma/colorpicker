@@ -109,12 +109,6 @@ protected:
     CButton       m_buttonClose;
 
     //
-    // Values
-    //
-
-    int           m_nSelectedChannel     { };
-
-    //
     // Bitmap generators
     //
 
