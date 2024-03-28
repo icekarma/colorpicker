@@ -270,7 +270,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
     return true;
 }
 
-bool CChildView::GetValueAndChangeStateFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
     int nOldValue { nValue };
 
     if ( !GetValueFromEdit( edit, nValue ) ) {
@@ -335,9 +335,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             bool                fChanged      { };
 
             debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n", oldLabValues[+LabChannels::L], oldLabValues[+LabChannels::a], oldLabValues[+LabChannels::b] );
-            if ( uId == IDC_LAB_L_VALUE ) { int n = oldLabValues[+LabChannels::L]; if ( GetValueAndChangeStateFromEdit( m_editLabLValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::L] = static_cast<LabValueT>( n ); } }
-            if ( uId == IDC_LAB_A_VALUE ) { int n = oldLabValues[+LabChannels::a]; if ( GetValueAndChangeStateFromEdit( m_editLabAValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::a] = static_cast<LabValueT>( n ); } }
-            if ( uId == IDC_LAB_B_VALUE ) { int n = oldLabValues[+LabChannels::b]; if ( GetValueAndChangeStateFromEdit( m_editLabBValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::b] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_L_VALUE ) { int n = oldLabValues[+LabChannels::L]; if ( GetValueAndChangedFromEdit( m_editLabLValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::L] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_A_VALUE ) { int n = oldLabValues[+LabChannels::a]; if ( GetValueAndChangedFromEdit( m_editLabAValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::a] = static_cast<LabValueT>( n ); } }
+            if ( uId == IDC_LAB_B_VALUE ) { int n = oldLabValues[+LabChannels::b]; if ( GetValueAndChangedFromEdit( m_editLabBValue, n, fChanged ) && fChanged ) { newLabValues[+LabChannels::b] = static_cast<LabValueT>( n ); } }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
@@ -363,9 +363,9 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             bool                fChanged      { };
 
             debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
-            if ( uId == IDC_SRGB_R_VALUE ) { int n = oldSrgbValues[+SrgbChannels::R]; if ( GetValueAndChangeStateFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
-            if ( uId == IDC_SRGB_G_VALUE ) { int n = oldSrgbValues[+SrgbChannels::G]; if ( GetValueAndChangeStateFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
-            if ( uId == IDC_SRGB_B_VALUE ) { int n = oldSrgbValues[+SrgbChannels::B]; if ( GetValueAndChangeStateFromEdit( m_editSrgbBValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::B] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_R_VALUE ) { int n = oldSrgbValues[+SrgbChannels::R]; if ( GetValueAndChangedFromEdit( m_editSrgbRValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::R] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_G_VALUE ) { int n = oldSrgbValues[+SrgbChannels::G]; if ( GetValueAndChangedFromEdit( m_editSrgbGValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::G] = static_cast<SrgbValueT>( n ); } }
+            if ( uId == IDC_SRGB_B_VALUE ) { int n = oldSrgbValues[+SrgbChannels::B]; if ( GetValueAndChangedFromEdit( m_editSrgbBValue, n, fChanged ) && fChanged ) { newSrgbValues[+SrgbChannels::B] = static_cast<SrgbValueT>( n ); } }
             debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
