@@ -11,12 +11,12 @@ template<typename ValueT> class SrgbColorTemplate;
 // Type aliases
 //================================================
 
-using LabValueT    =  int8_t;
+using    LabValueT =  int8_t;
 using RawLabValueT = uint8_t;
-using SrgbValueT   = uint8_t;
+using   SrgbValueT = uint8_t;
 
 template<typename T>
-using Triplet      = std::array<T, 3>;
+using      Triplet = std::array<T, 3>;
 
 using    LabColor  =  LabColorTemplate<   LabValueT>;
 using RawLabColor  =  LabColorTemplate<RawLabValueT>;
