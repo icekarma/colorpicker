@@ -77,8 +77,8 @@ SrgbChannels          inline constexpr  AllChannelsToSrgbChannels( AllChannels c
 AllChannels           inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
 AllChannels           inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
 
-Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<   LabValueT> const& channels );
-Triplet<LabValueT>    inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& channels );
+Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<   LabValueT> const& values );
+Triplet<LabValueT>    inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values );
 
 RawLabColor           inline constexpr ScaleLabColor(    LabColor const& color );
 LabColor              inline constexpr ScaleLabColor( RawLabColor const& color );
@@ -143,15 +143,15 @@ public:
         /*empty*/
     }
 
-    constexpr LabColorTemplate( Triplet<ValueT> const& channels ) noexcept:
-        LabColorTemplate { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
+    constexpr LabColorTemplate( Triplet<ValueT> const& values ) noexcept:
+        LabColorTemplate { values[+LabChannels::L], values[+LabChannels::a], values[+LabChannels::b] }
     {
         /*empty*/
     }
 
     template<typename ForeignT>
-    constexpr LabColorTemplate( Triplet<ForeignT> const& channels ) noexcept:
-        LabColorTemplate { ScaleLabColor( channels ) }
+    constexpr LabColorTemplate( Triplet<ForeignT> const& values ) noexcept:
+        LabColorTemplate { ScaleLabColor( values ) }
     {
         /*empty*/
     }
@@ -187,15 +187,15 @@ public:
         return *this;
     }
 
-    constexpr LabColorTemplate& operator=( Triplet<ValueT> const& channels ) noexcept {
-        _values = channels;
+    constexpr LabColorTemplate& operator=( Triplet<ValueT> const& values ) noexcept {
+        _values = values;
 
         return *this;
     }
 
     template<typename ForeignT>
-    constexpr LabColorTemplate& operator=( Triplet<ForeignT> const& channels ) noexcept {
-        _values = ScaleLabColor( channels );
+    constexpr LabColorTemplate& operator=( Triplet<ForeignT> const& values ) noexcept {
+        _values = ScaleLabColor( values );
 
         return *this;
     }
@@ -302,8 +302,8 @@ public:
         /*empty*/
     }
 
-    constexpr SrgbColorTemplate( Triplet<ValueT> const channels ) noexcept:
-        SrgbColorTemplate { channels[+SrgbChannels::R], channels[+SrgbChannels::G], channels[+SrgbChannels::B] }
+    constexpr SrgbColorTemplate( Triplet<ValueT> const values ) noexcept:
+        SrgbColorTemplate { values[+SrgbChannels::R], values[+SrgbChannels::G], values[+SrgbChannels::B] }
     {
         /*empty*/
     }
@@ -446,19 +446,19 @@ AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const chann
     return static_cast<AllChannels>( +channel + +AllChannels::SrgbMin );
 }
 
-Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& channels ) {
+Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& values ) {
     return {
-        static_cast<RawLabValueT>( static_cast<int>( channels[0] ) * 255 / 100 ),
-        static_cast<RawLabValueT>( static_cast<int>( channels[1] ) + 128       ),
-        static_cast<RawLabValueT>( static_cast<int>( channels[2] ) + 128       )
+        static_cast<RawLabValueT>( static_cast<int>( values[0] ) * 255 / 100 ),
+        static_cast<RawLabValueT>( static_cast<int>( values[1] ) + 128       ),
+        static_cast<RawLabValueT>( static_cast<int>( values[2] ) + 128       )
     };
 }
 
-Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& channels ) {
+Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values ) {
     return {
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[0] ) ) * 100 / 255 ),
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[1] ) ) - 128       ),
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( channels[2] ) ) - 128       )
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[0] ) ) * 100 / 255 ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[1] ) ) - 128       ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[2] ) ) - 128       )
     };
 }
 
