@@ -18,6 +18,10 @@ using SrgbValueT   = uint8_t;
 template<typename T>
 using Triplet      = std::array<T, 3>;
 
+using    LabColor  =  LabColorTemplate<   LabValueT>;
+using RawLabColor  =  LabColorTemplate<RawLabValueT>;
+using   SrgbColor  = SrgbColorTemplate<  SrgbValueT>;
+
 //================================================
 // Constants
 //================================================
@@ -224,9 +228,6 @@ protected:
 
 };
 
-using    LabColor = LabColorTemplate<   LabValueT>;
-using RawLabColor = LabColorTemplate<RawLabValueT>;
-
 //
 // Template class SrgbColor
 //
@@ -327,8 +328,6 @@ protected:
     Triplet<ValueT> _values;
 
 };
-
-using SrgbColor = SrgbColorTemplate<SrgbValueT>;
 
 //
 // Class TransformsManager
