@@ -40,13 +40,8 @@ public:
 
 private:
 
-    void _UpdateLabL( );
-    void _UpdateLabA( );
-    void _UpdateLabB( );
-
-    void _UpdateSrgbR( );
-    void _UpdateSrgbG( );
-    void _UpdateSrgbB( );
+    void _UpdateLab( );
+    void _UpdateSrgb( );
 
     int const static       ImageWidth    { 256 };
     int const static       ImageHeight   { 256 };
