@@ -215,18 +215,18 @@ void CChildView::UpdateBitmaps( ) {
     if ( m_pZStrip ) {
         m_pZStrip->SetChannel( m_channelZ );
         m_pZStrip->Update( );
-        m_staticZStrip.Invalidate( );
+        m_staticZStrip.Invalidate( FALSE );
     }
 
     if ( m_pXyGrid ) {
         m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
         m_pXyGrid->Update( );
-        m_staticXyGrid.Invalidate( );
+        m_staticXyGrid.Invalidate( FALSE );
     }
 
     if ( m_pSwatch ) {
         m_pSwatch->Update( );
-        m_staticSwatch.Invalidate( );
+        m_staticSwatch.Invalidate( FALSE );
     }
 }
 
