@@ -42,9 +42,10 @@ void CZStrip::Update( ) {
 void CZStrip::_UpdateLab( ) {
     RawLabValueT*         ptr      { m_RawLabImage };
     Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
+    LabChannels           channel  { AllChannelsToLabChannels( m_channel ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+m_channel] = static_cast<RawLabValueT>( y );
+        channels[+channel] = static_cast<RawLabValueT>( y );
         for ( int x { }; x < ImageWidth; ++x ) {
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::L] );
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::a] );

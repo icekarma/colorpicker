@@ -42,11 +42,13 @@ void CXyGrid::Update( ) {
 void CXyGrid::_UpdateLab( ) {
     RawLabValueT*         ptr      { m_RawLabImage };
     Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
+    LabChannels           channelX { AllChannelsToLabChannels( m_channelX ) };
+    LabChannels           channelY { AllChannelsToLabChannels( m_channelY ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+m_channelY] = static_cast<RawLabValueT>( y );
+        channels[+channelY] = static_cast<RawLabValueT>( y );
         for ( int x { }; x < ImageWidth; ++x ) {
-            channels[+m_channelX] = static_cast<RawLabValueT>( x );
+            channels[+channelX] = static_cast<RawLabValueT>( x );
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::L] );
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::a] );
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::b] );
