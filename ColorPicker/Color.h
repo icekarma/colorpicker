@@ -1,6 +1,13 @@
 #pragma once
 
 //================================================
+// Forward declarations
+//================================================
+
+template<typename ValueT> class  LabColorTemplate;
+template<typename ValueT> class SrgbColorTemplate;
+
+//================================================
 // Type aliases
 //================================================
 
