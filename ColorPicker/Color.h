@@ -136,6 +136,12 @@ public:
         /*empty*/
     }
 
+    constexpr LabColorTemplate( Triplet<ValueT> const& channels ) noexcept:
+        LabColorTemplate { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
+    {
+        /*empty*/
+    }
+
     constexpr LabColorTemplate( ValueT const L, ValueT const a, ValueT const b ) noexcept:
         _values { L, a, b }
     {
@@ -144,12 +150,6 @@ public:
 
     constexpr LabColorTemplate( int const L, int const a, int const b ) noexcept:
         _values { static_cast<LabValueT>( L ), static_cast<LabValueT>( a ), static_cast<LabValueT>( b ) }
-    {
-        /*empty*/
-    }
-
-    constexpr LabColorTemplate( Triplet<ValueT> const channels ) noexcept:
-        LabColorTemplate { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
     {
         /*empty*/
     }
