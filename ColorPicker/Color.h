@@ -166,6 +166,16 @@ public:
         return *this;
     }
 
+    constexpr LabColorTemplate& operator=( Triplet<ValueT> const& channels ) noexcept {
+        _values = channels;
+
+        return *this;
+    }
+
+    constexpr operator Triplet<ValueT>( ) {
+        return _values;
+    }
+
     virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::Lab;
     }
