@@ -136,8 +136,22 @@ public:
         /*empty*/
     }
 
+    template<typename ForeignT>
+    constexpr LabColorTemplate( LabColorTemplate<ForeignT> const& rhs ) noexcept:
+        LabColorTemplate { ScaleLabColor( rhs ) }
+    {
+        /*empty*/
+    }
+
     constexpr LabColorTemplate( Triplet<ValueT> const& channels ) noexcept:
         LabColorTemplate { channels[+LabChannels::L], channels[+LabChannels::a], channels[+LabChannels::b] }
+    {
+        /*empty*/
+    }
+
+    template<typename ForeignT>
+    constexpr LabColorTemplate( Triplet<ForeignT> const& channels ) noexcept:
+        LabColorTemplate { ScaleLabColor( channels ) }
     {
         /*empty*/
     }
@@ -166,14 +180,38 @@ public:
         return *this;
     }
 
+    template<typename ForeignT>
+    constexpr LabColorTemplate& operator=( LabColorTemplate<ForeignT> const& rhs ) noexcept {
+        _values = ScaleLabColor( rhs._values );
+
+        return *this;
+    }
+
     constexpr LabColorTemplate& operator=( Triplet<ValueT> const& channels ) noexcept {
         _values = channels;
 
         return *this;
     }
 
+    template<typename ForeignT>
+    constexpr LabColorTemplate& operator=( Triplet<ForeignT> const& channels ) noexcept {
+        _values = ScaleLabColor( channels );
+
+        return *this;
+    }
+
+    template<typename ForeignT>
+    constexpr operator LabColorTemplate<ForeignT>( ) {
+        return { ScaleLabColor( _values ) };
+    }
+
     constexpr operator Triplet<ValueT>( ) {
         return _values;
+    }
+
+    template<typename ForeignT>
+    constexpr operator Triplet<ForeignT>( ) {
+        return ScaleLabColor( _values );
     }
 
     virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
@@ -206,6 +244,11 @@ public:
 
     virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
         return _values;
+    }
+
+    template<typename ForeignT>
+    constexpr Triplet<ForeignT> GetChannelValues( ) const noexcept {
+        return ScaleLabColor<ForeignT>( _values );
     }
 
     virtual constexpr void SetChannelValues( Triplet<ValueT> const& values ) noexcept override {
