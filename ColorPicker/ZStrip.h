@@ -46,8 +46,8 @@ private:
     void _UpdateSrgbG( );
     void _UpdateSrgbB( );
 
-    int const              ImageWidth    {  20 };
-    int const              ImageHeight   { 256 };
+    int const static       ImageWidth    {  20 };
+    int const static       ImageHeight   { 256 };
 
     CColorPickerDoc const* m_pDoc;
     CBitmap                m_bitmap;
