@@ -27,9 +27,9 @@ protected:
     }
 
     virtual ~CChildView( ) {
-        if ( m_pXyGrid ) {
-            delete m_pXyGrid;
-            m_pXyGrid = nullptr;
+        if ( m_pSwatch ) {
+            delete m_pSwatch;
+            m_pSwatch = nullptr;
         }
 
         if ( m_pZStrip ) {
@@ -37,9 +37,9 @@ protected:
             m_pZStrip = nullptr;
         }
 
-        if ( m_pSwatch ) {
-            delete m_pSwatch;
-            m_pSwatch = nullptr;
+        if ( m_pXyGrid ) {
+            delete m_pXyGrid;
+            m_pXyGrid = nullptr;
         }
     }
 
@@ -106,9 +106,9 @@ protected:
     CEdit         m_editSrgbGValue;
     CEdit         m_editSrgbBValue;
 
-    CStaticBitmap m_staticXyGrid;
-    CStaticBitmap m_staticZStrip;
     CStatic       m_staticSwatch;
+    CStaticBitmap m_staticZStrip;
+    CStaticBitmap m_staticXyGrid;
 
     CButton       m_buttonClose;
 
@@ -116,9 +116,9 @@ protected:
     // Bitmap generators
     //
 
-    CXyGrid*      m_pXyGrid              { };
-    CZStrip*      m_pZStrip              { };
     CSwatch*      m_pSwatch              { };
+    CZStrip*      m_pZStrip              { };
+    CXyGrid*      m_pXyGrid              { };
 
     //
     // Channel mapping

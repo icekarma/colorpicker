@@ -108,9 +108,9 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     DDX_Control( pDX, IDC_SRGB_G_VALUE,   m_editSrgbGValue     );
     DDX_Control( pDX, IDC_SRGB_B_VALUE,   m_editSrgbBValue     );
 
-    DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
-    DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
     DDX_Control( pDX, IDC_SWATCH,         m_staticSwatch       );
+    DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
+    DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
 
     DDX_Control( pDX, IDCLOSE,            m_buttonClose        );
 }
@@ -157,17 +157,20 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2 );
     _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1 );
 
+    //djustPosition( &m_staticSwatch,       adjust0      );
+
     _SetSize       ( &m_staticZStrip,       {  20, 256 } );
 
     _AdjustPosition( &m_staticXyGrid,       {  -1,   0 } );
     _SetSize       ( &m_staticXyGrid,       { 256, 256 } );
 
-    //djustPosition( &m_staticSwatch,       adjust0      );
-
     _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
 
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
     m_editLabLValue.SetFocus( );
+
+    m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
+    m_pSwatch->Update( );
 
     m_pZStrip = new CZStrip { pDoc, &m_staticZStrip };
     m_pZStrip->SetChannel( m_channelZ );
@@ -176,9 +179,6 @@ void CChildView::OnInitialUpdate( ) {
     m_pXyGrid = new CXyGrid { pDoc, &m_staticXyGrid };
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
     m_pXyGrid->Update( );
-
-    m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
-    m_pSwatch->Update( );
 
     // Set m_uBusy to prevent OnColorValueChange from interfering
     InterlockedExchange( &m_uBusy, 1 );
@@ -212,6 +212,11 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 }
 
 void CChildView::UpdateBitmaps( ) {
+    if ( m_pSwatch ) {
+        m_pSwatch->Update( );
+        m_staticSwatch.Invalidate( FALSE );
+    }
+
     if ( m_pZStrip ) {
         m_pZStrip->SetChannel( m_channelZ );
         m_pZStrip->Update( );
@@ -222,11 +227,6 @@ void CChildView::UpdateBitmaps( ) {
         m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
         m_pXyGrid->Update( );
         m_staticXyGrid.Invalidate( FALSE );
-    }
-
-    if ( m_pSwatch ) {
-        m_pSwatch->Update( );
-        m_staticSwatch.Invalidate( FALSE );
     }
 }
 
