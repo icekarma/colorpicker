@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP( CStaticBitmap, CStatic )
     ON_WM_LBUTTONDOWN( )
     ON_WM_LBUTTONUP( )
     ON_WM_SIZE( )
+    ON_WM_ERASEBKGND( )
 END_MESSAGE_MAP( )
 
 void CStaticBitmap::_Notify( CPoint point ) {
@@ -27,6 +28,10 @@ void CStaticBitmap::_Notify( CPoint point ) {
         m_ptLast = ptNew;
         ::PostMessage( m_hWndTarget, ZSBN_MOUSEMOVE, m_nControlId, MAKELPARAM( ptNew.x, ptNew.y ) );
     }
+}
+
+BOOL CStaticBitmap::OnEraseBackground( CDC* /*pDC*/ ) {
+    return TRUE;
 }
 
 void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
