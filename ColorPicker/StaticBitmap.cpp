@@ -15,8 +15,17 @@ void CStaticBitmap::_Notify( CPoint point ) {
         std::min( std::max( point.y, m_rcClient.top  ), m_rcClient.bottom - 1 )
     };
     if ( ptNew != m_ptLast ) {
+        if ( !m_nControlId ) {
+            ::SetLastError( 0 );
+            m_nControlId = ::GetDlgCtrlID( GetSafeHwnd( ) );
+            if ( !m_nControlId ) {
+                debug( "CStaticBitmap::_Notify: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
+                return;
+            }
+        }
+
         m_ptLast = ptNew;
-        ::PostMessage( m_hWndTarget, ZSBN_MOUSEMOVE, ::GetDlgCtrlID( GetSafeHwnd( ) ), MAKELPARAM( ptNew.x, ptNew.y ) );
+        ::PostMessage( m_hWndTarget, ZSBN_MOUSEMOVE, m_nControlId, MAKELPARAM( ptNew.x, ptNew.y ) );
     }
 }
 

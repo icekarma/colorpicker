@@ -22,6 +22,7 @@ protected:
     void _Notify( CPoint point );
 
     CRect  m_rcClient;
+    int    m_nControlId   { };
     HWND   m_hWndTarget   { };
     bool   m_fLButtonDown { };
     CPoint m_ptLast       { -1, -1 };
