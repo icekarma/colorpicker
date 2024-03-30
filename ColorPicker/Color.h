@@ -163,7 +163,7 @@ public:
     }
 
     constexpr LabColorTemplate( int const L, int const a, int const b ) noexcept:
-        _values { static_cast<LabValueT>( L ), static_cast<LabValueT>( a ), static_cast<LabValueT>( b ) }
+        _values { static_cast<ValueT>( L ), static_cast<ValueT>( a ), static_cast<ValueT>( b ) }
     {
         /*empty*/
     }
