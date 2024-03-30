@@ -201,16 +201,16 @@ public:
     }
 
     template<typename ForeignT>
-    constexpr operator LabColorTemplate<ForeignT>( ) {
+    constexpr operator LabColorTemplate<ForeignT>( ) noexcept {
         return { ScaleLabColor( _values ) };
     }
 
-    constexpr operator Triplet<ValueT>( ) {
+    constexpr operator Triplet<ValueT>( ) noexcept {
         return _values;
     }
 
     template<typename ForeignT>
-    constexpr operator Triplet<ForeignT>( ) {
+    constexpr operator Triplet<ForeignT>( ) noexcept {
         return ScaleLabColor( _values );
     }
 
