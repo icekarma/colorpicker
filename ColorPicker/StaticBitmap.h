@@ -8,11 +8,6 @@ class CStaticBitmap: public CStatic {
 
 public:
 
-    afx_msg void OnLButtonDown ( UINT nFlags, CPoint point );
-    afx_msg void OnLButtonUp   ( UINT nFlags, CPoint point );
-    afx_msg void OnMouseMove   ( UINT nFlags, CPoint point );
-    afx_msg void OnSize        ( UINT nType, int cx, int cy );
-
     void SetCustomMessageTargetWindow( HWND htarget ) {
         m_hWndTarget = htarget;
     }
@@ -20,6 +15,11 @@ public:
 protected:
 
     void _Notify( CPoint point );
+
+    afx_msg void OnLButtonDown( UINT nFlags, CPoint point );
+    afx_msg void OnLButtonUp( UINT nFlags, CPoint point );
+    afx_msg void OnMouseMove( UINT nFlags, CPoint point );
+    afx_msg void OnSize( UINT nType, int cx, int cy );
 
     CRect  m_rcClient;
     int    m_nControlId   { };
