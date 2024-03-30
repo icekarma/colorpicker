@@ -1,5 +1,15 @@
 #pragma once
 
+#if defined _UNICODE
+#   if defined _M_IX86
+#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#   elif defined _M_X64
+#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#   else
+#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#   endif
+#endif
+
 #define _AFX_ALL_WARNINGS
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define  NOMINMAX
@@ -87,16 +97,3 @@ inline ReturnT* dynamic_downcast( ValueT* p ) {
 // Functions
 //================================================
 
-//================================================
-// Linker directives
-//================================================
-
-#if defined _UNICODE
-#   if defined _M_IX86
-#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#   elif defined _M_X64
-#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#   else
-#       pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#   endif
-#endif
