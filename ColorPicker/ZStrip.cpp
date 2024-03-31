@@ -14,7 +14,7 @@ void CZStrip::Update( ) {
     Timing timing( "CZStrip::Update", true );
 #endif // defined TIMING
 
-    switch ( m_channel ) {
+    switch ( m_channelZ ) {
         case AllChannels::LabL:
         case AllChannels::LabA:
         case AllChannels::LabB:
@@ -28,7 +28,7 @@ void CZStrip::Update( ) {
             break;
 
         default:
-            debug( "CZStrip::Update: Unknown value %d for m_channel\n", +m_channel );
+            debug( "CZStrip::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
             return;
     }
 
@@ -42,7 +42,7 @@ void CZStrip::Update( ) {
 void CZStrip::_UpdateLab( ) {
     RawLabValueT*         ptr      { m_RawLabImage };
     Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
-    LabChannels           channel  { AllChannelsToLabChannels( m_channel ) };
+    LabChannels           channel  { AllChannelsToLabChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channel] = static_cast<RawLabValueT>( y );
@@ -59,7 +59,7 @@ void CZStrip::_UpdateLab( ) {
 void CZStrip::_UpdateSrgb( ) {
     SrgbValueT*         ptr      { m_SrgbImage };
     Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    SrgbChannels        channel  { AllChannelsToSrgbChannels( m_channel ) };
+    SrgbChannels        channel  { AllChannelsToSrgbChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channel] = static_cast<SrgbValueT>( y );
