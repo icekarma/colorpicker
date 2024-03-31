@@ -30,8 +30,8 @@ public:
         }
     }
 
-    void SetChannel( AllChannels const channel ) {
-        m_channel = channel;
+    void SetChannel( AllChannels const channelZ ) {
+        m_channelZ = channelZ;
     }
 
     void Update( );
@@ -47,7 +47,7 @@ private:
     CColorPickerDoc const* m_pDoc;
     CBitmap                m_bitmap;
 
-    AllChannels            m_channel     { AllChannels::unknown };
+    AllChannels            m_channelZ    { AllChannels::unknown };
 
     RawLabValueT*          m_RawLabImage { new RawLabValueT[ImageWidth * ImageHeight *  ImageLabValuesPerPixel] };
     SrgbValueT*            m_SrgbImage   { new   SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
