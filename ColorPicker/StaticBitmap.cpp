@@ -10,23 +10,23 @@ BEGIN_MESSAGE_MAP( CStaticBitmap, CStatic )
     ON_WM_SIZE( )
 END_MESSAGE_MAP( )
 
-void CStaticBitmap::_Notify( CPoint point ) {
-    CPoint ptNew {
-        std::min( std::max( point.x, m_rcClient.left ), m_rcClient.right  - 1 ),
-        std::min( std::max( point.y, m_rcClient.top  ), m_rcClient.bottom - 1 )
-    };
-    if ( ptNew != m_ptLast ) {
-        if ( !m_nControlId ) {
-            ::SetLastError( 0 );
-            m_nControlId = ::GetDlgCtrlID( GetSafeHwnd( ) );
-            if ( !m_nControlId ) {
-                debug( "CStaticBitmap::_Notify: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
-                return;
-            }
-        }
+namespace {
 
-        m_ptLast = ptNew;
-        ::PostMessage( m_hWndTarget, ZSBN_MOUSEMOVE, m_nControlId, MAKELPARAM( ptNew.x, ptNew.y ) );
+    [[nodiscard]] CPoint ClipPointToRect( CPoint const& point, CRect const& rect ) {
+        return {
+            std::min( std::max( point.x, rect.left ), rect.right  - 1 ),
+            std::min( std::max( point.y, rect.top  ), rect.bottom - 1 )
+        };
+    }
+
+}
+
+void CStaticBitmap::NotifyPosition( CPoint const& point ) {
+    if ( CPoint pt { ClipPointToRect( point, m_rcClient ) }; pt != m_ptLast ) {
+        m_ptLast = pt;
+
+        ZSB_MOUSEMOVE mm { { GetSafeHwnd( ), static_cast<UINT_PTR>( m_nControlId ), ZSBN_MOUSEMOVE }, pt };
+        m_pWndTarget->SendMessage( WM_NOTIFY, m_nControlId, reinterpret_cast<LPARAM>( &mm ) );
     }
 }
 
@@ -39,7 +39,7 @@ void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
     SetCapture( );
 
     if ( m_hWndTarget ) {
-        _Notify( point );
+        NotifyPosition( point );
     }
 
     CStatic::OnLButtonDown( nFlags, point );
@@ -47,7 +47,7 @@ void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
 
 void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
     if ( m_hWndTarget && m_fLButtonDown ) {
-        _Notify( point );
+        NotifyPosition( point );
     }
 
     m_fLButtonDown = false;
@@ -58,7 +58,7 @@ void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
 
 void CStaticBitmap::OnMouseMove( UINT nFlags, CPoint point ) {
     if ( m_hWndTarget && m_fLButtonDown ) {
-        _Notify( point );
+        NotifyPosition( point );
     }
 
     CStatic::OnMouseMove( nFlags, point );

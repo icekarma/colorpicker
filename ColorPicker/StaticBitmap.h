@@ -1,6 +1,11 @@
 #pragma once
 
-UINT const ZSBN_MOUSEMOVE { WM_USER + 0x7FE };
+UINT const ZSBN_MOUSEMOVE { 17 };
+
+struct ZSB_MOUSEMOVE {
+    NMHDR  hdr;
+    CPoint point;
+};
 
 class CStaticBitmap: public CStatic {
 
@@ -8,13 +13,13 @@ class CStaticBitmap: public CStatic {
 
 public:
 
-    void SetCustomMessageTargetWindow( HWND htarget ) {
-        m_hWndTarget = htarget;
+    void SetCustomMessageTarget( CWnd* pWndTarget ) {
+        m_pWndTarget = pWndTarget;
     }
 
 protected:
 
-    void _Notify( CPoint point );
+    void NotifyPosition( CPoint const& point );
 
     afx_msg BOOL OnEraseBkgnd( CDC* pDC );
     afx_msg void OnLButtonDown( UINT nFlags, CPoint point );
@@ -24,7 +29,7 @@ protected:
 
     CRect  m_rcClient;
     int    m_nControlId   { };
-    HWND   m_hWndTarget   { };
+    CWnd*  m_pWndTarget   { };
     bool   m_fLButtonDown { };
     CPoint m_ptLast       { -1, -1 };
 

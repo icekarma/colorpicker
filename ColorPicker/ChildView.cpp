@@ -22,8 +22,10 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED   ( IDCLOSE,        &CChildView::OnCloseButtonClicked )
-    ON_MESSAGE      ( ZSBN_MOUSEMOVE, &CChildView::OnZsbnMouseMove      )
+    ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
+
+    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
+    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
 
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_CHANGE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueChange     )
@@ -132,8 +134,8 @@ void CChildView::OnInitialUpdate( ) {
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
-    m_staticZStrip.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
-    m_staticXyGrid.SetCustomMessageTargetWindow( GetSafeHwnd( ) );
+    m_staticZStrip.SetCustomMessageTarget( this );
+    m_staticXyGrid.SetCustomMessageTarget( this );
 
     //ZE adjust0   { 0,  0 };
     SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
@@ -400,16 +402,11 @@ void CChildView::OnColorValueChange( UINT const uId ) {
     InterlockedExchange( &m_uBusy, 0 );
 }
 
-afx_msg LRESULT CChildView::OnZsbnMouseMove( WPARAM wParam, LPARAM lParam ) {
-    switch ( wParam ) {
-        case IDC_Z_STRIP: OnZStripMouseMove( LOWORD( lParam ), HIWORD( lParam ) ); break;
-        case IDC_XY_GRID: OnXyGridMouseMove( LOWORD( lParam ), HIWORD( lParam ) ); break;
-    }
+void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
+    ZSB_MOUSEMOVE* mm { reinterpret_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
+    int x { mm->point.x };
+    int y { mm->point.y };
 
-    return 0;
-}
-
-void CChildView::OnZStripMouseMove( int x, int y ) {
     debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
     CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
@@ -431,9 +428,15 @@ void CChildView::OnZStripMouseMove( int x, int y ) {
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );
+
+    *result = 0;
 }
 
-void CChildView::OnXyGridMouseMove( int x, int y ) {
+void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
+    ZSB_MOUSEMOVE* mm { reinterpret_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
+    int x { mm->point.x };
+    int y { mm->point.y };
+
     debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
 
     CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
@@ -456,4 +459,6 @@ void CChildView::OnXyGridMouseMove( int x, int y ) {
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );
+
+    *result = 0;
 }
