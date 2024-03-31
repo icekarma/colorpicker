@@ -96,6 +96,9 @@ class ColorTemplate {
 
 public:
 
+    virtual constexpr bool            operator==( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
+    virtual constexpr bool            operator!=( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
+
     virtual constexpr ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
     virtual constexpr int             GetChannelCount( )                                               const noexcept = 0;
 
@@ -214,6 +217,30 @@ public:
         return ScaleLabColor( _values );
     }
 
+    virtual constexpr bool operator==( ColorTemplate<ValueT> const& rhs ) const noexcept override {
+        return
+            ( GetColorSpace( )   == rhs.GetColorSpace( )    ) &&
+            ( GetChannelCount( ) == rhs.GetChannelCount( )  ) &&
+            ( _values            == rhs.GetChannelValues( ) )
+            ;
+    }
+
+    virtual constexpr bool operator!=( ColorTemplate<ValueT> const& rhs ) const noexcept override {
+        return
+            ( GetColorSpace( )   != rhs.GetColorSpace( )    ) ||
+            ( GetChannelCount( ) != rhs.GetChannelCount( )  ) ||
+            ( _values            != rhs.GetChannelValues( ) )
+            ;
+    }
+
+    virtual constexpr bool operator==( LabColorTemplate<ValueT> const& rhs ) const noexcept {
+        return _values == rhs._values;
+    }
+
+    virtual constexpr bool operator!=( LabColorTemplate<ValueT> const& rhs ) const noexcept {
+        return _values != rhs._values;
+    }
+
     virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::Lab;
     }
@@ -318,6 +345,30 @@ public:
         _values = std::move( rhs._values );
 
         return *this;
+    }
+
+    virtual constexpr bool operator==( ColorTemplate<ValueT> const& rhs ) const noexcept override {
+        return
+            ( GetColorSpace( )   == rhs.GetColorSpace( )    ) &&
+            ( GetChannelCount( ) == rhs.GetChannelCount( )  ) &&
+            ( _values            == rhs.GetChannelValues( ) )
+            ;
+    }
+
+    virtual constexpr bool operator!=( ColorTemplate<ValueT> const& rhs ) const noexcept override {
+        return
+            ( GetColorSpace( )   != rhs.GetColorSpace( )    ) ||
+            ( GetChannelCount( ) != rhs.GetChannelCount( )  ) ||
+            ( _values            != rhs.GetChannelValues( ) )
+            ;
+    }
+
+    virtual constexpr bool operator==( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
+        return _values == rhs._values;
+    }
+
+    virtual constexpr bool operator!=( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
+        return _values != rhs._values;
     }
 
     virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
