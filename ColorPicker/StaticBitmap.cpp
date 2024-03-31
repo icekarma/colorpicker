@@ -35,10 +35,10 @@ BOOL CStaticBitmap::OnEraseBkgnd( CDC* /*pDC*/ ) {
 }
 
 void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
-    m_fLButtonDown = true;
-    SetCapture( );
+    if ( m_pWndTarget && m_nControlId ) {
+        m_fLButtonDown = true;
+        SetCapture( );
 
-    if ( m_hWndTarget ) {
         NotifyPosition( point );
     }
 
@@ -46,18 +46,18 @@ void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
 }
 
 void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
-    if ( m_hWndTarget && m_fLButtonDown ) {
+    if ( m_fLButtonDown && m_pWndTarget && m_nControlId ) {
         NotifyPosition( point );
-    }
 
-    m_fLButtonDown = false;
-    ReleaseCapture( );
+        m_fLButtonDown = false;
+        ReleaseCapture( );
+    }
 
     CStatic::OnLButtonUp( nFlags, point );
 }
 
 void CStaticBitmap::OnMouseMove( UINT nFlags, CPoint point ) {
-    if ( m_hWndTarget && m_fLButtonDown ) {
+    if ( m_fLButtonDown && m_pWndTarget && m_nControlId ) {
         NotifyPosition( point );
     }
 
@@ -68,4 +68,12 @@ void CStaticBitmap::OnSize( UINT nType, int cx, int cy ) {
     CStatic::OnSize( nType, cx, cy );
 
     GetClientRect( m_rcClient );
+
+    if ( !m_nControlId ) {
+        m_nControlId = ::GetDlgCtrlID( GetSafeHwnd( ) );
+        if ( !m_nControlId ) {
+            debug( "CStaticBitmap::OnSize: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
+            return;
+        }
+    }
 }
