@@ -3,11 +3,11 @@
 #include "StaticBitmap.h"
 
 BEGIN_MESSAGE_MAP( CStaticBitmap, CStatic )
-    ON_WM_MOUSEMOVE( )
+    ON_WM_ERASEBKGND( )
     ON_WM_LBUTTONDOWN( )
     ON_WM_LBUTTONUP( )
+    ON_WM_MOUSEMOVE( )
     ON_WM_SIZE( )
-    ON_WM_ERASEBKGND( )
 END_MESSAGE_MAP( )
 
 void CStaticBitmap::_Notify( CPoint point ) {
