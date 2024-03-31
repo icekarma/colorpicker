@@ -134,9 +134,6 @@ void CChildView::OnInitialUpdate( ) {
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
-    m_staticZStrip.SetCustomMessageTarget( this );
-    m_staticXyGrid.SetCustomMessageTarget( this );
-
     //ZE adjust0   { 0,  0 };
     SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
     SIZE adjustUp2 { 0, -2 }; SIZE adjustDn2 { 0, 2 };

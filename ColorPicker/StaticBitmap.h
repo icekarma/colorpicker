@@ -11,12 +11,6 @@ class CStaticBitmap: public CStatic {
 
     DECLARE_MESSAGE_MAP( )
 
-public:
-
-    void SetCustomMessageTarget( CWnd* pWndTarget ) {
-        m_pWndTarget = pWndTarget;
-    }
-
 protected:
 
     void NotifyPosition( CPoint const& point );
@@ -29,7 +23,6 @@ protected:
 
     CRect  m_rcClient;
     int    m_nControlId   { };
-    CWnd*  m_pWndTarget   { };
     bool   m_fLButtonDown { };
     CPoint m_ptLast       { -1, -1 };
 

@@ -26,7 +26,7 @@ void CStaticBitmap::NotifyPosition( CPoint const& point ) {
         m_ptLast = pt;
 
         ZSB_MOUSEMOVE mm { { GetSafeHwnd( ), static_cast<UINT_PTR>( m_nControlId ), ZSBN_MOUSEMOVE }, pt };
-        m_pWndTarget->SendMessage( WM_NOTIFY, m_nControlId, reinterpret_cast<LPARAM>( &mm ) );
+        GetOwner( )->SendMessage( WM_NOTIFY, m_nControlId, reinterpret_cast<LPARAM>( &mm ) );
     }
 }
 
@@ -35,7 +35,7 @@ BOOL CStaticBitmap::OnEraseBkgnd( CDC* /*pDC*/ ) {
 }
 
 void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
-    if ( m_pWndTarget && m_nControlId ) {
+    if ( m_nControlId ) {
         m_fLButtonDown = true;
         SetCapture( );
 
@@ -46,7 +46,7 @@ void CStaticBitmap::OnLButtonDown( UINT nFlags, CPoint point ) {
 }
 
 void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
-    if ( m_fLButtonDown && m_pWndTarget && m_nControlId ) {
+    if ( m_fLButtonDown && m_nControlId ) {
         NotifyPosition( point );
 
         m_fLButtonDown = false;
@@ -57,7 +57,7 @@ void CStaticBitmap::OnLButtonUp( UINT nFlags, CPoint point ) {
 }
 
 void CStaticBitmap::OnMouseMove( UINT nFlags, CPoint point ) {
-    if ( m_fLButtonDown && m_pWndTarget && m_nControlId ) {
+    if ( m_fLButtonDown && m_nControlId ) {
         NotifyPosition( point );
     }
 
@@ -73,7 +73,6 @@ void CStaticBitmap::OnSize( UINT nType, int cx, int cy ) {
         m_nControlId = ::GetDlgCtrlID( GetSafeHwnd( ) );
         if ( !m_nControlId ) {
             debug( "CStaticBitmap::OnSize: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
-            return;
         }
     }
 }
