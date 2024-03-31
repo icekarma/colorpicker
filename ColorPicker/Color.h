@@ -71,17 +71,17 @@ enum class AllChannels {
 // Function prototypes
 //================================================
 
-LabChannels           inline constexpr  AllChannelsToLabChannels ( AllChannels const channel );
-SrgbChannels          inline constexpr  AllChannelsToSrgbChannels( AllChannels const channel );
+[[nodiscard]] LabChannels           inline constexpr  AllChannelsToLabChannels ( AllChannels const channel );
+[[nodiscard]] SrgbChannels          inline constexpr  AllChannelsToSrgbChannels( AllChannels const channel );
 
-AllChannels           inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
-AllChannels           inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
+[[nodiscard]] AllChannels           inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
+[[nodiscard]] AllChannels           inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
 
-Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<   LabValueT> const& values );
-Triplet<LabValueT>    inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values );
+[[nodiscard]] Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<   LabValueT> const& values );
+[[nodiscard]] Triplet<LabValueT>    inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values );
 
-RawLabColor           inline constexpr ScaleLabColor(    LabColor const& color );
-LabColor              inline constexpr ScaleLabColor( RawLabColor const& color );
+[[nodiscard]] RawLabColor           inline constexpr ScaleLabColor(    LabColor const& color );
+[[nodiscard]] LabColor              inline constexpr ScaleLabColor( RawLabColor const& color );
 
 //================================================
 // Classes
@@ -96,17 +96,17 @@ class ColorTemplate {
 
 public:
 
-    virtual constexpr bool            operator==( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
-    virtual constexpr bool            operator!=( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
+    virtual constexpr               bool            operator==( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
+    virtual constexpr               bool            operator!=( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
 
-    virtual constexpr ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
-    virtual constexpr int             GetChannelCount( )                                               const noexcept = 0;
+    virtual constexpr [[nodiscard]] ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
+    virtual constexpr [[nodiscard]] int             GetChannelCount( )                                               const noexcept = 0;
 
-    virtual constexpr ValueT          GetChannelValue( AllChannels const channel )                     const noexcept = 0;
-    virtual constexpr void            SetChannelValue( AllChannels const channel, ValueT const value )       noexcept = 0;
+    virtual constexpr [[nodiscard]] ValueT          GetChannelValue( AllChannels const channel )                     const noexcept = 0;
+    virtual constexpr               void            SetChannelValue( AllChannels const channel, ValueT const value )       noexcept = 0;
 
-    virtual constexpr Triplet<ValueT> GetChannelValues( )                                              const noexcept = 0;
-    virtual constexpr void            SetChannelValues( Triplet<ValueT> const& values )                      noexcept = 0;
+    virtual constexpr [[nodiscard]] Triplet<ValueT> GetChannelValues( )                                              const noexcept = 0;
+    virtual constexpr               void            SetChannelValues( Triplet<ValueT> const& values )                      noexcept = 0;
 
 };
 
@@ -241,15 +241,15 @@ public:
         return _values != rhs._values;
     }
 
-    virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
+    [[nodiscard]] virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::Lab;
     }
 
-    virtual int constexpr GetChannelCount( ) const noexcept override {
+    [[nodiscard]] virtual int constexpr GetChannelCount( ) const noexcept override {
         return 3;
     }
 
-    constexpr ValueT GetChannelValue( LabChannels const channel ) const noexcept {
+    [[nodiscard]] constexpr ValueT GetChannelValue( LabChannels const channel ) const noexcept {
         assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
         return _values[+channel];
     }
@@ -259,7 +259,7 @@ public:
         _values[+channel] = value;
     }
 
-    virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
+    [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
         assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
         return _values[+AllChannelsToLabChannels( channel )];
     }
@@ -269,12 +269,12 @@ public:
         _values[+AllChannelsToLabChannels( channel )] = value;
     }
 
-    virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
+    [[nodiscard]] virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
         return _values;
     }
 
     template<typename ForeignT>
-    constexpr Triplet<ForeignT> GetChannelValues( ) const noexcept {
+    [[nodiscard]] constexpr Triplet<ForeignT> GetChannelValues( ) const noexcept {
         return ScaleLabColor<ForeignT>( _values );
     }
 
@@ -379,31 +379,31 @@ public:
         return 3;
     }
 
-    constexpr ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
+    [[nodiscard]] constexpr ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
         assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
         return _values[+channel];
     }
 
-    constexpr void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
+    [[nodiscard]] constexpr void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
         assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
         _values[+channel] = value;
     }
 
-    virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
+    [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
         assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
         return _values[+AllChannelsToSrgbChannels( channel )];
     }
 
-    virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
+    [[nodiscard]] virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
         assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
         _values[+AllChannelsToSrgbChannels( channel )] = value;
     }
 
-    virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
+    [[nodiscard]] virtual constexpr Triplet<ValueT> GetChannelValues( ) const noexcept override {
         return _values;
     }
 
-    virtual constexpr void SetChannelValues( Triplet<ValueT> const& values ) noexcept override {
+    [[nodiscard]] virtual constexpr void SetChannelValues( Triplet<ValueT> const& values ) noexcept override {
         _values = values;
     }
 
@@ -443,8 +443,8 @@ public:
         }
     }
 
-    cmsHTRANSFORM GetLabToSrgbTransform( ) const { return _hLabToSrgbTransform; }
-    cmsHTRANSFORM GetSrgbToLabTransform( ) const { return _hSrgbToLabTransform; }
+    [[nodiscard]] cmsHTRANSFORM GetLabToSrgbTransform( ) const { return _hLabToSrgbTransform; }
+    [[nodiscard]] cmsHTRANSFORM GetSrgbToLabTransform( ) const { return _hSrgbToLabTransform; }
 
     void TransformLabToSrgb( void const* pInputBuffer, void* pOutputBuffer, unsigned cPixels ) {
         cmsDoTransform( _hLabToSrgbTransform, pInputBuffer, pOutputBuffer, cPixels );
@@ -454,7 +454,7 @@ public:
         cmsDoTransform( _hSrgbToLabTransform, pInputBuffer, pOutputBuffer, cPixels );
     }
 
-    SrgbColor ConvertColor( LabColor const& color ) {
+    [[nodiscard]] SrgbColor ConvertColor( LabColor const& color ) {
         SrgbValueT            srgbValues[ImageSrgbValuesPerPixel];
         Triplet<RawLabValueT> labValues { ScaleLabColor( color.GetChannelValues( ) ) };
 
@@ -462,7 +462,7 @@ public:
         return { srgbValues[2], srgbValues[1], srgbValues[0] };
     }
 
-    LabColor ConvertColor( SrgbColor const& color ) {
+    [[nodiscard]] LabColor ConvertColor( SrgbColor const& color ) {
         RawLabValueT        labValues[ImageLabValuesPerPixel];
         Triplet<SrgbValueT> srgbValues { color.GetChannelValues( ) };
 
@@ -472,8 +472,8 @@ public:
 
 protected:
 
-    cmsHTRANSFORM _hLabToSrgbTransform { };
-    cmsHTRANSFORM _hSrgbToLabTransform { };
+    cmsHTRANSFORM _hLabToSrgbTransform;
+    cmsHTRANSFORM _hSrgbToLabTransform;
 
 };
 
@@ -481,23 +481,23 @@ protected:
 // Function definitions
 //================================================
 
-LabChannels inline constexpr AllChannelsToLabChannels( AllChannels const channel ) {
+[[nodiscard]] LabChannels inline constexpr AllChannelsToLabChannels( AllChannels const channel ) {
     return static_cast<LabChannels>( +channel - +AllChannels::LabMin );
 }
 
-SrgbChannels inline constexpr AllChannelsToSrgbChannels( AllChannels const channel ) {
+[[nodiscard]] SrgbChannels inline constexpr AllChannelsToSrgbChannels( AllChannels const channel ) {
     return static_cast<SrgbChannels>( +channel - +AllChannels::SrgbMin );
 }
 
-AllChannels inline constexpr LabChannelsToAllChannels( LabChannels const channel ) {
+[[nodiscard]] AllChannels inline constexpr LabChannelsToAllChannels( LabChannels const channel ) {
     return static_cast<AllChannels>( +channel + +AllChannels::LabMin );
 }
 
-AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel ) {
+[[nodiscard]] AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel ) {
     return static_cast<AllChannels>( +channel + +AllChannels::SrgbMin );
 }
 
-Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& values ) {
+[[nodiscard]] Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& values ) {
     return {
         static_cast<RawLabValueT>( static_cast<int>( values[0] ) * 255 / 100 ),
         static_cast<RawLabValueT>( static_cast<int>( values[1] ) + 128       ),
@@ -505,7 +505,7 @@ Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& 
     };
 }
 
-Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values ) {
+[[nodiscard]] Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values ) {
     return {
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[0] ) ) * 100 / 255 ),
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[1] ) ) - 128       ),
@@ -513,11 +513,11 @@ Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& 
     };
 }
 
-RawLabColor inline constexpr ScaleLabColor( LabColor const& color ) {
+[[nodiscard]] RawLabColor inline constexpr ScaleLabColor( LabColor const& color ) {
     return RawLabColor { ScaleLabColor( color.GetChannelValues( ) ) };
 }
 
-LabColor inline constexpr ScaleLabColor( RawLabColor const& color ) {
+[[nodiscard]] LabColor inline constexpr ScaleLabColor( RawLabColor const& color ) {
     return LabColor { ScaleLabColor( color.GetChannelValues( ) ) };
 }
 
