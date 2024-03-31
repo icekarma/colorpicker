@@ -29,6 +29,8 @@ public:
 
 private:
 
+    void _UpdateSrgb( );
+
     int const              ImageWidth  { 99 };
     int const              ImageHeight { 52 };
 
