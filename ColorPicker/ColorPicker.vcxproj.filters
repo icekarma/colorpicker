@@ -60,6 +60,9 @@
     <ClInclude Include="Swatch.h">
       <Filter>02 Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StaticBrush.h">
+      <Filter>02 Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">
@@ -93,6 +96,9 @@
       <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Swatch.cpp">
+      <Filter>01 Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticBrush.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
   </ItemGroup>

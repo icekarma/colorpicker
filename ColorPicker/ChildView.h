@@ -4,6 +4,7 @@
 #include "ZStrip.h"
 #include "Swatch.h"
 #include "StaticBitmap.h"
+#include "StaticBrush.h"
 
 class CChildView:
     public CFormView
@@ -105,7 +106,7 @@ protected:
     CEdit         m_editSrgbGValue;
     CEdit         m_editSrgbBValue;
 
-    CStatic       m_staticSwatch;
+    CStaticBrush  m_staticSwatch;
     CStaticBitmap m_staticZStrip;
     CStaticBitmap m_staticXyGrid;
 
