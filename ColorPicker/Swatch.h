@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ColorPickerDoc.h"
+#include "StaticBrush.h"
 
 class CSwatch {
 
@@ -8,35 +9,20 @@ public:
 
     CSwatch( ) = delete;
 
-    CSwatch( CColorPickerDoc* pDoc, CStatic* pStatic ):
-        m_pDoc { pDoc }
+    CSwatch( CColorPickerDoc* pDoc, CStaticBrush* pStatic ):
+        m_pDoc         { pDoc    },
+        m_pStaticBrush { pStatic }
     {
-        if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
-            pStatic->SetBitmap( m_bitmap );
-        } else {
-            debug( "CSwatch::`ctor: CreateBitmap failed\n" );
-        }
+        m_pStaticBrush->SetColor( m_pDoc->GetSrgbColor( ) );
     }
 
-    ~CSwatch( ) {
-        if ( m_SrgbImage ) {
-            delete[] m_SrgbImage;
-            m_SrgbImage = nullptr;
-        }
+    void Update( ) {
+        m_pStaticBrush->SetColor( m_pDoc->GetSrgbColor( ) );
     }
-
-    void Update( );
 
 private:
 
-    void _UpdateSrgb( );
-
-    int const              ImageWidth  { 99 };
-    int const              ImageHeight { 52 };
-
     CColorPickerDoc const* m_pDoc;
-    CBitmap                m_bitmap;
-
-    SrgbValueT*            m_SrgbImage { new SrgbValueT[ImageWidth * ImageHeight * ImageSrgbValuesPerPixel] };
+    CStaticBrush*          m_pStaticBrush;
 
 };

@@ -1,9 +1,13 @@
 #pragma once
 
+#include "Color.h"
+
 class CStaticBrush: public CStatic {
 
     DECLARE_MESSAGE_MAP( )
 
-protected:
+public:
+
+    void SetColor( SrgbColor const& color );
 
 };
