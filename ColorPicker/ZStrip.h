@@ -30,8 +30,12 @@ public:
         }
     }
 
-    void SetChannel( AllChannels const channelZ ) {
+    bool SetChannel( AllChannels const channelZ ) {
+        bool changed = m_channelZ != channelZ;
+
         m_channelZ = channelZ;
+
+        return changed;
     }
 
     void Update( );
