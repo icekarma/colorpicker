@@ -85,15 +85,10 @@ std::underlying_type_t<T> constexpr operator+( T const rhs ) {
 }
 
 //================================================
-// Pseudo-"cast operator"s
+// Pseudo-cast operators
 //================================================
 
 template<typename ReturnT, typename ValueT>
 inline ReturnT* dynamic_downcast( ValueT* p ) {
-    return (ReturnT*) AfxDynamicDownCast( ReturnT::GetThisClass( ), p );
+    return reinterpret_cast<ReturnT*>( AfxDynamicDownCast( ReturnT::GetThisClass( ), p ) );
 }
-
-//================================================
-// Functions
-//================================================
-
