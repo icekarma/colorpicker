@@ -30,7 +30,7 @@ void CStaticBitmap::_Notify( CPoint point ) {
     }
 }
 
-BOOL CStaticBitmap::OnEraseBackground( CDC* /*pDC*/ ) {
+BOOL CStaticBitmap::OnEraseBkgnd( CDC* /*pDC*/ ) {
     return TRUE;
 }
 

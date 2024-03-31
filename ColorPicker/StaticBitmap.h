@@ -16,7 +16,7 @@ protected:
 
     void _Notify( CPoint point );
 
-    afx_msg BOOL OnEraseBackground( CDC* pDC );
+    afx_msg BOOL OnEraseBkgnd( CDC* pDC );
     afx_msg void OnLButtonDown( UINT nFlags, CPoint point );
     afx_msg void OnLButtonUp( UINT nFlags, CPoint point );
     afx_msg void OnMouseMove( UINT nFlags, CPoint point );
