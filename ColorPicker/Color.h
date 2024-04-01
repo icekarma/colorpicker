@@ -371,6 +371,10 @@ public:
         return _values != rhs._values;
     }
 
+    constexpr explicit operator COLORREF( ) const noexcept {
+        return RGB( _values[+SrgbChannels::R], _values[+SrgbChannels::G], _values[+SrgbChannels::B] );
+    }
+
     virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
         return ColorSpace::sRGB;
     }
