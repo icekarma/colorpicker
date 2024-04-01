@@ -40,9 +40,9 @@ void CZStrip::Update( ) {
 }
 
 void CZStrip::_UpdateLab( ) {
-    RawLabValueT*         ptr      { m_RawLabImage };
-    Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
-    LabChannels           channel  { AllChannelsToLabChannels( m_channelZ ) };
+    RawLabValueT* ptr      { m_RawLabImage };
+    RawLabTriplet channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
+    LabChannels   channel  { AllChannelsToLabChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channel] = static_cast<RawLabValueT>( y );
@@ -57,9 +57,9 @@ void CZStrip::_UpdateLab( ) {
 }
 
 void CZStrip::_UpdateSrgb( ) {
-    SrgbValueT*         ptr      { m_SrgbImage };
-    Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    SrgbChannels        channel  { AllChannelsToSrgbChannels( m_channelZ ) };
+    SrgbValueT*  ptr      { m_SrgbImage };
+    SrgbTriplet  channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    SrgbChannels channel  { AllChannelsToSrgbChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channel] = static_cast<SrgbValueT>( y );

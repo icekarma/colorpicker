@@ -182,12 +182,12 @@ void CChildView::OnInitialUpdate( ) {
     // Set m_uBusy to prevent OnColorValueChange from interfering
     InterlockedExchange( &m_uBusy, 1 );
 
-    Triplet<LabValueT> labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
+    LabTriplet labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
     PutValueToEdit( m_editLabLValue, labValues[+LabChannels::L] );
     PutValueToEdit( m_editLabAValue, labValues[+LabChannels::a] );
     PutValueToEdit( m_editLabBValue, labValues[+LabChannels::b] );
 
-    Triplet<SrgbValueT> srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
     PutValueToEdit( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
     PutValueToEdit( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
@@ -341,12 +341,12 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         return;
     }
 
-    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    Triplet<LabValueT>  newLabValues  {  oldLabValues };
-    Triplet<SrgbValueT> newSrgbValues { oldSrgbValues };
-    bool fChanged { };
+    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet       newLabValues  {  oldLabValues };
+    SrgbTriplet      newSrgbValues { oldSrgbValues };
+    bool             fChanged      { };
 
     debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
     debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
@@ -406,14 +406,13 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
-    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet       newLabValues  { oldLabValues  };
+    SrgbTriplet      newSrgbValues { oldSrgbValues };
 
     SetChannelValue( m_channelZ, y );
-
-    Triplet<LabValueT>  newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    Triplet<SrgbValueT> newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     InterlockedExchange( &m_uBusy, 1 );
     if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
@@ -436,15 +435,14 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
 
-    CColorPickerDoc*    pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    Triplet<LabValueT>  oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    Triplet<SrgbValueT> oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet       newLabValues  { oldLabValues  };
+    SrgbTriplet      newSrgbValues { oldSrgbValues };
 
     SetChannelValue( m_channelX, x );
     SetChannelValue( m_channelY, y );
-
-    Triplet<LabValueT>  newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    Triplet<SrgbValueT> newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     InterlockedExchange( &m_uBusy, 1 );
     if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }

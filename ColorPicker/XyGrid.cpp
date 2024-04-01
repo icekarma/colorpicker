@@ -40,10 +40,10 @@ void CXyGrid::Update( ) {
 }
 
 void CXyGrid::_UpdateLab( ) {
-    RawLabValueT*         ptr      { m_RawLabImage };
-    Triplet<RawLabValueT> channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
-    LabChannels           channelX { AllChannelsToLabChannels( m_channelX ) };
-    LabChannels           channelY { AllChannelsToLabChannels( m_channelY ) };
+    RawLabValueT* ptr      { m_RawLabImage };
+    RawLabTriplet channels { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
+    LabChannels   channelX { AllChannelsToLabChannels( m_channelX ) };
+    LabChannels   channelY { AllChannelsToLabChannels( m_channelY ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channelY] = static_cast<RawLabValueT>( y );
@@ -59,10 +59,10 @@ void CXyGrid::_UpdateLab( ) {
 }
 
 void CXyGrid::_UpdateSrgb( ) {
-    SrgbValueT*         ptr      { m_SrgbImage };
-    Triplet<SrgbValueT> channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    SrgbChannels        channelX { AllChannelsToSrgbChannels( m_channelX ) };
-    SrgbChannels        channelY { AllChannelsToSrgbChannels( m_channelY ) };
+    SrgbValueT*  ptr      { m_SrgbImage };
+    SrgbTriplet  channels { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    SrgbChannels channelX { AllChannelsToSrgbChannels( m_channelX ) };
+    SrgbChannels channelY { AllChannelsToSrgbChannels( m_channelY ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
         channels[+channelY] = static_cast<SrgbValueT>( y );

@@ -11,16 +11,20 @@ template<typename ValueT> class SrgbColorTemplate;
 // Type aliases
 //================================================
 
-using    LabValueT =  int8_t;
-using RawLabValueT = uint8_t;
-using   SrgbValueT = uint8_t;
+using    LabValueT  =  int8_t;
+using RawLabValueT  = uint8_t;
+using   SrgbValueT  = uint8_t;
 
 template<typename T>
-using      Triplet = std::array<T, 3>;
+using      Triplet  = std::array<T, 3>;
 
-using    LabColor  =  LabColorTemplate<   LabValueT>;
-using RawLabColor  =  LabColorTemplate<RawLabValueT>;
-using   SrgbColor  = SrgbColorTemplate<  SrgbValueT>;
+using LabTriplet    = Triplet<LabValueT>;
+using RawLabTriplet = Triplet<RawLabValueT>;
+using SrgbTriplet   = Triplet<SrgbValueT>;
+
+using    LabColor   =  LabColorTemplate<   LabValueT>;
+using RawLabColor   =  LabColorTemplate<RawLabValueT>;
+using   SrgbColor   = SrgbColorTemplate<  SrgbValueT>;
 
 //================================================
 // Constants
@@ -71,17 +75,17 @@ enum class AllChannels {
 // Function prototypes
 //================================================
 
-[[nodiscard]] LabChannels           inline constexpr  AllChannelsToLabChannels ( AllChannels const channel );
-[[nodiscard]] SrgbChannels          inline constexpr  AllChannelsToSrgbChannels( AllChannels const channel );
+[[nodiscard]] LabChannels   inline constexpr  AllChannelsToLabChannels ( AllChannels const channel );
+[[nodiscard]] SrgbChannels  inline constexpr  AllChannelsToSrgbChannels( AllChannels const channel );
 
-[[nodiscard]] AllChannels           inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
-[[nodiscard]] AllChannels           inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
+[[nodiscard]] AllChannels   inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
+[[nodiscard]] AllChannels   inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
 
-[[nodiscard]] Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<   LabValueT> const& values );
-[[nodiscard]] Triplet<LabValueT>    inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values );
+[[nodiscard]] RawLabTriplet inline constexpr ScaleLabColor(    LabTriplet const& values );
+[[nodiscard]] LabTriplet    inline constexpr ScaleLabColor( RawLabTriplet const& values );
 
-[[nodiscard]] RawLabColor           inline constexpr ScaleLabColor(    LabColor const& color );
-[[nodiscard]] LabColor              inline constexpr ScaleLabColor( RawLabColor const& color );
+[[nodiscard]] RawLabColor   inline constexpr ScaleLabColor(    LabColor const& color );
+[[nodiscard]] LabColor      inline constexpr ScaleLabColor( RawLabColor const& color );
 
 //================================================
 // Classes
@@ -459,19 +463,19 @@ public:
     }
 
     [[nodiscard]] SrgbColor ConvertColor( LabColor const& color ) {
-        SrgbValueT            srgbValues[ImageSrgbValuesPerPixel];
-        Triplet<RawLabValueT> labValues { ScaleLabColor( color.GetChannelValues( ) ) };
+        SrgbValueT    srgbValues[ImageSrgbValuesPerPixel];
+        RawLabTriplet labValues { ScaleLabColor( color.GetChannelValues( ) ) };
 
         TransformLabToSrgb( labValues.data( ), srgbValues, 1 );
         return { srgbValues[2], srgbValues[1], srgbValues[0] };
     }
 
     [[nodiscard]] LabColor ConvertColor( SrgbColor const& color ) {
-        RawLabValueT        labValues[ImageLabValuesPerPixel];
-        Triplet<SrgbValueT> srgbValues { color.GetChannelValues( ) };
+        RawLabValueT labValues[ImageLabValuesPerPixel];
+        SrgbTriplet  srgbValues { color.GetChannelValues( ) };
 
         TransformSrgbToLab( srgbValues.data( ), labValues, 1 );
-        return ScaleLabColor( Triplet<RawLabValueT> { labValues[0], labValues[1], labValues[2] } );
+        return ScaleLabColor( RawLabTriplet { labValues[0], labValues[1], labValues[2] } );
     }
 
 protected:
@@ -501,7 +505,7 @@ protected:
     return static_cast<AllChannels>( +channel + +AllChannels::SrgbMin );
 }
 
-[[nodiscard]] Triplet<RawLabValueT> inline constexpr ScaleLabColor( Triplet<LabValueT> const& values ) {
+[[nodiscard]] RawLabTriplet inline constexpr ScaleLabColor( LabTriplet const& values ) {
     return {
         static_cast<RawLabValueT>( static_cast<int>( values[0] ) * 255 / 100 ),
         static_cast<RawLabValueT>( static_cast<int>( values[1] ) + 128       ),
@@ -509,7 +513,7 @@ protected:
     };
 }
 
-[[nodiscard]] Triplet<LabValueT> inline constexpr ScaleLabColor( Triplet<RawLabValueT> const& values ) {
+[[nodiscard]] LabTriplet inline constexpr ScaleLabColor( RawLabTriplet const& values ) {
     return {
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[0] ) ) * 100 / 255 ),
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[1] ) ) - 128       ),
