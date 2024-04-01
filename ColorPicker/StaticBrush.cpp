@@ -22,10 +22,10 @@ BOOL CStaticBrush::OnEraseBkgnd( CDC* /*pDC*/ ) {
 }
 
 void CStaticBrush::OnPaint( ) {
-    CPaintDC dc( this );
     CRect rcClient;
-
     GetClientRect( rcClient );
+
+    CPaintDC dc { this };
     dc.FillRect( rcClient, &m_brush );
 
     // Do not call CStatic::OnPaint() for painting messages
