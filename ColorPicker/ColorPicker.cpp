@@ -65,10 +65,6 @@ BOOL CColorPickerApp::InitInstance( ) {
     return TRUE;
 }
 
-//int CColorPickerApp::ExitInstance( ) {
-//    return CWinApp::ExitInstance( );
-//}
-
 void CColorPickerApp::OnAppAbout( ) {
     CAboutDlg { }.DoModal( );
 }

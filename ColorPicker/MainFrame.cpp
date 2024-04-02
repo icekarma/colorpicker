@@ -27,16 +27,6 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     return TRUE;
 }
 
-//BOOL CMainFrame::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo ) {
-//    // let the view have first crack at the command
-//    if ( m_pwndView->OnCmdMsg( nID, nCode, pExtra, pHandlerInfo ) ) {
-//        return TRUE;
-//    }
-//
-//    // otherwise, do default handling
-//    return CFrameWnd::OnCmdMsg( nID, nCode, pExtra, pHandlerInfo );
-//}
-
 #if defined DEBUG_WINDOW_SIZE
 void CMainFrame::OnSizing( UINT fwSide, LPRECT pRect ) {
     CFrameWnd::OnSizing( fwSide, pRect );

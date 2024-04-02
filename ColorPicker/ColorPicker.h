@@ -13,7 +13,6 @@ public:
     virtual ~CColorPickerApp( ) { /*empty*/ }
 
     virtual BOOL InitInstance( );
-    //virtual int ExitInstance( );
 
 protected:
 
