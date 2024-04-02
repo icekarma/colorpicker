@@ -281,7 +281,10 @@ bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, boo
 }
 
 void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
-    edit.SetWindowTextW( std::to_wstring( nValue ).c_str( ) );
+    CString str;
+
+    str.Format( L"%d", nValue );
+    edit.SetWindowTextW( str );
 }
 
 template<typename T>
