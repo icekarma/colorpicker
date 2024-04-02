@@ -489,23 +489,23 @@ protected:
 // Function definitions
 //================================================
 
-[[nodiscard]] LabChannels inline constexpr AllChannelsToLabChannels( AllChannels const channel ) {
+[[nodiscard]] inline constexpr LabChannels AllChannelsToLabChannels( AllChannels const channel ) {
     return static_cast<LabChannels>( +channel - +AllChannels::LabMin );
 }
 
-[[nodiscard]] SrgbChannels inline constexpr AllChannelsToSrgbChannels( AllChannels const channel ) {
+[[nodiscard]] inline constexpr SrgbChannels AllChannelsToSrgbChannels( AllChannels const channel ) {
     return static_cast<SrgbChannels>( +channel - +AllChannels::SrgbMin );
 }
 
-[[nodiscard]] AllChannels inline constexpr LabChannelsToAllChannels( LabChannels const channel ) {
+[[nodiscard]] inline constexpr AllChannels LabChannelsToAllChannels( LabChannels const channel ) {
     return static_cast<AllChannels>( +channel + +AllChannels::LabMin );
 }
 
-[[nodiscard]] AllChannels inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel ) {
+[[nodiscard]] inline constexpr AllChannels SrgbChannelsToAllChannels( SrgbChannels const channel ) {
     return static_cast<AllChannels>( +channel + +AllChannels::SrgbMin );
 }
 
-[[nodiscard]] RawLabTriplet inline constexpr ScaleLabColor( LabTriplet const& values ) {
+[[nodiscard]] inline constexpr RawLabTriplet ScaleLabColor( LabTriplet const& values ) {
     return {
         static_cast<RawLabValueT>( static_cast<int>( values[0] ) * 255 / 100 ),
         static_cast<RawLabValueT>( static_cast<int>( values[1] ) + 128       ),
@@ -513,7 +513,7 @@ protected:
     };
 }
 
-[[nodiscard]] LabTriplet inline constexpr ScaleLabColor( RawLabTriplet const& values ) {
+[[nodiscard]] inline constexpr LabTriplet ScaleLabColor( RawLabTriplet const& values ) {
     return {
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[0] ) ) * 100 / 255 ),
         static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[1] ) ) - 128       ),
@@ -521,11 +521,11 @@ protected:
     };
 }
 
-[[nodiscard]] RawLabColor inline constexpr ScaleLabColor( LabColor const& color ) {
+[[nodiscard]] inline constexpr RawLabColor ScaleLabColor( LabColor const& color ) {
     return RawLabColor { ScaleLabColor( color.GetChannelValues( ) ) };
 }
 
-[[nodiscard]] LabColor inline constexpr ScaleLabColor( RawLabColor const& color ) {
+[[nodiscard]] inline constexpr LabColor ScaleLabColor( RawLabColor const& color ) {
     return LabColor { ScaleLabColor( color.GetChannelValues( ) ) };
 }
 

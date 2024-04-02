@@ -1,5 +1,7 @@
 #pragma once
 
+#undef DEBUG_WINDOW_SIZE
+
 class CMainFrame:
     public CFrameWnd
 {

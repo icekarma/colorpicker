@@ -1,6 +1,8 @@
 #pragma once
 
-#if defined _DEBUG && defined TIMING
+#if defined TIMING
+
+#   if defined _DEBUG
 
 class Timing {
 
@@ -38,18 +40,18 @@ public:
 
 private:
 
+    void _GetSystemTime( uint64_t& uTime ) {
+        GetSystemTimeAsFileTime( reinterpret_cast<LPFILETIME>( &uTime ) );
+    }
+
     uint64_t    m_uStartTime   { };
     uint64_t    m_uStopTime    { };
     uint64_t    m_uDelta       { };
     std::string m_strReportTag;
 
-    void _GetSystemTime( uint64_t& uTime ) {
-        GetSystemTimeAsFileTime( reinterpret_cast<LPFILETIME>( &uTime ) );
-    }
-
 };
 
-#else // !defined _DEBUG || !defined TIMING
+#   else // !defined _DEBUG
 
 class Timing {
 
@@ -73,4 +75,6 @@ public:
 
 };
 
-#endif // defined _DEBUG && defined TIMING
+#   endif // defined _DEBUG
+
+#endif // defined TIMING

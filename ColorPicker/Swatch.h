@@ -13,7 +13,7 @@ public:
         m_pDoc         { pDoc    },
         m_pStaticBrush { pStatic }
     {
-        m_pStaticBrush->SetColor( m_pDoc->GetSrgbColor( ) );
+        Update( );
     }
 
     void Update( ) {
