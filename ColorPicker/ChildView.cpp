@@ -284,38 +284,6 @@ void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
     edit.SetWindowTextW( std::to_wstring( nValue ).c_str( ) );
 }
 
-void CChildView::SetChannelValue( AllChannels channel, int nValue ) {
-    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
-
-    switch ( channel ) {
-        case AllChannels::LabL:
-        case AllChannels::LabA:
-        case AllChannels::LabB: {
-            LabColor color { pDoc->GetLabColor( ) };
-            if ( channel == AllChannels::LabL ) {
-                nValue = nValue * 100 / 255;
-            } else {
-                nValue -= 128;
-            }
-            color.SetChannelValue( channel, static_cast<LabValueT>( nValue ) );
-            pDoc->SetColor( color );
-            break;
-        }
-
-        case AllChannels::SrgbR:
-        case AllChannels::SrgbG:
-        case AllChannels::SrgbB: {
-            SrgbColor color { pDoc->GetSrgbColor( ) };
-            color.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
-            pDoc->SetColor( color );
-            break;
-        }
-
-        default:
-            break;
-    }
-}
-
 template<typename T>
 bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
     int n { static_cast<int>( oldValue ) };
@@ -412,7 +380,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { oldLabValues  };
     SrgbTriplet      newSrgbValues { oldSrgbValues };
 
-    SetChannelValue( m_channelZ, y );
+    pDoc->SetChannelValue( m_channelZ, y );
 
     InterlockedExchange( &m_uBusy, 1 );
     if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
@@ -441,8 +409,8 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { oldLabValues  };
     SrgbTriplet      newSrgbValues { oldSrgbValues };
 
-    SetChannelValue( m_channelX, x );
-    SetChannelValue( m_channelY, y );
+    pDoc->SetChannelValue( m_channelX, x );
+    pDoc->SetChannelValue( m_channelY, y );
 
     InterlockedExchange( &m_uBusy, 1 );
     if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }

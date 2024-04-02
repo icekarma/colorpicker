@@ -74,7 +74,6 @@ protected:
     bool GetValueFromEdit( CEdit const& edit, int& result );
     bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
     void PutValueToEdit( CEdit& edit, int const nValue ) const;
-    void SetChannelValue( AllChannels channel, int nValue );
     template<typename T>
     bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
     template<typename T>

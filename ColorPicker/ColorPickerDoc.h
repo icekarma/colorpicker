@@ -29,6 +29,8 @@ public:
         return m_SrgbColor;
     }
 
+    void SetChannelValue( AllChannels const channel, int const nValue );
+
 protected:
 
     CColorPickerDoc( ) noexcept { /*empty*/ }
@@ -37,8 +39,8 @@ protected:
 
     virtual BOOL OnNewDocument( );
 
-    // Use SetColor to change these, because it keeps their values synchronized!
-    LabColor    m_LabColor;
-    SrgbColor   m_SrgbColor;
+    // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
+    LabColor  m_LabColor  { };
+    SrgbColor m_SrgbColor { };
 
 };

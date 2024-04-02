@@ -21,3 +21,32 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
 
 	return TRUE;
 }
+
+void CColorPickerDoc::SetChannelValue( AllChannels const channel, int const nValue ) {
+    switch ( channel ) {
+        case AllChannels::LabL:
+        case AllChannels::LabA:
+        case AllChannels::LabB: {
+            LabColor color { m_LabColor };
+            if ( channel == AllChannels::LabL ) {
+                color.SetChannelValue( channel, static_cast<LabValueT>( nValue * 100 / 255 ) );
+            } else {
+                color.SetChannelValue( channel, static_cast<LabValueT>( nValue - 128 ) );
+            }
+            SetColor( color );
+            break;
+        }
+
+        case AllChannels::SrgbR:
+        case AllChannels::SrgbG:
+        case AllChannels::SrgbB: {
+            SrgbColor color { m_SrgbColor };
+            color.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
+            SetColor( color );
+            break;
+        }
+
+        default:
+            break;
+    }
+}
