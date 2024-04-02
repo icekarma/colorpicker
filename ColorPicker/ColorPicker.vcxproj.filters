@@ -95,9 +95,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Swatch.cpp">
-      <Filter>01 Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StaticBrush.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>

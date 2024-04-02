@@ -244,7 +244,6 @@
     <ClCompile Include="ColorPickerDoc.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
     <ClCompile Include="StaticBrush.cpp" />
-    <ClCompile Include="Swatch.cpp" />
     <ClCompile Include="XyGrid.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="pch.cpp">
