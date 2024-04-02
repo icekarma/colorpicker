@@ -370,7 +370,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
 }
 
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
-    ZSB_MOUSEMOVE* mm { reinterpret_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
+    ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int x { mm->point.x };
     int y { mm->point.y };
 
@@ -399,7 +399,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 }
 
 void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
-    ZSB_MOUSEMOVE* mm { reinterpret_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
+    ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int x { mm->point.x };
     int y { mm->point.y };
 

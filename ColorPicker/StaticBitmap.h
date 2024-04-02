@@ -2,8 +2,7 @@
 
 UINT const ZSBN_MOUSEMOVE { 17 };
 
-struct ZSB_MOUSEMOVE {
-    NMHDR  hdr;
+struct ZSB_MOUSEMOVE: NMHDR {
     CPoint point;
 };
 
