@@ -397,10 +397,11 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    LabTriplet       newLabValues  { oldLabValues  };
-    SrgbTriplet      newSrgbValues { oldSrgbValues };
 
     pDoc->SetChannelValue( m_channelZ, y );
+
+    LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     InterlockedExchange( &m_uBusy, 1 );
     UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
@@ -429,11 +430,12 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    LabTriplet       newLabValues  { oldLabValues  };
-    SrgbTriplet      newSrgbValues { oldSrgbValues };
 
     pDoc->SetChannelValue( m_channelX, x );
     pDoc->SetChannelValue( m_channelY, y );
+
+    LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     InterlockedExchange( &m_uBusy, 1 );
     UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
