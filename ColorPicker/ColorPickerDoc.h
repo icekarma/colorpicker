@@ -9,6 +9,12 @@ class CColorPickerDoc:
     DECLARE_DYNCREATE( CColorPickerDoc )
     DECLARE_MESSAGE_MAP( )
 
+protected:
+
+    CColorPickerDoc( ) noexcept { /*empty*/ }
+
+    virtual ~CColorPickerDoc( ) { /*empty*/ }
+
 public:
 
     void SetColor( LabColor const& color ) {
@@ -32,10 +38,6 @@ public:
     void SetChannelValue( AllChannels const channel, int const nValue );
 
 protected:
-
-    CColorPickerDoc( ) noexcept { /*empty*/ }
-
-    virtual ~CColorPickerDoc( ) { /*empty*/ }
 
     virtual BOOL OnNewDocument( );
 
