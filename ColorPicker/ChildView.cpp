@@ -110,6 +110,8 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     DDX_Control( pDX, IDC_SRGB_G_VALUE,   m_editSrgbGValue     );
     DDX_Control( pDX, IDC_SRGB_B_VALUE,   m_editSrgbBValue     );
 
+    DDX_Control( pDX, IDC_EDIT_HEX_COLOR, m_editHexColor       );
+
     DDX_Control( pDX, IDC_SWATCH,         m_staticSwatch       );
     DDX_Control( pDX, IDC_Z_STRIP,        m_staticZStrip       );
     DDX_Control( pDX, IDC_XY_GRID,        m_staticXyGrid       );
@@ -155,6 +157,8 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
     _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
 
+    //djustPosition( &m_editHexColor,       adjust0      );
+
     //djustPosition( &m_staticSwatch,       adjust0      );
 
     _SetSize       ( &m_staticZStrip,       {  20, 256 } );
@@ -190,6 +194,8 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
     PutValueToEdit( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
+
+    PutHexColorToEdit( m_editHexColor, srgbValues );
 
     InterlockedExchange( &m_uBusy, 0 );
 }
@@ -286,6 +292,16 @@ void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
     edit.SetWindowTextW( str );
 }
 
+void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
+    unsigned r { values[+SrgbChannels::R] };
+    unsigned g { values[+SrgbChannels::G] };
+    unsigned b { values[+SrgbChannels::B] };
+
+    CString str;
+    str.Format( L"#%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
+    edit.SetWindowTextW( str );
+}
+
 template<typename T>
 [[nodiscard]] bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
     int n { static_cast<int>( oldValue ) };
@@ -337,6 +353,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
                 UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
                 UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
                 UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+                PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
         }
@@ -356,6 +373,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
                 UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
                 UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
                 UpdateEditIfValueChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+                PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
         }
@@ -391,6 +409,9 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
     UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
     UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    if ( oldSrgbValues != newSrgbValues ) {
+        PutHexColorToEdit( m_editHexColor, newSrgbValues );
+    }
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );
@@ -421,6 +442,9 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
     UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
     UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    if ( oldSrgbValues != newSrgbValues ) {
+        PutHexColorToEdit( m_editHexColor, newSrgbValues );
+    }
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );

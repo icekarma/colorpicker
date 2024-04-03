@@ -74,6 +74,7 @@ protected:
     bool GetValueFromEdit( CEdit const& edit, int& result );
     bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
     void PutValueToEdit( CEdit& edit, int const nValue ) const;
+    void PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const;
     template<typename T>
     bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
     template<typename T>
@@ -104,6 +105,8 @@ protected:
     CEdit         m_editSrgbRValue;
     CEdit         m_editSrgbGValue;
     CEdit         m_editSrgbBValue;
+
+    CEdit         m_editHexColor;
 
     CStaticBrush  m_staticSwatch;
     CStaticBitmap m_staticZStrip;

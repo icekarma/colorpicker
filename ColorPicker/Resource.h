@@ -21,6 +21,7 @@
 #define IDC_SRGB_R_VALUE                3010
 #define IDC_SRGB_G_VALUE                3011
 #define IDC_SRGB_B_VALUE                3012
+#define IDC_EDIT_HEX_COLOR              3020
 #define IDC_SWATCH                      4000
 #define IDC_Z_STRIP                     4001
 #define IDC_XY_GRID                     4002
