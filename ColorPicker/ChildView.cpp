@@ -138,22 +138,22 @@ void CChildView::OnInitialUpdate( ) {
     SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
     SIZE adjustUp2 { 0, -2 }; SIZE adjustDn2 { 0, 2 };
 
-    _AdjustSize    ( &m_groupBoxLab,        adjustUp1 );
-    //djustPosition( &m_editLabLValue,      adjust0   );
-    //djustPosition( &m_editLabAValue,      adjust0   );
-    _AdjustPosition( &m_editLabBValue,      adjustUp2 );
-    _AdjustPosition( &m_buttonLabLChannel,  adjustDn1 );
-    _AdjustPosition( &m_buttonLabAChannel,  adjustUp1 );
-    _AdjustPosition( &m_buttonLabBChannel,  adjustUp2 );
+    _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
+    _AdjustPosition( &m_buttonLabLChannel,  adjustDn1    );
+    _AdjustPosition( &m_buttonLabAChannel,  adjustUp1    );
+    _AdjustPosition( &m_buttonLabBChannel,  adjustUp2    );
+    //djustPosition( &m_editLabLValue,      adjust0      );
+    //djustPosition( &m_editLabAValue,      adjust0      );
+    _AdjustPosition( &m_editLabBValue,      adjustUp2    );
 
-    _AdjustPosition( &m_groupBoxSrgb,       adjustDn2 );
-    _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1 );
-    _AdjustPosition( &m_editSrgbRValue,     adjustDn2 );
-    _AdjustPosition( &m_editSrgbGValue,     adjustDn2 );
-    _AdjustPosition( &m_editSrgbBValue,     adjustUp1 );
-    _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2 );
-    //djustPosition( &m_buttonSrgbGChannel, adjust0   );
-    _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2 );
+    _AdjustPosition( &m_groupBoxSrgb,       adjustDn2    );
+    _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1    );
+    _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2    );
+    //djustPosition( &m_buttonSrgbGChannel, adjust0      );
+    _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2    );
+    _AdjustPosition( &m_editSrgbRValue,     adjustDn2    );
+    _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
+    _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
 
     //djustPosition( &m_staticSwatch,       adjust0      );
 
@@ -287,7 +287,7 @@ void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
 }
 
 template<typename T>
-bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
+[[nodiscard]] bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
     int n { static_cast<int>( oldValue ) };
     bool fChanged { };
 
@@ -385,12 +385,12 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     pDoc->SetChannelValue( m_channelZ, y );
 
     InterlockedExchange( &m_uBusy, 1 );
-    if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
-    if (  newLabValues[ +LabChannels::a] !=  oldLabValues[ +LabChannels::a] ) { PutValueToEdit( m_editLabAValue,   newLabValues[ +LabChannels::a] ); }
-    if (  newLabValues[ +LabChannels::b] !=  oldLabValues[ +LabChannels::b] ) { PutValueToEdit( m_editLabBValue,   newLabValues[ +LabChannels::b] ); }
-    if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
-    if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
-    if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
+    UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );
@@ -415,12 +415,12 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     pDoc->SetChannelValue( m_channelY, y );
 
     InterlockedExchange( &m_uBusy, 1 );
-    if (  newLabValues[ +LabChannels::L] !=  oldLabValues[ +LabChannels::L] ) { PutValueToEdit( m_editLabLValue,   newLabValues[ +LabChannels::L] ); }
-    if (  newLabValues[ +LabChannels::a] !=  oldLabValues[ +LabChannels::a] ) { PutValueToEdit( m_editLabAValue,   newLabValues[ +LabChannels::a] ); }
-    if (  newLabValues[ +LabChannels::b] !=  oldLabValues[ +LabChannels::b] ) { PutValueToEdit( m_editLabBValue,   newLabValues[ +LabChannels::b] ); }
-    if ( newSrgbValues[+SrgbChannels::R] != oldSrgbValues[+SrgbChannels::R] ) { PutValueToEdit( m_editSrgbRValue, newSrgbValues[+SrgbChannels::R] ); }
-    if ( newSrgbValues[+SrgbChannels::G] != oldSrgbValues[+SrgbChannels::G] ) { PutValueToEdit( m_editSrgbGValue, newSrgbValues[+SrgbChannels::G] ); }
-    if ( newSrgbValues[+SrgbChannels::B] != oldSrgbValues[+SrgbChannels::B] ) { PutValueToEdit( m_editSrgbBValue, newSrgbValues[+SrgbChannels::B] ); }
+    UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     InterlockedExchange( &m_uBusy, 0 );
 
     UpdateBitmaps( );
