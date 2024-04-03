@@ -7,7 +7,7 @@
 #include "ChildView.h"
 #include "AboutDlg.h"
 
-BEGIN_MESSAGE_MAP( CColorPickerApp, CWinApp )
+BEGIN_MESSAGE_MAP( CColorPickerApp, CWinAppEx )
     ON_COMMAND( ID_APP_ABOUT, &CColorPickerApp::OnAppAbout )
 END_MESSAGE_MAP( )
 

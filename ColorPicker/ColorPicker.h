@@ -1,7 +1,7 @@
 #pragma once
 
 class CColorPickerApp:
-    public CWinApp
+    public CWinAppEx
 {
 
     DECLARE_MESSAGE_MAP( )
