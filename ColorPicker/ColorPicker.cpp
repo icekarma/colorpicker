@@ -29,14 +29,7 @@ BOOL CColorPickerApp::InitInstance( ) {
 
     CWinApp::InitInstance( );
 
-    if ( !AfxSocketInit( ) ) {
-        AfxMessageBox( IDP_SOCKETS_INIT_FAILED );
-        return FALSE;
-    }
-
     EnableTaskbarInteraction( FALSE );
-
-    AfxInitRichEdit2();
 
     SetRegistryKey( L"Zive Technology Research\\ColorPicker" );
     LoadStdProfileSettings( 4 );
