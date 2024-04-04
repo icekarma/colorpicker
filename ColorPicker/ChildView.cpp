@@ -299,7 +299,7 @@ void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) con
     unsigned b { values[+SrgbChannels::B] };
 
     CString str;
-    str.Format( L"#%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
+    str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
     edit.SetWindowTextW( str );
 }
 
