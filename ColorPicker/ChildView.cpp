@@ -138,7 +138,7 @@ void CChildView::OnInitialUpdate( ) {
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     //ZE adjust0   { 0,  0 };
-    SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 }; SIZE adjustRt1 { 1, 0 };
+    SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
     SIZE adjustUp2 { 0, -2 }; SIZE adjustDn2 { 0, 2 };
 
     _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
@@ -158,8 +158,7 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
     _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
 
-    _AdjustPosition( &m_editHexColor,       adjustRt1    );
-    _AdjustPosition( &m_editHexColor,       adjustUp1    );
+    _AdjustPosition( &m_editHexColor,       {   1,  -1 } );
 
     _AdjustSize    ( &m_staticSwatch,       adjustUp1    );
 
