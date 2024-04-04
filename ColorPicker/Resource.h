@@ -15,6 +15,7 @@
 #define IDC_SRGB_R_CHANNEL              2010
 #define IDC_SRGB_G_CHANNEL              2011
 #define IDC_SRGB_B_CHANNEL              2012
+#define IDC_LABEL_HEX_COLOR             2020
 #define IDC_LAB_L_VALUE                 3000
 #define IDC_LAB_A_VALUE                 3001
 #define IDC_LAB_B_VALUE                 3002

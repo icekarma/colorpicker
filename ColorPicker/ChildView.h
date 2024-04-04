@@ -106,6 +106,7 @@ protected:
     CEdit         m_editSrgbGValue;
     CEdit         m_editSrgbBValue;
 
+    CStatic       m_labelHexColor;
     CEdit         m_editHexColor;
 
     CStaticBrush  m_staticSwatch;
