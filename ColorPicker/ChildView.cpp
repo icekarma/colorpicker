@@ -137,22 +137,23 @@ void CChildView::OnInitialUpdate( ) {
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
-    //ZE adjust0   { 0,  0 };
-    SIZE adjustUp1 { 0, -1 }; SIZE adjustDn1 { 0, 1 };
-    SIZE adjustUp2 { 0, -2 }; SIZE adjustDn2 { 0, 2 };
+    SIZE constexpr adjustUp2 { 0, -2 };
+    SIZE constexpr adjustUp1 { 0, -1 };
+    SIZE constexpr adjustDn1 { 0,  1 };
+    SIZE constexpr adjustDn2 { 0,  2 };
 
     _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
     _AdjustPosition( &m_buttonLabLChannel,  adjustDn1    );
     _AdjustPosition( &m_buttonLabAChannel,  adjustUp1    );
     _AdjustPosition( &m_buttonLabBChannel,  adjustUp2    );
-    //djustPosition( &m_editLabLValue,      adjust0      );
-    //djustPosition( &m_editLabAValue,      adjust0      );
+    // m_editLabLValue
+    // m_editLabAValue
     _AdjustPosition( &m_editLabBValue,      adjustUp2    );
 
     _AdjustPosition( &m_groupBoxSrgb,       adjustDn2    );
     _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1    );
     _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2    );
-    //djustPosition( &m_buttonSrgbGChannel, adjust0      );
+    // m_buttonSrgbGChannel
     _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2    );
     _AdjustPosition( &m_editSrgbRValue,     adjustDn2    );
     _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
