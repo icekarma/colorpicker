@@ -70,6 +70,9 @@ protected:
     // Own methods
     //
 
+    bool LockEditControls( );
+    void UnlockEditControls( );
+
     void UpdateBitmaps( );
     bool GetValueFromEdit( CEdit const& edit, int& result );
     bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
