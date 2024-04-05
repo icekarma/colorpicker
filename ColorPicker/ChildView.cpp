@@ -240,7 +240,7 @@ void CChildView::UpdateBitmaps( ) {
 }
 
 bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
-    int cbText { edit.GetWindowTextLengthW( ) };
+    int cbText { edit.GetWindowTextLength( ) };
     if ( cbText < 1 ) {
         debug( "CChildView::GetValueFromEdit: bail 1: no text in control\n" );
         return false;
@@ -252,7 +252,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
         debug( "CChildView::GetValueFromEdit: bail 2: memory allocation failure\n" );
         return false;
     }
-    if ( edit.GetWindowTextW( pwszText, cbText ) < 1 ) {
+    if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
         delete[] pwszText;
         debug( "CChildView::GetValueFromEdit: bail 3: GetWindowText failed\n" );
         return false;
@@ -294,7 +294,7 @@ void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
     CString str;
 
     str.Format( L"%d", nValue );
-    edit.SetWindowTextW( str );
+    edit.SetWindowText( str );
 }
 
 void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
@@ -304,7 +304,7 @@ void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) con
 
     CString str;
     str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
-    edit.SetWindowTextW( str );
+    edit.SetWindowText( str );
 }
 
 template<typename T>
