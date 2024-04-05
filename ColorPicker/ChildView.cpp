@@ -171,7 +171,6 @@ void CChildView::OnInitialUpdate( ) {
     _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
 
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
-    m_editLabLValue.SetFocus( );
 
     m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
     m_pSwatch->Update( );
