@@ -184,20 +184,17 @@ void CChildView::OnInitialUpdate( ) {
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
     m_pXyGrid->Update( );
 
-    LockEditControls( );
-
-    LabTriplet labValues { pDoc->GetLabColor( ).GetChannelValues( ) };
-    PutValueToEdit( m_editLabLValue, labValues[+LabChannels::L] );
-    PutValueToEdit( m_editLabAValue, labValues[+LabChannels::a] );
-    PutValueToEdit( m_editLabBValue, labValues[+LabChannels::b] );
-
+    LabTriplet  labValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    PutValueToEdit( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
-    PutValueToEdit( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
-    PutValueToEdit( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
 
-    PutHexColorToEdit( m_editHexColor, srgbValues );
-
+    LockEditControls( );
+    PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
+    PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
+    PutValueToEdit   ( m_editLabBValue,   labValues[ +LabChannels::b] );
+    PutValueToEdit   ( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
+    PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
+    PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
+    PutHexColorToEdit( m_editHexColor,   srgbValues );
     UnlockEditControls( );
 }
 
