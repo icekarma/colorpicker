@@ -225,11 +225,11 @@ public:
             ;
     }
 
-    virtual constexpr bool operator==( LabColorTemplate<ValueT> const& rhs ) const noexcept {
+    constexpr bool operator==( LabColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values == rhs._values;
     }
 
-    virtual constexpr bool operator!=( LabColorTemplate<ValueT> const& rhs ) const noexcept {
+    constexpr bool operator!=( LabColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values != rhs._values;
     }
 
@@ -369,11 +369,11 @@ public:
             ;
     }
 
-    virtual constexpr bool operator==( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
+    constexpr bool operator==( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values == rhs._values;
     }
 
-    virtual constexpr bool operator!=( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
+    constexpr bool operator!=( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values != rhs._values;
     }
 
