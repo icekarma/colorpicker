@@ -209,16 +209,6 @@ public:
         return *this;
     }
 
-    template<typename ForeignT>
-    constexpr operator LabColorTemplate<ForeignT>( ) noexcept {
-        return { ScaleLabColor( _values ) };
-    }
-
-    template<typename ForeignT>
-    constexpr operator Triplet<ForeignT>( ) noexcept {
-        return ScaleLabColor( _values );
-    }
-
     virtual constexpr bool operator==( ColorTemplate<ValueT> const& rhs ) const noexcept override {
         return
             ( GetColorSpace( )   == rhs.GetColorSpace( )    ) &&
@@ -245,6 +235,16 @@ public:
 
     virtual constexpr operator Triplet<ValueT>( ) const noexcept override {
         return _values;
+    }
+
+    template<typename ForeignT>
+    constexpr operator LabColorTemplate<ForeignT>( ) const noexcept {
+        return { ScaleLabColor( _values ) };
+    }
+
+    template<typename ForeignT>
+    constexpr operator Triplet<ForeignT>( ) const noexcept {
+        return ScaleLabColor( _values );
     }
 
     [[nodiscard]] virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
