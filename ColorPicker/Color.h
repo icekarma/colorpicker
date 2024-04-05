@@ -103,6 +103,8 @@ public:
     virtual constexpr               bool            operator==( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
     virtual constexpr               bool            operator!=( ColorTemplate<ValueT> const& rhs )                   const noexcept = 0;
 
+    virtual constexpr [[nodiscard]]                 operator Triplet<ValueT>( )                                      const noexcept = 0;
+
     virtual constexpr [[nodiscard]] ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
     virtual constexpr [[nodiscard]] int             GetChannelCount( )                                               const noexcept = 0;
 
@@ -212,10 +214,6 @@ public:
         return { ScaleLabColor( _values ) };
     }
 
-    constexpr operator Triplet<ValueT>( ) noexcept {
-        return _values;
-    }
-
     template<typename ForeignT>
     constexpr operator Triplet<ForeignT>( ) noexcept {
         return ScaleLabColor( _values );
@@ -243,6 +241,10 @@ public:
 
     virtual constexpr bool operator!=( LabColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values != rhs._values;
+    }
+
+    virtual constexpr operator Triplet<ValueT>( ) const noexcept override {
+        return _values;
     }
 
     [[nodiscard]] virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
@@ -373,6 +375,10 @@ public:
 
     virtual constexpr bool operator!=( SrgbColorTemplate<ValueT> const& rhs ) const noexcept {
         return _values != rhs._values;
+    }
+
+    virtual constexpr operator Triplet<ValueT>( ) const noexcept override {
+        return _values;
     }
 
     constexpr explicit operator COLORREF( ) const noexcept {
