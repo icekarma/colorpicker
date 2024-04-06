@@ -229,23 +229,23 @@ void CChildView::UpdateBitmaps( ) {
     }
 }
 
-bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
+wchar_t* CChildView::SafeGetWindowText( CEdit const& edit ) {
     int cbText { edit.GetWindowTextLength( ) };
     if ( cbText < 1 ) {
-        debug( "CChildView::GetValueFromEdit: bail 1: no text in control\n" );
-        return false;
+        debug( "CChildView::SafeGetWindowText: bail 1: no text in control\n" );
+        return nullptr;
     }
     ++cbText;
 
-    wchar_t* pwszText { new wchar_t[cbText + 1] };
+    wchar_t* pwszText { new wchar_t[cbText + 1] { } };
     if ( !pwszText ) {
-        debug( "CChildView::GetValueFromEdit: bail 2: memory allocation failure\n" );
-        return false;
+        debug( "CChildView::SafeGetWindowText: bail 2: memory allocation failure\n" );
+        return nullptr;
     }
     if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
         delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 3: GetWindowText failed\n" );
-        return false;
+        debug( "CChildView::SafeGetWindowText: bail 3: GetWindowText failed\n" );
+        return nullptr;
     }
 
     for ( int index { cbText - 2 }; index >= 0; --index ) {
@@ -255,12 +255,21 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
         pwszText[index] = '\0';
     }
 
-    errno = 0;
+    return pwszText;
+}
+
+bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
+    wchar_t* pwszText { SafeGetWindowText( edit ) };
+    if ( !pwszText ) {
+        debug( "CChildView::GetValueFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
+        return false;
+    }
+
     wchar_t* pwszEnd { };
     long tmp = wcstol( pwszText, &pwszEnd, 10 );
     if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
         delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 4: garbage in number\n" );
+        debug( "CChildView::GetValueFromEdit: bail 2: garbage in number\n" );
         return false;
     }
 

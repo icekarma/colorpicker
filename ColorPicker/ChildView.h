@@ -71,6 +71,7 @@ protected:
     //
 
     void UpdateBitmaps( );
+    wchar_t* SafeGetWindowText( CEdit const& edit );
     bool GetValueFromEdit( CEdit const& edit, int& result );
     bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
     void PutValueToEdit( CEdit& edit, int const nValue ) const;
