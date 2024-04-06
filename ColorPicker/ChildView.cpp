@@ -186,7 +186,6 @@ void CChildView::OnInitialUpdate( ) {
     LabTriplet  labValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    LockEditControls( );
     PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
     PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
     PutValueToEdit   ( m_editLabBValue,   labValues[ +LabChannels::b] );
@@ -194,7 +193,6 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
     PutHexColorToEdit( m_editHexColor,   srgbValues );
-    UnlockEditControls( );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
@@ -210,14 +208,6 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
     m_channelZ = channels[2];
 
     UpdateBitmaps( );
-}
-
-bool CChildView::LockEditControls( ) {
-    return InterlockedIncrement( &m_uBusy ) != 0;
-}
-
-void CChildView::UnlockEditControls( ) {
-    InterlockedDecrement( &m_uBusy );
 }
 
 void CChildView::UpdateBitmaps( ) {
@@ -328,9 +318,7 @@ void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T cons
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {
-    if ( !LockEditControls( ) ) {
-        return;
-    }
+    debug( "CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
@@ -388,8 +376,6 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     //debug( "CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
     UpdateBitmaps( );
-
-    UnlockEditControls( );
 }
 
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
@@ -408,7 +394,6 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    LockEditControls( );
     UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
     UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
@@ -418,7 +403,6 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     if ( oldSrgbValues != newSrgbValues ) {
         PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
-    UnlockEditControls( );
 
     UpdateBitmaps( );
 
@@ -442,7 +426,6 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    LockEditControls( );
     UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
     UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
@@ -452,7 +435,6 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     if ( oldSrgbValues != newSrgbValues ) {
         PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
-    UnlockEditControls( );
 
     UpdateBitmaps( );
 
