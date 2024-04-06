@@ -24,11 +24,11 @@ IMPLEMENT_DYNCREATE( CChildView, CFormView )
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
 
-    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
-    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
-
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_UPDATE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
+
+    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
+    ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
 END_MESSAGE_MAP( )
 
 namespace {
