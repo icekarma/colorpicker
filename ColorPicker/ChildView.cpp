@@ -296,6 +296,41 @@ void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
     edit.SetWindowText( str );
 }
 
+bool CChildView::GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
+    wchar_t* pwszText { SafeGetWindowText( edit ) };
+    if ( !pwszText ) {
+        debug( "CChildView::GetHexColorFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
+        return false;
+    }
+
+    wchar_t* pwszEnd { };
+    long tmp = wcstol( pwszText, &pwszEnd, 16 );
+    if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
+        delete[] pwszText;
+        debug( "CChildView::GetHexColorFromEdit: bail 2: garbage in number\n" );
+        return false;
+    }
+
+    int r {   tmp >> 16          };
+    int g { ( tmp >>  8 ) & 0xFF };
+    int b {   tmp         & 0xFF };
+
+    values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
+    delete[] pwszText;
+    return true;
+}
+
+bool CChildView::GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
+    SrgbTriplet oldValues { values };
+
+    if ( GetHexColorFromEdit( edit, values ) ) {
+        fChanged = oldValues != values;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
     unsigned r { values[+SrgbChannels::R] };
     unsigned g { values[+SrgbChannels::G] };
