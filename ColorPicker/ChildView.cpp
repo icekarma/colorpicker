@@ -258,7 +258,7 @@ wchar_t* CChildView::SafeGetWindowText( CEdit const& edit ) {
     return pwszText;
 }
 
-bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
+bool CChildView::GetValueFromEdit( CEdit const& edit, int& nValue ) {
     wchar_t* pwszText { SafeGetWindowText( edit ) };
     if ( !pwszText ) {
         debug( "CChildView::GetValueFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
@@ -273,7 +273,7 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
         return false;
     }
 
-    result = static_cast<int>( tmp );
+    nValue = static_cast<int>( tmp );
     delete[] pwszText;
     return true;
 }
@@ -281,12 +281,12 @@ bool CChildView::GetValueFromEdit( CEdit const& edit, int& result ) {
 bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
     int nOldValue { nValue };
 
-    if ( !GetValueFromEdit( edit, nValue ) ) {
+    if ( GetValueFromEdit( edit, nValue ) ) {
+        fChanged = nOldValue != nValue;
+        return true;
+    } else {
         return false;
     }
-
-    fChanged = nOldValue != nValue;
-    return true;
 }
 
 void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {

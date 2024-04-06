@@ -72,7 +72,7 @@ protected:
 
     void UpdateBitmaps( );
     wchar_t* SafeGetWindowText( CEdit const& edit );
-    bool GetValueFromEdit( CEdit const& edit, int& result );
+    bool GetValueFromEdit( CEdit const& edit, int& nValue );
     bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
     void PutValueToEdit( CEdit& edit, int const nValue ) const;
     void PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const;
