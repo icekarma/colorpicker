@@ -28,7 +28,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
 
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
-    ON_CONTROL_RANGE( EN_CHANGE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueChange     )
+    ON_CONTROL_RANGE( EN_UPDATE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
 END_MESSAGE_MAP( )
 
 namespace {
@@ -327,7 +327,7 @@ void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T cons
     }
 }
 
-void CChildView::OnColorValueChange( UINT const uId ) {
+void CChildView::OnColorValueUpdate( UINT const uId ) {
     if ( !LockEditControls( ) ) {
         return;
     }
@@ -339,8 +339,8 @@ void CChildView::OnColorValueChange( UINT const uId ) {
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
 
-    debug( "CChildView::OnColorValueChange: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    debug( "CChildView::OnColorValueChange: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+    //debug( "CChildView::OnColorValueUpdate: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    //debug( "CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE:
@@ -349,7 +349,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             if ( uId == IDC_LAB_L_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); }
             if ( uId == IDC_LAB_A_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); }
             if ( uId == IDC_LAB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] ); }
-            debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
+            //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
@@ -369,7 +369,7 @@ void CChildView::OnColorValueChange( UINT const uId ) {
             if ( uId == IDC_SRGB_R_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); }
             if ( uId == IDC_SRGB_G_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); }
             if ( uId == IDC_SRGB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] ); }
-            debug( "CChildView::OnColorValueChange: fChanged: %s\n", fChanged ? "true" : "false" );
+            //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
@@ -384,8 +384,8 @@ void CChildView::OnColorValueChange( UINT const uId ) {
         }
     }
 
-    debug( "CChildView::OnColorValueChange: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-    debug( "CChildView::OnColorValueChange: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+    //debug( "CChildView::OnColorValueUpdate: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+    //debug( "CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
     UpdateBitmaps( );
 
