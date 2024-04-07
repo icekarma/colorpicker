@@ -138,35 +138,36 @@ void CChildView::OnInitialUpdate( ) {
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
-    SIZE constexpr adjustUp2 { 0, -2 };
-    SIZE constexpr adjustUp1 { 0, -1 };
-    SIZE constexpr adjustDn1 { 0,  1 };
-    SIZE constexpr adjustDn2 { 0,  2 };
+    SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
+    SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
+    SIZE constexpr adjustDown1 { 0,  1 }; SIZE constexpr adjustRight1 {  1, 0 };
+    SIZE constexpr adjustDown2 { 0,  2 }; SIZE constexpr adjustRight2 {  2, 0 };
 
     _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
-    _AdjustPosition( &m_buttonLabLChannel,  adjustDn1    );
+    _AdjustPosition( &m_buttonLabLChannel,  adjustDown1  );
     _AdjustPosition( &m_buttonLabAChannel,  adjustUp1    );
     _AdjustPosition( &m_buttonLabBChannel,  adjustUp2    );
     // m_editLabLValue
     // m_editLabAValue
     _AdjustPosition( &m_editLabBValue,      adjustUp2    );
 
-    _AdjustPosition( &m_groupBoxSrgb,       adjustDn2    );
+    _AdjustPosition( &m_groupBoxSrgb,       adjustDown2  );
     _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1    );
-    _AdjustPosition( &m_buttonSrgbRChannel, adjustDn2    );
+    _AdjustPosition( &m_buttonSrgbRChannel, adjustDown2  );
     // m_buttonSrgbGChannel
     _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2    );
-    _AdjustPosition( &m_editSrgbRValue,     adjustDn2    );
-    _AdjustPosition( &m_editSrgbGValue,     adjustDn2    );
+    _AdjustPosition( &m_editSrgbRValue,     adjustDown2  );
+    _AdjustPosition( &m_editSrgbGValue,     adjustDown2  );
     _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
 
-    _AdjustPosition( &m_editHexColor,       {   1,  -1 } );
+    _AdjustPosition( &m_editHexColor,       adjustUp1    );
+    _AdjustSize    ( &m_editHexColor,       {   1,   0 } );
 
-    _AdjustSize    ( &m_staticSwatch,       adjustUp1    );
+    _AdjustSize    ( &m_staticSwatch,       {  -1,  -1 } );
 
     _SetSize       ( &m_staticZStrip,       {  20, 256 } );
 
-    _AdjustPosition( &m_staticXyGrid,       {  -1,   0 } );
+    _AdjustPosition( &m_staticXyGrid,       adjustLeft1  );
     _SetSize       ( &m_staticXyGrid,       { 256, 256 } );
 
     _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
