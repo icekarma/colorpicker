@@ -19,6 +19,10 @@
 // TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO //
 //==============================================================//
 
+//===================//
+// Hair space: -> <- //
+//===================//
+
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
