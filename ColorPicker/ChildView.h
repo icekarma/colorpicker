@@ -63,6 +63,7 @@ protected:
     afx_msg void OnCloseButtonClicked( );
     afx_msg void OnChannelButtonClicked( UINT uId );
     afx_msg void OnColorValueUpdate( UINT uId );
+    afx_msg void OnHexColorUpdate( );
     afx_msg void OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
     afx_msg void OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
 

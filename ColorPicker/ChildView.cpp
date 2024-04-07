@@ -22,7 +22,8 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED( IDCLOSE, &CChildView::OnCloseButtonClicked )
+    ON_BN_CLICKED( IDCLOSE,            &CChildView::OnCloseButtonClicked )
+    ON_EN_UPDATE ( IDC_EDIT_HEX_COLOR, &CChildView::OnHexColorUpdate     )
 
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_UPDATE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
@@ -418,6 +419,41 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
 
     //debug( "CChildView::OnColorValueUpdate: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
     //debug( "CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+
+    UpdateBitmaps( );
+}
+
+void CChildView::OnHexColorUpdate( ) {
+    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet       newLabValues  {  oldLabValues };
+    SrgbTriplet      newSrgbValues { oldSrgbValues };
+    bool             fChanged      { };
+
+    debug( "CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    debug( "CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+
+    if ( !GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
+        debug( "CChildView::OnHexColorUpdate:   GetHexColorAndChangedFromEdit failed\n" );
+        return;
+    }
+
+    debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
+    if ( fChanged ) {
+        pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
+
+        newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
+        debug( "CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+        debug( "CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+
+        UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+        UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+        UpdateEditIfValueChanged( m_editLabBValue,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+        UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+        UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+        UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    }
 
     UpdateBitmaps( );
 }
