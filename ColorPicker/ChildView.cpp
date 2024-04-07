@@ -377,12 +377,11 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     //debug( "CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     switch ( uId ) {
-        case IDC_LAB_L_VALUE:
-        case IDC_LAB_A_VALUE:
-        case IDC_LAB_B_VALUE: {
-            if ( uId == IDC_LAB_L_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); }
-            if ( uId == IDC_LAB_A_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); }
-            if ( uId == IDC_LAB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] ); }
+        case IDC_LAB_L_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
+        case IDC_LAB_A_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
+        case IDC_LAB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] ); goto Lab;
+        {
+Lab:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
@@ -397,12 +396,11 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
             break;
         }
 
-        case IDC_SRGB_R_VALUE:
-        case IDC_SRGB_G_VALUE:
-        case IDC_SRGB_B_VALUE: {
-            if ( uId == IDC_SRGB_R_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); }
-            if ( uId == IDC_SRGB_G_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); }
-            if ( uId == IDC_SRGB_B_VALUE ) { fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] ); }
+        case IDC_SRGB_R_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
+        case IDC_SRGB_G_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
+        case IDC_SRGB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] ); goto sRGB;
+        {
+sRGB:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
