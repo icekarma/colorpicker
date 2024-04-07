@@ -3,9 +3,7 @@
 // Used by ColorPicker.rc
 //
 #define IDD_ABOUTBOX                    100
-#define IDP_SOCKETS_INIT_FAILED         104
 #define IDR_MAINFRAME                   128
-#define IDR_ColorPickerTYPE             130
 #define IDD_CHILDVIEW                   310
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
