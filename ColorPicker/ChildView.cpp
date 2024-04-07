@@ -32,6 +32,20 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_UPDATE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
 
+    ON_UPDATE_COMMAND_UI( ID_EDIT_CUT,        &CChildView::OnUpdateEditCut       ) /* OnUpdateNeedSel  */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_COPY,       &CChildView::OnUpdateEditCopy      ) /* OnUpdateNeedSel  */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_PASTE,      &CChildView::OnUpdateEditPaste     ) /* OnUpdateNeedClip */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_CLEAR,      &CChildView::OnUpdateEditClear     ) /* OnUpdateNeedSel  */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_UNDO,       &CChildView::OnUpdateEditUndo      ) /* OnUpdateEditUndo */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_SELECT_ALL, &CChildView::OnUpdateEditSelectAll ) /* OnUpdateNeedText */
+
+    ON_COMMAND( ID_EDIT_CUT,        &CChildView::OnEditCut       ) /* OnUpdateNeedSel  */
+    ON_COMMAND( ID_EDIT_COPY,       &CChildView::OnEditCopy      ) /* OnUpdateNeedSel  */
+    ON_COMMAND( ID_EDIT_PASTE,      &CChildView::OnEditPaste     ) /* OnUpdateNeedClip */
+    ON_COMMAND( ID_EDIT_CLEAR,      &CChildView::OnEditClear     ) /* OnUpdateNeedSel  */
+    ON_COMMAND( ID_EDIT_UNDO,       &CChildView::OnEditUndo      ) /* OnUpdateEditUndo */
+    ON_COMMAND( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll ) /* OnUpdateNeedText */
+
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
 END_MESSAGE_MAP( )
@@ -199,6 +213,42 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
     PutHexColorToEdit( m_editHexColor,   srgbValues );
+}
+
+void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
+}
+
+void CChildView::OnEditCut( ) {
+}
+
+void CChildView::OnEditCopy( ) {
+}
+
+void CChildView::OnEditPaste( ) {
+}
+
+void CChildView::OnEditClear( ) {
+}
+
+void CChildView::OnEditUndo( ) {
+}
+
+void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnCloseButtonClicked( ) {
