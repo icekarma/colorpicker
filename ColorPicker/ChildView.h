@@ -96,12 +96,15 @@ protected:
     bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
     template<typename T>
     void UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue );
+    CEdit* GetFocusedEditControl( );
 
     //============================================
     // Member variables
     //============================================
 
     volatile unsigned m_uBusy { };
+
+    std::unordered_map<unsigned, CEdit*> m_mapEditControls;
 
     //
     // Controls

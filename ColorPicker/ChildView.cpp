@@ -154,6 +154,14 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
+    m_mapEditControls.insert( { IDC_LAB_L_VALUE,    &m_editLabLValue  } );
+    m_mapEditControls.insert( { IDC_LAB_A_VALUE,    &m_editLabAValue  } );
+    m_mapEditControls.insert( { IDC_LAB_B_VALUE,    &m_editLabBValue  } );
+    m_mapEditControls.insert( { IDC_SRGB_R_VALUE,   &m_editSrgbRValue } );
+    m_mapEditControls.insert( { IDC_SRGB_G_VALUE,   &m_editSrgbGValue } );
+    m_mapEditControls.insert( { IDC_SRGB_B_VALUE,   &m_editSrgbBValue } );
+    m_mapEditControls.insert( { IDC_EDIT_HEX_COLOR, &m_editHexColor   } );
+
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
@@ -216,39 +224,67 @@ void CChildView::OnInitialUpdate( ) {
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
+    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+        int nStartIndex, nEndIndex;
+        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        pCmdUI->Enable( nStartIndex != nEndIndex );
+    }
 }
 
 void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
+    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+        int nStartIndex, nEndIndex;
+        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        pCmdUI->Enable( nStartIndex != nEndIndex );
+    }
 }
 
 void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( ::IsClipboardFormatAvailable( CF_TEXT ) );
 }
 
 void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
+    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+        int nStartIndex, nEndIndex;
+        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        pCmdUI->Enable( nStartIndex != nEndIndex );
+    }
 }
 
 void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
+    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+        pCmdUI->Enable( pCurEdit->CanUndo( ) );
+    }
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
+    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+        pCmdUI->Enable( pCurEdit->GetWindowTextLength( ) != 0 );
+    }
 }
 
 void CChildView::OnEditCut( ) {
+    GetFocusedEditControl( )->Cut( );
 }
 
 void CChildView::OnEditCopy( ) {
+    GetFocusedEditControl( )->Copy( );
 }
 
 void CChildView::OnEditPaste( ) {
+    GetFocusedEditControl( )->Paste( );
 }
 
 void CChildView::OnEditClear( ) {
+    GetFocusedEditControl( )->Clear( );
 }
 
 void CChildView::OnEditUndo( ) {
+    GetFocusedEditControl( )->Undo( );
 }
 
 void CChildView::OnEditSelectAll( ) {
+    GetFocusedEditControl( )->SetSel( 0, -1 );
 }
 
 void CChildView::OnCloseButtonClicked( ) {
@@ -414,6 +450,27 @@ template<typename T>
 void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
     if ( newValue != oldValue ) {
         PutValueToEdit( edit, static_cast<int>( newValue ) );
+    }
+}
+
+CEdit* CChildView::GetFocusedEditControl( ) {
+    CWnd* pwnd { GetFocus( ) };
+    if ( !pwnd ) {
+        return nullptr;
+    }
+
+    SetLastError( 0 );
+    int nId { ::GetDlgCtrlID( pwnd->GetSafeHwnd( ) ) };
+    if ( !nId ) {
+        debug( "CChildView::GetFocusedEditControl: GetDlgCtrlId failed: %lu\n", GetLastError( ) );
+        return nullptr;
+    }
+
+    try {
+        return m_mapEditControls.at( static_cast<unsigned>( nId ) );
+    }
+    catch (...) {
+        return nullptr;
     }
 }
 
