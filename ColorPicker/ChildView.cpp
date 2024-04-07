@@ -29,22 +29,24 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_BN_CLICKED( IDCLOSE,            &CChildView::OnCloseButtonClicked )
     ON_EN_UPDATE ( IDC_EDIT_HEX_COLOR, &CChildView::OnHexColorUpdate     )
 
-    ON_CONTROL_RANGE( BN_CLICKED, IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
-    ON_CONTROL_RANGE( EN_UPDATE,  IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
+    ON_CONTROL_RANGE( BN_CLICKED,   IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
+    ON_CONTROL_RANGE( EN_KILLFOCUS, IDC_LAB_L_VALUE,   IDC_EDIT_HEX_COLOR, &CChildView::OnEditLostFocus        )
+    ON_CONTROL_RANGE( EN_SETFOCUS,  IDC_LAB_L_VALUE,   IDC_EDIT_HEX_COLOR, &CChildView::OnEditGotFocus         )
+    ON_CONTROL_RANGE( EN_UPDATE,    IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
 
-    ON_UPDATE_COMMAND_UI( ID_EDIT_CUT,        &CChildView::OnUpdateEditCut       ) /* OnUpdateNeedSel  */
-    ON_UPDATE_COMMAND_UI( ID_EDIT_COPY,       &CChildView::OnUpdateEditCopy      ) /* OnUpdateNeedSel  */
-    ON_UPDATE_COMMAND_UI( ID_EDIT_PASTE,      &CChildView::OnUpdateEditPaste     ) /* OnUpdateNeedClip */
-    ON_UPDATE_COMMAND_UI( ID_EDIT_CLEAR,      &CChildView::OnUpdateEditClear     ) /* OnUpdateNeedSel  */
-    ON_UPDATE_COMMAND_UI( ID_EDIT_UNDO,       &CChildView::OnUpdateEditUndo      ) /* OnUpdateEditUndo */
-    ON_UPDATE_COMMAND_UI( ID_EDIT_SELECT_ALL, &CChildView::OnUpdateEditSelectAll ) /* OnUpdateNeedText */
+    ON_UPDATE_COMMAND_UI( ID_EDIT_CUT,        &CChildView::OnUpdateEditCut       )
+    ON_UPDATE_COMMAND_UI( ID_EDIT_COPY,       &CChildView::OnUpdateEditCopy      )
+    ON_UPDATE_COMMAND_UI( ID_EDIT_PASTE,      &CChildView::OnUpdateEditPaste     )
+    ON_UPDATE_COMMAND_UI( ID_EDIT_CLEAR,      &CChildView::OnUpdateEditClear     )
+    ON_UPDATE_COMMAND_UI( ID_EDIT_UNDO,       &CChildView::OnUpdateEditUndo      )
+    ON_UPDATE_COMMAND_UI( ID_EDIT_SELECT_ALL, &CChildView::OnUpdateEditSelectAll )
 
-    ON_COMMAND( ID_EDIT_CUT,        &CChildView::OnEditCut       ) /* OnUpdateNeedSel  */
-    ON_COMMAND( ID_EDIT_COPY,       &CChildView::OnEditCopy      ) /* OnUpdateNeedSel  */
-    ON_COMMAND( ID_EDIT_PASTE,      &CChildView::OnEditPaste     ) /* OnUpdateNeedClip */
-    ON_COMMAND( ID_EDIT_CLEAR,      &CChildView::OnEditClear     ) /* OnUpdateNeedSel  */
-    ON_COMMAND( ID_EDIT_UNDO,       &CChildView::OnEditUndo      ) /* OnUpdateEditUndo */
-    ON_COMMAND( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll ) /* OnUpdateNeedText */
+    ON_COMMAND          ( ID_EDIT_CUT,        &CChildView::OnEditCut             )
+    ON_COMMAND          ( ID_EDIT_COPY,       &CChildView::OnEditCopy            )
+    ON_COMMAND          ( ID_EDIT_PASTE,      &CChildView::OnEditPaste           )
+    ON_COMMAND          ( ID_EDIT_CLEAR,      &CChildView::OnEditClear           )
+    ON_COMMAND          ( ID_EDIT_UNDO,       &CChildView::OnEditUndo            )
+    ON_COMMAND          ( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll       )
 
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
@@ -154,13 +156,15 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
-    m_mapEditControls.insert( { IDC_LAB_L_VALUE,    &m_editLabLValue  } );
-    m_mapEditControls.insert( { IDC_LAB_A_VALUE,    &m_editLabAValue  } );
-    m_mapEditControls.insert( { IDC_LAB_B_VALUE,    &m_editLabBValue  } );
-    m_mapEditControls.insert( { IDC_SRGB_R_VALUE,   &m_editSrgbRValue } );
-    m_mapEditControls.insert( { IDC_SRGB_G_VALUE,   &m_editSrgbGValue } );
-    m_mapEditControls.insert( { IDC_SRGB_B_VALUE,   &m_editSrgbBValue } );
-    m_mapEditControls.insert( { IDC_EDIT_HEX_COLOR, &m_editHexColor   } );
+    m_mapEditControls = {
+        { IDC_LAB_L_VALUE,    &m_editLabLValue  },
+        { IDC_LAB_A_VALUE,    &m_editLabAValue  },
+        { IDC_LAB_B_VALUE,    &m_editLabBValue  },
+        { IDC_SRGB_R_VALUE,   &m_editSrgbRValue },
+        { IDC_SRGB_G_VALUE,   &m_editSrgbGValue },
+        { IDC_SRGB_B_VALUE,   &m_editSrgbBValue },
+        { IDC_EDIT_HEX_COLOR, &m_editHexColor   },
+    };
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
@@ -224,17 +228,17 @@ void CChildView::OnInitialUpdate( ) {
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
-    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+    if ( m_pCurrentEdit ) {
         int nStartIndex, nEndIndex;
-        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
         pCmdUI->Enable( nStartIndex != nEndIndex );
     }
 }
 
 void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
-    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+    if ( m_pCurrentEdit ) {
         int nStartIndex, nEndIndex;
-        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
         pCmdUI->Enable( nStartIndex != nEndIndex );
     }
 }
@@ -244,47 +248,60 @@ void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
 }
 
 void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
-    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
+    if ( m_pCurrentEdit ) {
         int nStartIndex, nEndIndex;
-        pCurEdit->GetSel( nStartIndex, nEndIndex );
+        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
         pCmdUI->Enable( nStartIndex != nEndIndex );
     }
 }
 
 void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
-    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
-        pCmdUI->Enable( pCurEdit->CanUndo( ) );
+    if ( m_pCurrentEdit ) {
+        pCmdUI->Enable( m_pCurrentEdit->CanUndo( ) );
     }
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
-    if ( CEdit* pCurEdit { GetFocusedEditControl( ) }; pCurEdit ) {
-        pCmdUI->Enable( pCurEdit->GetWindowTextLength( ) != 0 );
+    if ( m_pCurrentEdit ) {
+        pCmdUI->Enable( m_pCurrentEdit->GetWindowTextLength( ) != 0 );
     }
 }
 
 void CChildView::OnEditCut( ) {
-    GetFocusedEditControl( )->Cut( );
+    m_pCurrentEdit->Cut( );
 }
 
 void CChildView::OnEditCopy( ) {
-    GetFocusedEditControl( )->Copy( );
+    m_pCurrentEdit->Copy( );
 }
 
 void CChildView::OnEditPaste( ) {
-    GetFocusedEditControl( )->Paste( );
+    m_pCurrentEdit->Paste( );
 }
 
 void CChildView::OnEditClear( ) {
-    GetFocusedEditControl( )->Clear( );
+    m_pCurrentEdit->Clear( );
 }
 
 void CChildView::OnEditUndo( ) {
-    GetFocusedEditControl( )->Undo( );
+    m_pCurrentEdit->Undo( );
 }
 
 void CChildView::OnEditSelectAll( ) {
-    GetFocusedEditControl( )->SetSel( 0, -1 );
+    m_pCurrentEdit->SetSel( 0, -1 );
+}
+
+void CChildView::OnEditGotFocus( UINT uId ) {
+    try {
+        m_pCurrentEdit = m_mapEditControls.at( uId );
+    }
+    catch ( ... ) {
+        m_pCurrentEdit = nullptr;
+    }
+}
+
+void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
+    m_pCurrentEdit = nullptr;
 }
 
 void CChildView::OnCloseButtonClicked( ) {
@@ -450,27 +467,6 @@ template<typename T>
 void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
     if ( newValue != oldValue ) {
         PutValueToEdit( edit, static_cast<int>( newValue ) );
-    }
-}
-
-CEdit* CChildView::GetFocusedEditControl( ) {
-    CWnd* pwnd { GetFocus( ) };
-    if ( !pwnd ) {
-        return nullptr;
-    }
-
-    SetLastError( 0 );
-    int nId { ::GetDlgCtrlID( pwnd->GetSafeHwnd( ) ) };
-    if ( !nId ) {
-        debug( "CChildView::GetFocusedEditControl: GetDlgCtrlId failed: %lu\n", GetLastError( ) );
-        return nullptr;
-    }
-
-    try {
-        return m_mapEditControls.at( static_cast<unsigned>( nId ) );
-    }
-    catch (...) {
-        return nullptr;
     }
 }
 

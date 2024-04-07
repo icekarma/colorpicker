@@ -73,6 +73,8 @@ protected:
     afx_msg void OnEditClear( );
     afx_msg void OnEditUndo( );
     afx_msg void OnEditSelectAll( );
+    afx_msg void OnEditGotFocus( UINT uId );
+    afx_msg void OnEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
     afx_msg void OnChannelButtonClicked( UINT uId );
     afx_msg void OnColorValueUpdate( UINT uId );
@@ -96,15 +98,15 @@ protected:
     bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
     template<typename T>
     void UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue );
-    CEdit* GetFocusedEditControl( );
 
     //============================================
     // Member variables
     //============================================
 
-    volatile unsigned m_uBusy { };
-
     std::unordered_map<unsigned, CEdit*> m_mapEditControls;
+
+    CEdit*            m_pCurrentEdit { };
+    volatile unsigned m_uBusy        { };
 
     //
     // Controls
