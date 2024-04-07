@@ -26,13 +26,13 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED( IDCLOSE,            &CChildView::OnCloseButtonClicked )
-    ON_EN_UPDATE ( IDC_EDIT_HEX_COLOR, &CChildView::OnHexColorUpdate     )
+    ON_BN_CLICKED( IDCLOSE,             &CChildView::OnCloseButtonClicked )
+    ON_EN_UPDATE ( IDC_HEX_COLOR_VALUE, &CChildView::OnHexColorUpdate     )
 
-    ON_CONTROL_RANGE( BN_CLICKED,   IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL, &CChildView::OnChannelButtonClicked )
-    ON_CONTROL_RANGE( EN_KILLFOCUS, IDC_LAB_L_VALUE,   IDC_EDIT_HEX_COLOR, &CChildView::OnEditLostFocus        )
-    ON_CONTROL_RANGE( EN_SETFOCUS,  IDC_LAB_L_VALUE,   IDC_EDIT_HEX_COLOR, &CChildView::OnEditGotFocus         )
-    ON_CONTROL_RANGE( EN_UPDATE,    IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,   &CChildView::OnColorValueUpdate     )
+    ON_CONTROL_RANGE( BN_CLICKED,   IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL,  &CChildView::OnChannelButtonClicked )
+    ON_CONTROL_RANGE( EN_KILLFOCUS, IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditLostFocus        )
+    ON_CONTROL_RANGE( EN_SETFOCUS,  IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditGotFocus         )
+    ON_CONTROL_RANGE( EN_UPDATE,    IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,    &CChildView::OnColorValueUpdate     )
 
     ON_UPDATE_COMMAND_UI( ID_EDIT_CUT,        &CChildView::OnUpdateEditCut       )
     ON_UPDATE_COMMAND_UI( ID_EDIT_COPY,       &CChildView::OnUpdateEditCopy      )
@@ -131,8 +131,8 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbGValue     );
     DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbBValue     );
 
-    DDX_Control( pDX, IDC_LABEL_HEX_COLOR, m_labelHexColor      );
-    DDX_Control( pDX, IDC_EDIT_HEX_COLOR,  m_editHexColor       );
+    DDX_Control( pDX, IDC_HEX_COLOR_LABEL, m_labelHexColor      );
+    DDX_Control( pDX, IDC_HEX_COLOR_VALUE, m_editHexColor       );
 
     DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch       );
     DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip       );
@@ -157,13 +157,13 @@ void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
     m_mapEditControls = {
-        { IDC_LAB_L_VALUE,    &m_editLabLValue  },
-        { IDC_LAB_A_VALUE,    &m_editLabAValue  },
-        { IDC_LAB_B_VALUE,    &m_editLabBValue  },
-        { IDC_SRGB_R_VALUE,   &m_editSrgbRValue },
-        { IDC_SRGB_G_VALUE,   &m_editSrgbGValue },
-        { IDC_SRGB_B_VALUE,   &m_editSrgbBValue },
-        { IDC_EDIT_HEX_COLOR, &m_editHexColor   },
+        { IDC_LAB_L_VALUE,     &m_editLabLValue  },
+        { IDC_LAB_A_VALUE,     &m_editLabAValue  },
+        { IDC_LAB_B_VALUE,     &m_editLabBValue  },
+        { IDC_SRGB_R_VALUE,    &m_editSrgbRValue },
+        { IDC_SRGB_G_VALUE,    &m_editSrgbGValue },
+        { IDC_SRGB_B_VALUE,    &m_editSrgbBValue },
+        { IDC_HEX_COLOR_VALUE, &m_editHexColor   },
     };
 
     CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };

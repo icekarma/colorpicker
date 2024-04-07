@@ -13,14 +13,14 @@
 #define IDC_SRGB_R_CHANNEL              2010
 #define IDC_SRGB_G_CHANNEL              2011
 #define IDC_SRGB_B_CHANNEL              2012
-#define IDC_LABEL_HEX_COLOR             2020
+#define IDC_HEX_COLOR_LABEL             2020
 #define IDC_LAB_L_VALUE                 3000
 #define IDC_LAB_A_VALUE                 3001
 #define IDC_LAB_B_VALUE                 3002
 #define IDC_SRGB_R_VALUE                3010
 #define IDC_SRGB_G_VALUE                3011
 #define IDC_SRGB_B_VALUE                3012
-#define IDC_EDIT_HEX_COLOR              3020
+#define IDC_HEX_COLOR_VALUE             3020
 #define IDC_SWATCH                      4000
 #define IDC_Z_STRIP                     4001
 #define IDC_XY_GRID                     4002
