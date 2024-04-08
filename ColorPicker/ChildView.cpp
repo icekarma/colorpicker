@@ -228,43 +228,27 @@ void CChildView::OnInitialUpdate( ) {
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
-    if ( m_pCurrentEdit ) {
-        int nStartIndex, nEndIndex;
-        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
-        pCmdUI->Enable( nStartIndex != nEndIndex );
-    }
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
-    if ( m_pCurrentEdit ) {
-        int nStartIndex, nEndIndex;
-        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
-        pCmdUI->Enable( nStartIndex != nEndIndex );
-    }
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( ::IsClipboardFormatAvailable( CF_TEXT ) );
+    pCmdUI->Enable( m_pCurrentEdit && ::IsClipboardFormatAvailable( CF_TEXT ) );
 }
 
 void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
-    if ( m_pCurrentEdit ) {
-        int nStartIndex, nEndIndex;
-        m_pCurrentEdit->GetSel( nStartIndex, nEndIndex );
-        pCmdUI->Enable( nStartIndex != nEndIndex );
-    }
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
-    if ( m_pCurrentEdit ) {
-        pCmdUI->Enable( m_pCurrentEdit->CanUndo( ) );
-    }
+    pCmdUI->Enable( m_pCurrentEdit && m_pCurrentEdit->CanUndo( ) );
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
-    if ( m_pCurrentEdit ) {
-        pCmdUI->Enable( m_pCurrentEdit->GetWindowTextLength( ) != 0 );
-    }
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnEditCut( ) {
