@@ -3,6 +3,8 @@
 #undef DEBUG_TO_STDOUT
 #undef DEBUG_TO_STDERR
 
+#if defined _DEBUG
+
 template<typename T> concept Exception = std::is_base_of_v<std::exception, T>;
 
 template<typename... Args>
@@ -127,3 +129,19 @@ template<typename... ArgsT>
 [[noreturn]] void die( wchar_t const* format, ArgsT... args ) {
     die<std::runtime_error>( format, args... );
 }
+
+#else // !defined _DEBUG
+
+// A printf()-like function to record a message to the debugging facility.
+template<typename... ArgsT>
+void debug( char const*, ArgsT... ) {
+    /*empty*/
+}
+
+// A wprintf()-like function to record a message to the debugging facility.
+template<typename... ArgsT>
+void debug( wchar_t const*, ArgsT... ) {
+    /*empty*/
+}
+
+#endif // defined _DEBUG
