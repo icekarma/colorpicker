@@ -528,21 +528,21 @@ void CChildView::OnHexColorUpdate( ) {
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
 
-    debug( "CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    debug( "CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+    //debug( "CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    //debug( "CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     if ( !GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
-        debug( "CChildView::OnHexColorUpdate:   GetHexColorAndChangedFromEdit failed\n" );
+        //debug( "CChildView::OnHexColorUpdate:   GetHexColorAndChangedFromEdit failed\n" );
         return;
     }
-    debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
+    //debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
 
     if ( fChanged ) {
         pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
 
         newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
-        debug( "CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-        debug( "CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+        //debug( "CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+        //debug( "CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
         UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
         UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -560,7 +560,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     int x { mm->point.x };
     int y { mm->point.y };
 
-    debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
+    //debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
@@ -591,7 +591,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     int x { mm->point.x };
     int y { mm->point.y };
 
-    debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
+    //debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
