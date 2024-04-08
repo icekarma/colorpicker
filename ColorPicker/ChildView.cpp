@@ -470,6 +470,13 @@ void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T cons
     }
 }
 
+bool CChildView::IsTextSelected( CEdit const* pEdit ) {
+    int nStartIndex, nEndIndex;
+
+    pEdit->GetSel( nStartIndex, nEndIndex );
+    return nStartIndex != nEndIndex;
+}
+
 void CChildView::OnColorValueUpdate( UINT const uId ) {
     debug( "CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 

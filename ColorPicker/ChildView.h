@@ -98,6 +98,7 @@ protected:
     bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
     template<typename T>
     void UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue );
+    bool IsTextSelected( CEdit const* pEdit );
 
     //============================================
     // Member variables
