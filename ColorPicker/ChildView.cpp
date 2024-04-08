@@ -477,7 +477,7 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     switch ( uId ) {
         case IDC_LAB_L_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
         case IDC_LAB_A_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
-        case IDC_LAB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] ); goto Lab;
+        case IDC_LAB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
         {
 Lab:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
@@ -496,7 +496,7 @@ Lab:
 
         case IDC_SRGB_R_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
         case IDC_SRGB_G_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
-        case IDC_SRGB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] ); goto sRGB;
+        case IDC_SRGB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
         {
 sRGB:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
@@ -535,8 +535,8 @@ void CChildView::OnHexColorUpdate( ) {
         debug( "CChildView::OnHexColorUpdate:   GetHexColorAndChangedFromEdit failed\n" );
         return;
     }
-
     debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
+
     if ( fChanged ) {
         pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
 
