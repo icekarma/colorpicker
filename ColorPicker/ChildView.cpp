@@ -557,7 +557,6 @@ void CChildView::OnHexColorUpdate( ) {
 
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
-    int x { mm->point.x };
     int y { mm->point.y };
 
     //debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
