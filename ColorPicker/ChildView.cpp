@@ -112,6 +112,164 @@ namespace {
 
 }
 
+bool CChildView::IsTextSelected( CEdit const* pEdit ) {
+    int nStartIndex, nEndIndex;
+
+    pEdit->GetSel( nStartIndex, nEndIndex );
+    return nStartIndex != nEndIndex;
+}
+
+wchar_t* CChildView::SafeGetWindowText( CEdit const& edit ) {
+    int cbText { edit.GetWindowTextLength( ) };
+    if ( cbText < 1 ) {
+        debug( "CChildView::SafeGetWindowText: bail 1: no text in control\n" );
+        return nullptr;
+    }
+    ++cbText;
+
+    wchar_t* pwszText { new wchar_t[cbText + 1] { } };
+    if ( !pwszText ) {
+        debug( "CChildView::SafeGetWindowText: bail 2: memory allocation failure\n" );
+        return nullptr;
+    }
+    if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
+        delete[] pwszText;
+        debug( "CChildView::SafeGetWindowText: bail 3: GetWindowText failed\n" );
+        return nullptr;
+    }
+
+    for ( int index { cbText - 2 }; index >= 0; --index ) {
+        if ( !iswspace( pwszText[index] ) ) {
+            break;
+        }
+        pwszText[index] = '\0';
+    }
+
+    return pwszText;
+}
+
+bool CChildView::GetValueFromEdit( CEdit const& edit, int& nValue ) {
+    wchar_t* pwszText { SafeGetWindowText( edit ) };
+    if ( !pwszText ) {
+        debug( "CChildView::GetValueFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
+        return false;
+    }
+
+    wchar_t* pwszEnd { };
+    long tmp = wcstol( pwszText, &pwszEnd, 10 );
+    if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+        delete[] pwszText;
+        debug( "CChildView::GetValueFromEdit: bail 2: garbage in number\n" );
+        return false;
+    }
+
+    nValue = static_cast<int>( tmp );
+    delete[] pwszText;
+    return true;
+}
+
+bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+    int nOldValue { nValue };
+
+    if ( GetValueFromEdit( edit, nValue ) ) {
+        fChanged = nOldValue != nValue;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
+    CString str;
+
+    str.Format( L"%d", nValue );
+    edit.SetWindowText( str );
+}
+
+template<typename T>
+[[nodiscard]] bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
+    int n { static_cast<int>( oldValue ) };
+    bool fChanged { };
+
+    if ( GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
+        newValue = static_cast<T>( n );
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template<typename T>
+void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
+    if ( newValue != oldValue ) {
+        PutValueToEdit( edit, static_cast<int>( newValue ) );
+    }
+}
+
+bool CChildView::GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
+    wchar_t* pwszText { SafeGetWindowText( edit ) };
+    if ( !pwszText ) {
+        debug( "CChildView::GetHexColorFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
+        return false;
+    }
+
+    wchar_t* pwszEnd { };
+    long tmp = wcstol( pwszText, &pwszEnd, 16 );
+    if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
+        delete[] pwszText;
+        debug( "CChildView::GetHexColorFromEdit: bail 2: garbage in number\n" );
+        return false;
+    }
+
+    int r {   tmp >> 16          };
+    int g { ( tmp >>  8 ) & 0xFF };
+    int b {   tmp         & 0xFF };
+
+    values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
+    delete[] pwszText;
+    return true;
+}
+
+bool CChildView::GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
+    SrgbTriplet oldValues { values };
+
+    if ( GetHexColorFromEdit( edit, values ) ) {
+        fChanged = oldValues != values;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
+    unsigned r { values[+SrgbChannels::R] };
+    unsigned g { values[+SrgbChannels::G] };
+    unsigned b { values[+SrgbChannels::B] };
+
+    CString str;
+    str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
+    edit.SetWindowText( str );
+}
+
+void CChildView::UpdateBitmaps( ) {
+    if ( m_pSwatch ) {
+        m_pSwatch->Update( );
+        m_staticSwatch.Invalidate( FALSE );
+    }
+
+    if ( m_pZStrip ) {
+        m_pZStrip->SetChannel( m_channelZ );
+        m_pZStrip->Update( );
+        m_staticZStrip.Invalidate( FALSE );
+    }
+
+    if ( m_pXyGrid ) {
+        m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
+        m_pXyGrid->Update( );
+        m_staticXyGrid.Invalidate( FALSE );
+    }
+}
+
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 
@@ -301,164 +459,6 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
     m_channelZ = channels[2];
 
     UpdateBitmaps( );
-}
-
-void CChildView::UpdateBitmaps( ) {
-    if ( m_pSwatch ) {
-        m_pSwatch->Update( );
-        m_staticSwatch.Invalidate( FALSE );
-    }
-
-    if ( m_pZStrip ) {
-        m_pZStrip->SetChannel( m_channelZ );
-        m_pZStrip->Update( );
-        m_staticZStrip.Invalidate( FALSE );
-    }
-
-    if ( m_pXyGrid ) {
-        m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
-        m_pXyGrid->Update( );
-        m_staticXyGrid.Invalidate( FALSE );
-    }
-}
-
-wchar_t* CChildView::SafeGetWindowText( CEdit const& edit ) {
-    int cbText { edit.GetWindowTextLength( ) };
-    if ( cbText < 1 ) {
-        debug( "CChildView::SafeGetWindowText: bail 1: no text in control\n" );
-        return nullptr;
-    }
-    ++cbText;
-
-    wchar_t* pwszText { new wchar_t[cbText + 1] { } };
-    if ( !pwszText ) {
-        debug( "CChildView::SafeGetWindowText: bail 2: memory allocation failure\n" );
-        return nullptr;
-    }
-    if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
-        delete[] pwszText;
-        debug( "CChildView::SafeGetWindowText: bail 3: GetWindowText failed\n" );
-        return nullptr;
-    }
-
-    for ( int index { cbText - 2 }; index >= 0; --index ) {
-        if ( !iswspace( pwszText[index] ) ) {
-            break;
-        }
-        pwszText[index] = '\0';
-    }
-
-    return pwszText;
-}
-
-bool CChildView::GetValueFromEdit( CEdit const& edit, int& nValue ) {
-    wchar_t* pwszText { SafeGetWindowText( edit ) };
-    if ( !pwszText ) {
-        debug( "CChildView::GetValueFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
-        return false;
-    }
-
-    wchar_t* pwszEnd { };
-    long tmp = wcstol( pwszText, &pwszEnd, 10 );
-    if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
-        delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 2: garbage in number\n" );
-        return false;
-    }
-
-    nValue = static_cast<int>( tmp );
-    delete[] pwszText;
-    return true;
-}
-
-bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
-    int nOldValue { nValue };
-
-    if ( GetValueFromEdit( edit, nValue ) ) {
-        fChanged = nOldValue != nValue;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
-    CString str;
-
-    str.Format( L"%d", nValue );
-    edit.SetWindowText( str );
-}
-
-bool CChildView::GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
-    wchar_t* pwszText { SafeGetWindowText( edit ) };
-    if ( !pwszText ) {
-        debug( "CChildView::GetHexColorFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
-        return false;
-    }
-
-    wchar_t* pwszEnd { };
-    long tmp = wcstol( pwszText, &pwszEnd, 16 );
-    if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
-        delete[] pwszText;
-        debug( "CChildView::GetHexColorFromEdit: bail 2: garbage in number\n" );
-        return false;
-    }
-
-    int r {   tmp >> 16          };
-    int g { ( tmp >>  8 ) & 0xFF };
-    int b {   tmp         & 0xFF };
-
-    values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
-    delete[] pwszText;
-    return true;
-}
-
-bool CChildView::GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
-    SrgbTriplet oldValues { values };
-
-    if ( GetHexColorFromEdit( edit, values ) ) {
-        fChanged = oldValues != values;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
-    unsigned r { values[+SrgbChannels::R] };
-    unsigned g { values[+SrgbChannels::G] };
-    unsigned b { values[+SrgbChannels::B] };
-
-    CString str;
-    str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
-    edit.SetWindowText( str );
-}
-
-template<typename T>
-[[nodiscard]] bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
-    int n { static_cast<int>( oldValue ) };
-    bool fChanged { };
-
-    if ( GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
-        newValue = static_cast<T>( n );
-        return true;
-    } else {
-        return false;
-    }
-}
-
-template<typename T>
-void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
-    if ( newValue != oldValue ) {
-        PutValueToEdit( edit, static_cast<int>( newValue ) );
-    }
-}
-
-bool CChildView::IsTextSelected( CEdit const* pEdit ) {
-    int nStartIndex, nEndIndex;
-
-    pEdit->GetSel( nStartIndex, nEndIndex );
-    return nStartIndex != nEndIndex;
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {
