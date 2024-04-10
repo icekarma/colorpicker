@@ -8,6 +8,35 @@ template<typename ValueT> class  LabColorTemplate;
 template<typename ValueT> class SrgbColorTemplate;
 
 //================================================
+// Types
+//================================================
+
+enum class LabChannels {
+    unknown = -1,
+    L       =  0,
+    a       =  1,
+    b       =  2,
+};
+
+enum class SrgbChannels {
+    unknown = -1,
+    R       =  0,
+    G       =  1,
+    B       =  2,
+};
+
+enum class AllChannels {
+    LabL    =  0, LabA    =  1, LabB    =  2,
+    SrgbR   =  3, SrgbG   =  4, SrgbB   =  5,
+
+    unknown = -1,
+    LabMin  = AllChannels::LabL,
+    LabMax  = AllChannels::LabB,
+    SrgbMin = AllChannels::SrgbR,
+    SrgbMax = AllChannels::SrgbB,
+};
+
+//================================================
 // Type aliases
 //================================================
 
@@ -36,35 +65,6 @@ int             constexpr ImageSrgbValuesPerPixel { 4 };
 
 cmsUInt32Number constexpr  LabPixelFormat         { TYPE_Lab_8  };
 cmsUInt32Number constexpr SrgbPixelFormat         { TYPE_BGRA_8 };
-
-//================================================
-// Types
-//================================================
-
-enum class LabChannels {
-    unknown = -1,
-    L       =  0,
-    a       =  1,
-    b       =  2,
-};
-
-enum class SrgbChannels {
-    unknown = -1,
-    R       =  0,
-    G       =  1,
-    B       =  2,
-};
-
-enum class AllChannels {
-    LabL    =  0, LabA    =  1, LabB    =  2,
-    SrgbR   =  3, SrgbG   =  4, SrgbB   =  5,
-
-    unknown = -1,
-    LabMin  = AllChannels::LabL,
-    LabMax  = AllChannels::LabB,
-    SrgbMin = AllChannels::SrgbR,
-    SrgbMax = AllChannels::SrgbB,
-};
 
 //================================================
 // Function prototypes
