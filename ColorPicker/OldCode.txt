@@ -1,0 +1,7 @@
+﻿void barf( char const* pszName, CWnd const* pCtrl, CPoint const& topLeft ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+    pCtrl->GetWindowPlacement( &wp );
+    CRect rect { wp.rcNormalPosition };
+    rect -= topLeft;
+    debug( "%s: (%d,%d)-(%d,%d) %d×%d\n", pszName, rect.left, rect.top, rect.right, rect.bottom, rect.Width( ), rect.Height( ) );
+}
