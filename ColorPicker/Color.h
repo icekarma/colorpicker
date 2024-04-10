@@ -41,12 +41,6 @@ cmsUInt32Number constexpr SrgbPixelFormat         { TYPE_BGRA_8 };
 // Types
 //================================================
 
-enum class ColorSpace {
-    unknown = -1,
-    Lab     =  0,
-    sRGB    =  1,
-};
-
 enum class LabChannels {
     unknown = -1,
     L       =  0,
@@ -106,7 +100,6 @@ public:
 
     virtual constexpr [[nodiscard]]                 operator Triplet<ValueT>( )                                      const noexcept = 0;
 
-    virtual constexpr [[nodiscard]] ColorSpace      GetColorSpace( )                                                 const noexcept = 0;
     virtual constexpr [[nodiscard]] int             GetChannelCount( )                                               const noexcept = 0;
 
     virtual constexpr [[nodiscard]] ValueT          GetChannelValue( AllChannels const channel )                     const noexcept = 0;
@@ -212,7 +205,6 @@ public:
 
     virtual constexpr bool operator==( ColorTemplate<ValueT> const& rhs ) const noexcept override {
         return
-            ( GetColorSpace( )   == rhs.GetColorSpace( )    ) &&
             ( GetChannelCount( ) == rhs.GetChannelCount( )  ) &&
             ( _values            == rhs.GetChannelValues( ) )
             ;
@@ -220,7 +212,6 @@ public:
 
     virtual constexpr bool operator!=( ColorTemplate<ValueT> const& rhs ) const noexcept override {
         return
-            ( GetColorSpace( )   != rhs.GetColorSpace( )    ) ||
             ( GetChannelCount( ) != rhs.GetChannelCount( )  ) ||
             ( _values            != rhs.GetChannelValues( ) )
             ;
@@ -246,10 +237,6 @@ public:
     template<typename ForeignT>
     constexpr operator Triplet<ForeignT>( ) const noexcept {
         return ScaleLabColor( _values );
-    }
-
-    [[nodiscard]] virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
-        return ColorSpace::Lab;
     }
 
     [[nodiscard]] virtual int constexpr GetChannelCount( ) const noexcept override {
@@ -356,7 +343,6 @@ public:
 
     virtual constexpr bool operator==( ColorTemplate<ValueT> const& rhs ) const noexcept override {
         return
-            ( GetColorSpace( )   == rhs.GetColorSpace( )    ) &&
             ( GetChannelCount( ) == rhs.GetChannelCount( )  ) &&
             ( _values            == rhs.GetChannelValues( ) )
             ;
@@ -364,7 +350,6 @@ public:
 
     virtual constexpr bool operator!=( ColorTemplate<ValueT> const& rhs ) const noexcept override {
         return
-            ( GetColorSpace( )   != rhs.GetColorSpace( )    ) ||
             ( GetChannelCount( ) != rhs.GetChannelCount( )  ) ||
             ( _values            != rhs.GetChannelValues( ) )
             ;
@@ -384,10 +369,6 @@ public:
 
     constexpr explicit operator COLORREF( ) const noexcept {
         return RGB( _values[+SrgbChannels::R], _values[+SrgbChannels::G], _values[+SrgbChannels::B] );
-    }
-
-    virtual ColorSpace constexpr GetColorSpace( ) const noexcept override {
-        return ColorSpace::sRGB;
     }
 
     virtual int constexpr GetChannelCount( ) const noexcept override {
