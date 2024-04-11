@@ -432,6 +432,7 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnEditGotFocus( UINT uId ) {
+    debug( "CChildView::OnEditGotFocus: uId: %u\n", uId );
     try {
         m_pCurrentEdit = m_mapEditControls.at( uId );
     }
@@ -456,7 +457,7 @@ void CChildView::OnCloseButtonClicked( ) {
 }
 
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
-    debug( "CChildView::OnChannelButtonClicked: uId: %u\n", uId );
+    //debug( "CChildView::OnChannelButtonClicked: uId: %u\n", uId );
 
     Triplet<AllChannels> const& channels { _ControlIdToChannels.at( uId ) };
     m_channelX = channels[0];
@@ -467,7 +468,7 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {
-    debug( "CChildView::OnColorValueUpdate(uId=%u):\n", uId );
+    //debug( "CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
