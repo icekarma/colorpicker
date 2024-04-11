@@ -5,6 +5,8 @@
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
 
+#include "ChannelInformation.h"
+
 //==============================================================//
 // TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO //
 //                                                              //
@@ -56,18 +58,37 @@ namespace {
     // Constants
     //
 
-    std::unordered_map<int, Triplet<AllChannels>> const _ControlIdToChannels {
-        { IDC_LAB_L_CHANNEL,  { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  } },
-        { IDC_LAB_A_CHANNEL,  { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  } },
-        { IDC_LAB_B_CHANNEL,  { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  } },
-        { IDC_SRGB_R_CHANNEL, { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR } },
-        { IDC_SRGB_G_CHANNEL, { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG } },
-        { IDC_SRGB_B_CHANNEL, { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB } },
+    std::unordered_map<AllChannels, AllChannelsTriplet> const _ChannelXyzTriplets {
+        { AllChannels::LabL,  { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  } },
+        { AllChannels::LabA,  { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  } },
+        { AllChannels::LabB,  { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  } },
+        { AllChannels::SrgbR, { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR } },
+        { AllChannels::SrgbG, { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG } },
+        { AllChannels::SrgbB, { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB } }
+    };
+
+    std::unordered_map<UINT, AllChannels> const _ControlIdToChannel {
+        { IDC_LAB_L_CHANNEL,  AllChannels::LabL  },
+        { IDC_LAB_A_CHANNEL,  AllChannels::LabA  },
+        { IDC_LAB_B_CHANNEL,  AllChannels::LabB  },
+        { IDC_SRGB_R_CHANNEL, AllChannels::SrgbR },
+        { IDC_SRGB_G_CHANNEL, AllChannels::SrgbG },
+        { IDC_SRGB_B_CHANNEL, AllChannels::SrgbB }
     };
 
     //
     // Private functions
     //
+
+    AllChannels _MapControlIdToChannel( UINT const uId ) {
+        try {
+            return _ControlIdToChannel.at( uId );
+        }
+        catch ( ... ) {
+            /*empty*/
+        }
+        return AllChannels::unknown;
+    }
 
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
         WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
@@ -459,7 +480,12 @@ void CChildView::OnCloseButtonClicked( ) {
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
     //debug( "CChildView::OnChannelButtonClicked: uId: %u\n", uId );
 
-    Triplet<AllChannels> const& channels { _ControlIdToChannels.at( uId ) };
+    AllChannels channel { _MapControlIdToChannel( uId ) };
+    if ( channel == AllChannels::unknown ) {
+        return;
+    }
+
+    AllChannelsTriplet const& channels { _ChannelXyzTriplets.at( channel ) };
     m_channelX = channels[0];
     m_channelY = channels[1];
     m_channelZ = channels[2];
