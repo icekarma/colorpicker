@@ -224,6 +224,7 @@
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
+    <ClInclude Include="Early.h" />
     <ClInclude Include="StaticBitmap.h" />
     <ClInclude Include="StaticBrush.h" />
     <ClInclude Include="Swatch.h" />
