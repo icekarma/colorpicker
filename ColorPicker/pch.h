@@ -60,6 +60,7 @@ using std::min;
 #endif
 
 #include "Debug.h"
+#include "Color.h"
 
 //================================================
 // Constants

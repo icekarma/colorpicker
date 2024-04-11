@@ -5,7 +5,6 @@
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
 
-#include "Color.h"
 
 //==============================================================//
 // TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO * TODO //
