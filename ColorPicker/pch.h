@@ -59,6 +59,7 @@ using std::min;
 #   define new DEBUG_NEW
 #endif
 
+#include "Early.h"
 #include "Debug.h"
 #include "Color.h"
 
@@ -68,21 +69,6 @@ using std::min;
 
 LONG  constexpr         WindowStylesToRemove { WS_BORDER        | WS_DLGFRAME         | WS_THICKFRAME       | WS_HSCROLL           | WS_VSCROLL       | WS_MINIMIZEBOX   | WS_MAXIMIZEBOX };
 DWORD constexpr ExtendedWindowStylesToRemove { WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME | WS_EX_LEFTSCROLLBAR | WS_EX_RIGHTSCROLLBAR | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE                  };
-
-//================================================
-// Concepts
-//================================================
-
-template<typename T> concept Enumeration = std::is_enum_v<T>;
-
-//================================================
-// Overloaded operators
-//================================================
-
-template<Enumeration T>
-std::underlying_type_t<T> constexpr operator+( T const rhs ) {
-    return static_cast<std::underlying_type_t<T>>( rhs );
-}
 
 //================================================
 // Pseudo-cast operators
