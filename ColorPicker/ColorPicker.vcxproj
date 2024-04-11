@@ -220,6 +220,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="ChannelInformation.h" />
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
@@ -238,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="ChannelInformation.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
