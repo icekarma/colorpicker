@@ -118,7 +118,7 @@ protected:
     // Controls
     //
 
-    CStatic       m_groupBoxLab;
+    CButton       m_groupBoxLab;
     CButton       m_buttonLabLChannel;
     CButton       m_buttonLabAChannel;
     CButton       m_buttonLabBChannel;
@@ -126,7 +126,7 @@ protected:
     CEdit         m_editLabAValue;
     CEdit         m_editLabBValue;
 
-    CStatic       m_groupBoxSrgb;
+    CButton       m_groupBoxSrgb;
     CButton       m_buttonSrgbRChannel;
     CButton       m_buttonSrgbGChannel;
     CButton       m_buttonSrgbBChannel;
