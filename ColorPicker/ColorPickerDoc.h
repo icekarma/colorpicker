@@ -1,6 +1,5 @@
 #pragma once
 
-
 class CColorPickerDoc:
     public CDocument
 {
