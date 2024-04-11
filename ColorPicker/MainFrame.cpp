@@ -4,6 +4,8 @@
 
 #include "ColorPicker.h"
 
+#define POSITION_RIGHT_HALF_CENTERED
+
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 
 BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
@@ -23,6 +25,15 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.lpszClass  = AfxRegisterWndClass( 0 );
     cs.cx         = 432;
     cs.cy         = 396;
+
+#if defined POSITION_RIGHT_HALF_CENTERED
+    {
+        int constexpr W = 1920 / 2;
+        int constexpr H = 1080;
+        cs.x = ( W - cs.cx ) / 2 + W;
+        cs.y = ( H - cs.cy ) / 2;
+    }
+#endif // defined POSITION_RIGHT_HALF_CENTERED
 
     return TRUE;
 }
