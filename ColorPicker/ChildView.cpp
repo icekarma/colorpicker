@@ -440,7 +440,14 @@ void CChildView::OnEditGotFocus( UINT uId ) {
     }
 }
 
-void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
+void CChildView::OnEditLostFocus( UINT uId ) {
+    debug( "CChildView::OnEditLostFocus: uId: %u\n", uId );
+
+    if ( int n; !GetValueFromEdit( *m_pCurrentEdit, n ) ) {
+        debug( "CChildView::OnEditLostFocus: garbage in edit control\n" );
+    }
+    // TODO range check
+
     m_pCurrentEdit = nullptr;
 }
 
