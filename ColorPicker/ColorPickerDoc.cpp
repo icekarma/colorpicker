@@ -10,16 +10,16 @@ BEGIN_MESSAGE_MAP( CColorPickerDoc, CDocument )
 END_MESSAGE_MAP( )
 
 BOOL CColorPickerDoc::OnNewDocument( ) {
-	if ( !CDocument::OnNewDocument( ) ) {
-		return FALSE;
-	}
+    if ( !CDocument::OnNewDocument( ) ) {
+        return FALSE;
+    }
 
-	// Reinitialization (SDI applications will reuse this document)
+    // Reinitialization (SDI applications will reuse this document)
 
-	m_LabColor  = { };
-	m_SrgbColor = { };
+    m_LabColor  = { };
+    m_SrgbColor = { };
 
-	return TRUE;
+    return TRUE;
 }
 
 void CColorPickerDoc::SetChannelValue( AllChannels const channel, int const nValue ) {
