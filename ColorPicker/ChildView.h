@@ -67,7 +67,11 @@ protected:
     bool GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged );
     void PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const;
 
-    void UpdateBitmaps( );
+    void UpdateBitmaps( ) {
+        UpdateBitmaps( true, true );
+    }
+
+    void UpdateBitmaps( bool fUpdateZ, bool fUpdateXy );
 
     //
     // Overrides
@@ -111,8 +115,8 @@ protected:
 
     std::unordered_map<unsigned, CEdit*> m_mapEditControls;
 
-    CEdit*            m_pCurrentEdit { };
-    volatile unsigned m_uBusy        { };
+    CEdit* m_pCurrentEdit        { };
+    bool   m_fBlockBitmapUpdates { };
 
     //
     // Controls

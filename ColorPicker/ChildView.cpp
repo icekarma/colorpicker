@@ -270,19 +270,23 @@ void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) con
     edit.SetWindowText( str );
 }
 
-void CChildView::UpdateBitmaps( ) {
+void CChildView::UpdateBitmaps( bool fUpdateZ, bool fUpdateXy ) {
+    if ( m_fBlockBitmapUpdates ) {
+        return;
+    }
+
     if ( m_pSwatch ) {
         m_pSwatch->Update( );
         m_staticSwatch.Invalidate( FALSE );
     }
 
-    if ( m_pZStrip ) {
+    if ( m_pZStrip && fUpdateZ ) {
         m_pZStrip->SetChannel( m_channelZ );
         m_pZStrip->Update( );
         m_staticZStrip.Invalidate( FALSE );
     }
 
-    if ( m_pXyGrid ) {
+    if ( m_pXyGrid && fUpdateXy ) {
         m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
         m_pXyGrid->Update( );
         m_staticXyGrid.Invalidate( FALSE );
@@ -593,6 +597,8 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     //debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
+    m_fBlockBitmapUpdates = true;
+
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -612,7 +618,8 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
         PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
-    UpdateBitmaps( );
+    m_fBlockBitmapUpdates = false;
+    UpdateBitmaps( false, true );
 
     *result = 0;
 }
@@ -623,6 +630,8 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     int y { mm->point.y };
 
     //debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
+
+    m_fBlockBitmapUpdates = true;
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
@@ -644,7 +653,8 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
         PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
-    UpdateBitmaps( );
+    m_fBlockBitmapUpdates = false;
+    UpdateBitmaps( true, false );
 
     *result = 0;
 }
