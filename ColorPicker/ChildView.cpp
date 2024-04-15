@@ -383,16 +383,15 @@ void CChildView::OnInitialUpdate( ) {
 
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
 
+    m_fBlockBitmapUpdates = true;
+
     m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
-    m_pSwatch->Update( );
 
     m_pZStrip = new CZStrip { pDoc, &m_staticZStrip };
     m_pZStrip->SetChannel( m_channelZ );
-    m_pZStrip->Update( );
 
     m_pXyGrid = new CXyGrid { pDoc, &m_staticXyGrid };
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
-    m_pXyGrid->Update( );
 
     LabTriplet  labValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -404,6 +403,9 @@ void CChildView::OnInitialUpdate( ) {
     PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
     PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
     PutHexColorToEdit( m_editHexColor,   srgbValues );
+
+    m_fBlockBitmapUpdates = false;
+    UpdateBitmaps( );
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
