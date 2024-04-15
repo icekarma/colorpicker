@@ -129,145 +129,144 @@ namespace {
         ctrl->SetWindowPlacement( &wp );
     }
 
-}
+    bool _IsTextSelected( CEdit const* pEdit ) {
+        int nStartIndex, nEndIndex;
 
-bool CChildView::IsTextSelected( CEdit const* pEdit ) {
-    int nStartIndex, nEndIndex;
-
-    pEdit->GetSel( nStartIndex, nEndIndex );
-    return nStartIndex != nEndIndex;
-}
-
-wchar_t* CChildView::SafeGetWindowText( CEdit const& edit ) {
-    int cbText { edit.GetWindowTextLength( ) };
-    if ( cbText < 1 ) {
-        debug( "CChildView::SafeGetWindowText: bail 1: no text in control\n" );
-        return nullptr;
-    }
-    ++cbText;
-
-    wchar_t* pwszText { new wchar_t[cbText + 1] { } };
-    if ( !pwszText ) {
-        debug( "CChildView::SafeGetWindowText: bail 2: memory allocation failure\n" );
-        return nullptr;
-    }
-    if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
-        delete[] pwszText;
-        debug( "CChildView::SafeGetWindowText: bail 3: GetWindowText failed\n" );
-        return nullptr;
+        pEdit->GetSel( nStartIndex, nEndIndex );
+        return nStartIndex != nEndIndex;
     }
 
-    for ( int index { cbText - 2 }; index >= 0; --index ) {
-        if ( !iswspace( pwszText[index] ) ) {
-            break;
+    wchar_t* _SafeGetWindowText( CEdit const& edit ) {
+        int cbText { edit.GetWindowTextLength( ) };
+        if ( cbText < 1 ) {
+            debug( "_SafeGetWindowText: bail 1: no text in control\n" );
+            return nullptr;
         }
-        pwszText[index] = '\0';
+        ++cbText;
+
+        wchar_t* pwszText { new wchar_t[cbText + 1] { } };
+        if ( !pwszText ) {
+            debug( "_SafeGetWindowText: bail 2: memory allocation failure\n" );
+            return nullptr;
+        }
+        if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
+            delete[] pwszText;
+            debug( "_SafeGetWindowText: bail 3: GetWindowText failed\n" );
+            return nullptr;
+        }
+
+        for ( int index { cbText - 2 }; index >= 0; --index ) {
+            if ( !iswspace( pwszText[index] ) ) {
+                break;
+            }
+            pwszText[index] = '\0';
+        }
+
+        return pwszText;
     }
 
-    return pwszText;
-}
+    bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
+        wchar_t* pwszText { _SafeGetWindowText( edit ) };
+        if ( !pwszText ) {
+            debug( "_GetValueFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            return false;
+        }
 
-bool CChildView::GetValueFromEdit( CEdit const& edit, int& nValue ) {
-    wchar_t* pwszText { SafeGetWindowText( edit ) };
-    if ( !pwszText ) {
-        debug( "CChildView::GetValueFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
-        return false;
-    }
+        wchar_t* pwszEnd { };
+        long tmp = wcstol( pwszText, &pwszEnd, 10 );
+        if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+            delete[] pwszText;
+            debug( "_GetValueFromEdit: bail 2: garbage in number\n" );
+            return false;
+        }
 
-    wchar_t* pwszEnd { };
-    long tmp = wcstol( pwszText, &pwszEnd, 10 );
-    if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+        nValue = static_cast<int>( tmp );
         delete[] pwszText;
-        debug( "CChildView::GetValueFromEdit: bail 2: garbage in number\n" );
-        return false;
-    }
-
-    nValue = static_cast<int>( tmp );
-    delete[] pwszText;
-    return true;
-}
-
-bool CChildView::GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
-    int nOldValue { nValue };
-
-    if ( GetValueFromEdit( edit, nValue ) ) {
-        fChanged = nOldValue != nValue;
         return true;
-    } else {
-        return false;
-    }
-}
-
-void CChildView::PutValueToEdit( CEdit& edit, int const nValue ) const {
-    CString str;
-
-    str.Format( L"%d", nValue );
-    edit.SetWindowText( str );
-}
-
-template<typename T>
-[[nodiscard]] bool CChildView::UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
-    int n { static_cast<int>( oldValue ) };
-    bool fChanged { };
-
-    if ( GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
-        newValue = static_cast<T>( n );
-        return true;
-    } else {
-        return false;
-    }
-}
-
-template<typename T>
-void CChildView::UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
-    if ( newValue != oldValue ) {
-        PutValueToEdit( edit, static_cast<int>( newValue ) );
-    }
-}
-
-bool CChildView::GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
-    wchar_t* pwszText { SafeGetWindowText( edit ) };
-    if ( !pwszText ) {
-        debug( "CChildView::GetHexColorFromEdit: bail 1: SafeGetWindowText returned nullptr\n" );
-        return false;
     }
 
-    wchar_t* pwszEnd { };
-    long tmp = wcstol( pwszText, &pwszEnd, 16 );
-    if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
+    bool _GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+        int nOldValue { nValue };
+
+        if ( _GetValueFromEdit( edit, nValue ) ) {
+            fChanged = nOldValue != nValue;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void _PutValueToEdit( CEdit& edit, int const nValue ) {
+        CString str;
+        str.Format( L"%d", nValue );
+        edit.SetWindowText( str );
+    }
+
+    template<typename T>
+    [[nodiscard]] bool _UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
+        int n { static_cast<int>( oldValue ) };
+        bool fChanged { };
+
+        if ( _GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
+            newValue = static_cast<T>( n );
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    template<typename T>
+    void _UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
+        if ( newValue != oldValue ) {
+            _PutValueToEdit( edit, static_cast<int>( newValue ) );
+        }
+    }
+
+    bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
+        wchar_t* pwszText { _SafeGetWindowText( edit ) };
+        if ( !pwszText ) {
+            debug( "_GetHexColorFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            return false;
+        }
+
+        wchar_t* pwszEnd { };
+        long tmp = wcstol( pwszText, &pwszEnd, 16 );
+        if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
+            delete[] pwszText;
+            debug( "_GetHexColorFromEdit: bail 2: garbage in number\n" );
+            return false;
+        }
+
+        int r {   tmp >> 16          };
+        int g { ( tmp >>  8 ) & 0xFF };
+        int b {   tmp         & 0xFF };
+
+        values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
         delete[] pwszText;
-        debug( "CChildView::GetHexColorFromEdit: bail 2: garbage in number\n" );
-        return false;
-    }
-
-    int r {   tmp >> 16          };
-    int g { ( tmp >>  8 ) & 0xFF };
-    int b {   tmp         & 0xFF };
-
-    values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
-    delete[] pwszText;
-    return true;
-}
-
-bool CChildView::GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
-    SrgbTriplet oldValues { values };
-
-    if ( GetHexColorFromEdit( edit, values ) ) {
-        fChanged = oldValues != values;
         return true;
-    } else {
-        return false;
     }
-}
 
-void CChildView::PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const {
-    unsigned r { values[+SrgbChannels::R] };
-    unsigned g { values[+SrgbChannels::G] };
-    unsigned b { values[+SrgbChannels::B] };
+    bool _GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
+        SrgbTriplet oldValues { values };
 
-    CString str;
-    str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
-    edit.SetWindowText( str );
+        if ( _GetHexColorFromEdit( edit, values ) ) {
+            fChanged = oldValues != values;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void _PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) {
+        unsigned r { values[+SrgbChannels::R] };
+        unsigned g { values[+SrgbChannels::G] };
+        unsigned b { values[+SrgbChannels::B] };
+
+        CString str;
+        str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
+        edit.SetWindowText( str );
+    }
+
 }
 
 void CChildView::UpdateBitmaps( bool fUpdateZ, bool fUpdateXy ) {
@@ -396,24 +395,24 @@ void CChildView::OnInitialUpdate( ) {
     LabTriplet  labValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
-    PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
-    PutValueToEdit   ( m_editLabBValue,   labValues[ +LabChannels::b] );
-    PutValueToEdit   ( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
-    PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
-    PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
-    PutHexColorToEdit( m_editHexColor,   srgbValues );
+    _PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
+    _PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
+    _PutValueToEdit   ( m_editLabBValue,   labValues[ +LabChannels::b] );
+    _PutValueToEdit   ( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
+    _PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
+    _PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
+    _PutHexColorToEdit( m_editHexColor,   srgbValues );
 
     m_fBlockBitmapUpdates = false;
     UpdateBitmaps( );
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
@@ -421,7 +420,7 @@ void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
 }
 
 void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
@@ -429,7 +428,7 @@ void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnEditCut( ) {
@@ -469,10 +468,11 @@ void CChildView::OnEditGotFocus( UINT uId ) {
 void CChildView::OnEditLostFocus( UINT uId ) {
     debug( "CChildView::OnEditLostFocus: uId: %u\n", uId );
 
-    if ( int n; !GetValueFromEdit( *m_pCurrentEdit, n ) ) {
+    if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
+        // TODO range check
+    } else {
         debug( "CChildView::OnEditLostFocus: garbage in edit control\n" );
     }
-    // TODO range check
 
     m_pCurrentEdit = nullptr;
 }
@@ -511,40 +511,40 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     //debug( "CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     switch ( uId ) {
-        case IDC_LAB_L_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
-        case IDC_LAB_A_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
-        case IDC_LAB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+        case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
+        case IDC_LAB_A_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
+        case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
         {
 Lab:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
-
                 newSrgbValues = pDoc->GetSrgbColor( ).GetChannelValues( );
-                UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-                UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-                UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-                PutHexColorToEdit( m_editHexColor, newSrgbValues );
+
+                _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+                _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+                _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+                _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
         }
 
-        case IDC_SRGB_R_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
-        case IDC_SRGB_G_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
-        case IDC_SRGB_B_VALUE: fChanged = UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+        case IDC_SRGB_R_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
+        case IDC_SRGB_G_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
+        case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
         {
 sRGB:
             //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
-
                 newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
-                UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
-                UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
-                UpdateEditIfValueChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
-                PutHexColorToEdit( m_editHexColor, newSrgbValues );
+
+                _UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
+                _UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
+                _UpdateEditIfValueChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+                _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
         }
@@ -567,25 +567,25 @@ void CChildView::OnHexColorUpdate( ) {
     //debug( "CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
     //debug( "CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
-    if ( !GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
-        //debug( "CChildView::OnHexColorUpdate:   GetHexColorAndChangedFromEdit failed\n" );
+    if ( !_GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
+        //debug( "CChildView::OnHexColorUpdate:   _GetHexColorAndChangedFromEdit failed\n" );
         return;
     }
     //debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
 
     if ( fChanged ) {
         pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
-
         newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
+
         //debug( "CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
         //debug( "CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
-        UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-        UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-        UpdateEditIfValueChanged( m_editLabBValue,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-        UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-        UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-        UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+        _UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+        _UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+        _UpdateEditIfValueChanged( m_editLabBValue,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+        _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+        _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+        _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     }
 
     UpdateBitmaps( );
@@ -608,14 +608,14 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    _UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     if ( oldSrgbValues != newSrgbValues ) {
-        PutHexColorToEdit( m_editHexColor, newSrgbValues );
+        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
     m_fBlockBitmapUpdates = false;
@@ -643,14 +643,14 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    _UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     if ( oldSrgbValues != newSrgbValues ) {
-        PutHexColorToEdit( m_editHexColor, newSrgbValues );
+        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
     m_fBlockBitmapUpdates = false;

@@ -52,21 +52,6 @@ protected:
     // Own methods
     //
 
-    bool IsTextSelected( CEdit const* pEdit );
-    wchar_t* SafeGetWindowText( CEdit const& edit );
-
-    bool GetValueFromEdit( CEdit const& edit, int& nValue );
-    bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
-    void PutValueToEdit( CEdit& edit, int const nValue ) const;
-    template<typename T>
-    bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue );
-    template<typename T>
-    void UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue );
-
-    bool GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values );
-    bool GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged );
-    void PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) const;
-
     void UpdateBitmaps( ) {
         UpdateBitmaps( true, true );
     }
