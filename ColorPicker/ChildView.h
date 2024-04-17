@@ -52,11 +52,12 @@ protected:
     // Own methods
     //
 
+    CEdit* MapControlIdToPointer( UINT const uId );
+    void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
+
     void UpdateBitmaps( ) {
         UpdateBitmaps( true, true );
     }
-
-    void UpdateBitmaps( bool fUpdateZ, bool fUpdateXy );
 
     //
     // Overrides

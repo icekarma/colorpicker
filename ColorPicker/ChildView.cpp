@@ -269,7 +269,16 @@ namespace {
 
 }
 
-void CChildView::UpdateBitmaps( bool fUpdateZ, bool fUpdateXy ) {
+CEdit* CChildView::MapControlIdToPointer( UINT const uId ) {
+    try {
+        return m_mapEditControls.at( uId );
+    }
+    catch ( ... ) {
+        return nullptr;
+    }
+}
+
+void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     if ( m_fBlockBitmapUpdates ) {
         return;
     }
@@ -456,13 +465,9 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnEditGotFocus( UINT uId ) {
-    debug( L"CChildView::OnEditGotFocus: uId: %u\n", uId );
-    try {
-        m_pCurrentEdit = m_mapEditControls.at( uId );
-    }
-    catch ( ... ) {
-        m_pCurrentEdit = nullptr;
-    }
+    debug( L"CChildView::OnEditGotFocus: uId: %u, old m_pCurrentEdit: 0x%p\n", uId, m_pCurrentEdit );
+    m_pCurrentEdit = MapControlIdToPointer( uId );
+    debug( L"CChildView::OnEditGotFocus: new m_pCurrentEdit: 0x%p\n", m_pCurrentEdit );
 }
 
 void CChildView::OnEditLostFocus( UINT uId ) {
