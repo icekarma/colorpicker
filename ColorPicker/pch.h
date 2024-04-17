@@ -52,15 +52,34 @@ using std::min;
 
 #include "Resource.h"
 
-#if defined _DEBUG && defined DEBUG_NEW
-#   if defined new
-#       undef new
-#   endif
-#   define new DEBUG_NEW
-#endif
+#if defined _DEBUG
+
+#   if defined DEBUG_NEW
+#       if defined new
+#           undef new
+#       endif // defined new
+#       define new DEBUG_NEW
+#   endif // defined DEBUG_NEW
+
+// A wprintf()-like function to record a message to the debugging facility.
+template<typename... ArgsT>
+void debug( wchar_t const* format, ArgsT... args ) {
+    CString message;
+    message.Format( format, args... );
+    ::OutputDebugStringW( message );
+}
+
+#else // !defined _DEBUG
+
+// A wprintf()-like function to record a message to the debugging facility.
+template<typename... ArgsT>
+void debug( wchar_t const*, ArgsT... ) {
+    /*empty*/
+}
+
+#endif // defined _DEBUG
 
 #include "Early.h"
-#include "Debug.h"
 #include "Color.h"
 
 //================================================

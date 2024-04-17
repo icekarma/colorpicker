@@ -234,7 +234,6 @@
     <ClInclude Include="Swatch.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="XyGrid.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Color.h" />
