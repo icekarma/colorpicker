@@ -12,9 +12,7 @@ class CStaticBitmap: public CStatic {
 
 public:
 
-    virtual ~CStaticBitmap( ) override {
-        /*empty*/
-    }
+    virtual ~CStaticBitmap( ) override = default;
 
 protected:
 

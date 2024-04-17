@@ -27,7 +27,7 @@ protected:
         /*empty*/
     }
 
-    virtual ~CChildView( ) {
+    virtual ~CChildView( ) override {
         if ( m_pSwatch ) {
             delete m_pSwatch;
             m_pSwatch = nullptr;

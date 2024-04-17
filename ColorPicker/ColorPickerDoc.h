@@ -9,9 +9,9 @@ class CColorPickerDoc:
 
 protected:
 
-    CColorPickerDoc( ) noexcept { /*empty*/ }
+    CColorPickerDoc( ) = default;
 
-    virtual ~CColorPickerDoc( ) { /*empty*/ }
+    virtual ~CColorPickerDoc( ) override = default;
 
 public:
 
@@ -37,7 +37,7 @@ public:
 
 protected:
 
-    virtual BOOL OnNewDocument( );
+    virtual BOOL OnNewDocument( ) override;
 
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
     LabColor  m_LabColor  { };

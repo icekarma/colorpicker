@@ -12,8 +12,8 @@ public:
     enum { IDD = IDD_ABOUTBOX };
 #endif
 
-    CAboutDlg( ) noexcept: CDialogEx { IDD_ABOUTBOX } { /*empty*/ }
+    CAboutDlg( ): CDialogEx { IDD_ABOUTBOX } { /*empty*/ }
 
-    virtual ~CAboutDlg( ) { /*empty*/ }
+    virtual ~CAboutDlg( ) override = default;
 
 };

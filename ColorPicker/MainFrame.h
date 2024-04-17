@@ -11,11 +11,11 @@ class CMainFrame:
 
 public:
 
-    virtual ~CMainFrame( ) { /*empty*/ }
+    virtual ~CMainFrame( ) override = default;
 
 protected:
 
-    virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+    virtual BOOL PreCreateWindow( CREATESTRUCT& cs ) override;
 
 #if defined DEBUG_WINDOW_SIZE
     afx_msg void OnSizing( UINT fwSide, LPRECT pRect );
