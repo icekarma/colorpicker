@@ -10,13 +10,13 @@ public:
 
     Timing( ) = delete;
 
-    Timing( std::wstring const& strReportTag ):
+    Timing( CString const& strReportTag ):
         Timing { strReportTag, false }
     {
         /*empty*/
     }
 
-    Timing( std::wstring const& strReportTag, bool const fStartNow ):
+    Timing( CString const& strReportTag, bool const fStartNow ):
         m_strReportTag { strReportTag }
     {
         if ( fStartNow ) {
@@ -31,7 +31,7 @@ public:
     void Stop( ) {
         _GetSystemTime( m_uStopTime );
         m_uDelta = m_uStopTime - m_uStartTime;
-        debug( L"%s: elapsed time %.4f ms; rate %.2f Hz\n", m_strReportTag.c_str( ), m_uDelta / 10'000.0, 1.0 / ( m_uDelta / 10'000'000.0 ) );
+        debug( L"%s: elapsed time %.4f ms; rate %.2f Hz\n", (wchar_t const*) m_strReportTag, m_uDelta / 10'000.0, 1.0 / ( m_uDelta / 10'000'000.0 ) );
     }
 
     uint64_t GetElapsedTime( ) const {
@@ -44,10 +44,10 @@ private:
         GetSystemTimeAsFileTime( reinterpret_cast<LPFILETIME>( &uTime ) );
     }
 
-    uint64_t     m_uStartTime   { };
-    uint64_t     m_uStopTime    { };
-    uint64_t     m_uDelta       { };
-    std::wstring m_strReportTag;
+    uint64_t m_uStartTime   { };
+    uint64_t m_uStopTime    { };
+    uint64_t m_uDelta       { };
+    CString  m_strReportTag;
 
 };
 
@@ -57,9 +57,9 @@ class Timing {
 
 public:
 
-    Timing( )                                = delete;
-    Timing( std::wstring const& )             { /*empty*/ }
-    Timing( std::wstring const&, bool const ) { /*empty*/ }
+    Timing( )                            = delete;
+    Timing( CString const& )             { /*empty*/ }
+    Timing( CString const&, bool const ) { /*empty*/ }
 
     void Start( ) {
         /*empty*/
