@@ -11,6 +11,10 @@
 #endif
 
 #define _AFX_ALL_WARNINGS
+#define _AFX_NO_AFXCMN_SUPPORT
+#define _AFX_NO_OLE_SUPPORT
+#define  AFX_NO_CTLBARS_SUPPORT
+#define  AFX_NO_SOCKET_SUPPORT
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define  NOMINMAX
 #define  VC_EXTRALEAN
@@ -41,9 +45,12 @@ using std::min;
 #if !defined _AFX_NO_AFXCMN_SUPPORT
 #   include <afxcmn.h>
 #endif
-
-#include <afxcontrolbars.h>
-#include <afxsock.h>
+#if !defined AFX_NO_CTLBARS_SUPPORT
+#   include <afxcontrolbars.h>
+#endif
+#if !defined AFX_NO_SOCKET_SUPPORT
+#   include <afxsock.h>
+#endif
 
 #include <afxwinappex.h>
 #include <afxdialogex.h>
