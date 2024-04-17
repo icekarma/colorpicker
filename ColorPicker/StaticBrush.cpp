@@ -11,8 +11,8 @@ void CStaticBrush::SetColor( SrgbColor const& color ) {
     if ( m_color == color ) {
         return;
     }
-
     m_color = color;
+
     m_brush.DeleteObject( );
     m_brush.CreateSolidBrush( (COLORREF) m_color );
 }
