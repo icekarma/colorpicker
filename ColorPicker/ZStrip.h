@@ -14,7 +14,7 @@ public:
         if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
             pStatic->SetBitmap( m_bitmap );
         } else {
-            debug( "CZStrip::`ctor: CreateBitmap failed\n" );
+            debug( L"CZStrip::`ctor: CreateBitmap failed\n" );
         }
     }
 

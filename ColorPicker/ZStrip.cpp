@@ -11,7 +11,7 @@
 
 void CZStrip::Update( ) {
 #if defined TIMING
-    Timing timing( "CZStrip::Update", true );
+    Timing timing( L"CZStrip::Update", true );
 #endif // defined TIMING
 
     switch ( m_channelZ ) {
@@ -28,7 +28,7 @@ void CZStrip::Update( ) {
             break;
 
         default:
-            debug( "CZStrip::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
+            debug( L"CZStrip::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
             return;
     }
 

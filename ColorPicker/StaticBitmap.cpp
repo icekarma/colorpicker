@@ -72,7 +72,7 @@ void CStaticBitmap::OnSize( UINT nType, int cx, int cy ) {
     if ( !m_nControlId ) {
         m_nControlId = ::GetDlgCtrlID( GetSafeHwnd( ) );
         if ( !m_nControlId ) {
-            debug( "CStaticBitmap::OnSize: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
+            debug( L"CStaticBitmap::OnSize: Couldn't get control ID for our window handle: %lu\n", ::GetLastError( ) );
         }
     }
 }

@@ -139,19 +139,19 @@ namespace {
     wchar_t* _SafeGetWindowText( CEdit const& edit ) {
         int cbText { edit.GetWindowTextLength( ) };
         if ( cbText < 1 ) {
-            debug( "_SafeGetWindowText: bail 1: no text in control\n" );
+            debug( L"_SafeGetWindowText: bail 1: no text in control\n" );
             return nullptr;
         }
         ++cbText;
 
         wchar_t* pwszText { new wchar_t[cbText + 1] { } };
         if ( !pwszText ) {
-            debug( "_SafeGetWindowText: bail 2: memory allocation failure\n" );
+            debug( L"_SafeGetWindowText: bail 2: memory allocation failure\n" );
             return nullptr;
         }
         if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
             delete[] pwszText;
-            debug( "_SafeGetWindowText: bail 3: GetWindowText failed\n" );
+            debug( L"_SafeGetWindowText: bail 3: GetWindowText failed\n" );
             return nullptr;
         }
 
@@ -168,7 +168,7 @@ namespace {
     bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
-            debug( "_GetValueFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            debug( L"_GetValueFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
             return false;
         }
 
@@ -176,7 +176,7 @@ namespace {
         long tmp = wcstol( pwszText, &pwszEnd, 10 );
         if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
             delete[] pwszText;
-            debug( "_GetValueFromEdit: bail 2: garbage in number\n" );
+            debug( L"_GetValueFromEdit: bail 2: garbage in number\n" );
             return false;
         }
 
@@ -225,7 +225,7 @@ namespace {
     bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
-            debug( "_GetHexColorFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            debug( L"_GetHexColorFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
             return false;
         }
 
@@ -233,7 +233,7 @@ namespace {
         long tmp = wcstol( pwszText, &pwszEnd, 16 );
         if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
             delete[] pwszText;
-            debug( "_GetHexColorFromEdit: bail 2: garbage in number\n" );
+            debug( L"_GetHexColorFromEdit: bail 2: garbage in number\n" );
             return false;
         }
 
@@ -456,7 +456,7 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnEditGotFocus( UINT uId ) {
-    debug( "CChildView::OnEditGotFocus: uId: %u\n", uId );
+    debug( L"CChildView::OnEditGotFocus: uId: %u\n", uId );
     try {
         m_pCurrentEdit = m_mapEditControls.at( uId );
     }
@@ -466,12 +466,12 @@ void CChildView::OnEditGotFocus( UINT uId ) {
 }
 
 void CChildView::OnEditLostFocus( UINT uId ) {
-    debug( "CChildView::OnEditLostFocus: uId: %u\n", uId );
+    debug( L"CChildView::OnEditLostFocus: uId: %u, m_pCurrentEdit: 0x%p\n", uId, m_pCurrentEdit );
 
     if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
         // TODO range check
     } else {
-        debug( "CChildView::OnEditLostFocus: garbage in edit control\n" );
+        debug( L"CChildView::OnEditLostFocus: garbage in edit control\n" );
     }
 
     m_pCurrentEdit = nullptr;
@@ -482,7 +482,7 @@ void CChildView::OnCloseButtonClicked( ) {
 }
 
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
-    //debug( "CChildView::OnChannelButtonClicked: uId: %u\n", uId );
+    //debug( L"CChildView::OnChannelButtonClicked: uId: %u\n", uId );
 
     AllChannels channel { _MapControlIdToChannel( uId ) };
     if ( channel == AllChannels::unknown ) {
@@ -498,7 +498,7 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {
-    //debug( "CChildView::OnColorValueUpdate(uId=%u):\n", uId );
+    //debug( L"CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 
     CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
@@ -507,8 +507,8 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
 
-    //debug( "CChildView::OnColorValueUpdate: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    //debug( "CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+    //debug( L"CChildView::OnColorValueUpdate: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    //debug( L"CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
@@ -516,7 +516,7 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
         case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
         {
 Lab:
-            //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
+            //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
@@ -535,7 +535,7 @@ Lab:
         case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
         {
 sRGB:
-            //debug( "CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? "true" : "false" );
+            //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
 
             if ( fChanged ) {
                 pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
@@ -550,8 +550,8 @@ sRGB:
         }
     }
 
-    //debug( "CChildView::OnColorValueUpdate: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-    //debug( "CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+    //debug( L"CChildView::OnColorValueUpdate: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+    //debug( L"CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
     UpdateBitmaps( );
 }
@@ -564,21 +564,21 @@ void CChildView::OnHexColorUpdate( ) {
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
 
-    //debug( "CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    //debug( "CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
+    //debug( L"CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
+    //debug( L"CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     if ( !_GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
-        //debug( "CChildView::OnHexColorUpdate:   _GetHexColorAndChangedFromEdit failed\n" );
+        //debug( L"CChildView::OnHexColorUpdate:   _GetHexColorAndChangedFromEdit failed\n" );
         return;
     }
-    //debug( "CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? "true" : "false" );
+    //debug( L"CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? L"true" : L"false" );
 
     if ( fChanged ) {
         pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
         newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
 
-        //debug( "CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-        //debug( "CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
+        //debug( L"CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
+        //debug( L"CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
         _UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
         _UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -595,7 +595,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int y { mm->point.y };
 
-    //debug( "CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
+    //debug( L"CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
     m_fBlockBitmapUpdates = true;
 
@@ -629,7 +629,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     int x { mm->point.x };
     int y { mm->point.y };
 
-    //debug( "CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
+    //debug( L"CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
 
     m_fBlockBitmapUpdates = true;
 

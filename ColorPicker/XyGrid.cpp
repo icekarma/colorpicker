@@ -11,7 +11,7 @@
 
 void CXyGrid::Update( ) {
 #if defined TIMING
-    Timing timing( "CXyGrid::Update", true );
+    Timing timing( L"CXyGrid::Update", true );
 #endif // defined TIMING
 
     switch ( m_channelZ ) {
@@ -28,7 +28,7 @@ void CXyGrid::Update( ) {
             break;
 
         default:
-            debug( "CXyGrid::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
+            debug( L"CXyGrid::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
             return;
     }
 

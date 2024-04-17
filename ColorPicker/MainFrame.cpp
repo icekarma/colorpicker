@@ -43,12 +43,12 @@ void CMainFrame::OnSizing( UINT fwSide, LPRECT pRect ) {
     CFrameWnd::OnSizing( fwSide, pRect );
 
     CRect rect( pRect );
-    debug( "CMainFrame::OnSizing: %dx%d (%d,%d)-(%d,%d)\n", rect.Width( ), rect.Height( ), rect.left, rect.top, rect.right, rect.bottom );
+    debug( L"CMainFrame::OnSizing: %dx%d (%d,%d)-(%d,%d)\n", rect.Width( ), rect.Height( ), rect.left, rect.top, rect.right, rect.bottom );
 }
 
 void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
     CFrameWnd::OnSize( nType, cx, cy );
 
-    debug( "CMainFrame::OnSize: %dx%d\n", cx, cy );
+    debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
 }
 #endif // defined DEBUG_WINDOW_SIZE
