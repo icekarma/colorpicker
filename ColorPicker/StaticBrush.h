@@ -6,7 +6,7 @@ class CStaticBrush: public CStatic {
 
 public:
 
-    ~CStaticBrush( ) {
+    virtual ~CStaticBrush( ) override {
         m_brush.DeleteObject( );
     }
 
