@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <array>
+#include <concepts>
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
@@ -100,7 +101,24 @@ DWORD constexpr ExtendedWindowStylesToRemove { WS_EX_CLIENTEDGE | WS_EX_DLGMODAL
 // Pseudo-cast operators
 //================================================
 
-template<typename ReturnT, typename ValueT>
-inline ReturnT* dynamic_downcast( ValueT* p ) {
-    return reinterpret_cast<ReturnT*>( AfxDynamicDownCast( ReturnT::GetThisClass( ), p ) );
+template<typename T>
+concept IsCObject = std::derived_from<T, CObject>;
+
+template<IsCObject Class>
+inline CRuntimeClass* runtime_class( ) {
+    return Class::GetThisClass( );
+}
+
+template<IsCObject Class, typename ValueT>
+inline Class* dynamic_downcast( ValueT* p ) {
+    return reinterpret_cast<Class*>( AfxDynamicDownCast( runtime_class<Class>( ), p ) );
+}
+
+template<IsCObject Class, IsCObject ValueT>
+inline Class* static_downcast( ValueT* p ) {
+#if defined _DEBUG
+    return static_cast<Class*>( AfxStaticDownCast( runtime_class<Class>( ), p ) );
+#else // !defined _DEBUG
+    return static_cast<Class*>( p );
+#endif // defined _DEBUG
 }
