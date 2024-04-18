@@ -283,7 +283,8 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
         return;
     }
 
-    m_pSwatch->Update( );
+    CColorPickerDoc* pDoc { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    m_staticSwatch.SetColor( pDoc->GetSrgbColor( ) );
     m_staticSwatch.Invalidate( FALSE );
 
     if ( fUpdateZ ) {
@@ -392,8 +393,6 @@ void CChildView::OnInitialUpdate( ) {
     m_buttonLabLChannel.SetCheck( BST_CHECKED );
 
     m_fBlockBitmapUpdates = true;
-
-    m_pSwatch = new CSwatch { pDoc, &m_staticSwatch };
 
     m_pZStrip = new CZStrip { pDoc, &m_staticZStrip };
     m_pZStrip->SetChannel( m_channelZ );

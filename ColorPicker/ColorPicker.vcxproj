@@ -249,7 +249,6 @@
     <ClInclude Include="Early.h" />
     <ClInclude Include="StaticBitmap.h" />
     <ClInclude Include="StaticBrush.h" />
-    <ClInclude Include="Swatch.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="XyGrid.h" />
     <ClInclude Include="MainFrame.h" />

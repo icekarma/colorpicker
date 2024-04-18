@@ -54,9 +54,6 @@
     <ClInclude Include="Timing.h">
       <Filter>02 Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Swatch.h">
-      <Filter>02 Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StaticBrush.h">
       <Filter>02 Header Files</Filter>
     </ClInclude>

@@ -2,7 +2,6 @@
 
 #include "XyGrid.h"
 #include "ZStrip.h"
-#include "Swatch.h"
 #include "StaticBitmap.h"
 #include "StaticBrush.h"
 
@@ -28,11 +27,6 @@ protected:
     }
 
     virtual ~CChildView( ) override {
-        if ( m_pSwatch ) {
-            delete m_pSwatch;
-            m_pSwatch = nullptr;
-        }
-
         if ( m_pZStrip ) {
             delete m_pZStrip;
             m_pZStrip = nullptr;
@@ -137,7 +131,6 @@ protected:
     // Bitmap generators
     //
 
-    CSwatch*      m_pSwatch              { };
     CZStrip*      m_pZStrip              { };
     CXyGrid*      m_pXyGrid              { };
 
