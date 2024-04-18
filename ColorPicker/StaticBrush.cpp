@@ -15,6 +15,7 @@ void CStaticBrush::SetColor( SrgbColor const& color ) {
 
     m_brush.DeleteObject( );
     m_brush.CreateSolidBrush( (COLORREF) m_color );
+    Invalidate( FALSE );
 }
 
 BOOL CStaticBrush::OnEraseBkgnd( CDC* /*pDC*/ ) {

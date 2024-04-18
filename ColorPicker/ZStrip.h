@@ -9,10 +9,11 @@ public:
     CZStrip( ) = delete;
 
     CZStrip( CColorPickerDoc const* pDoc, CStatic* pStatic ):
-        m_pDoc { pDoc }
+        m_pDoc    { pDoc    },
+        m_pStatic { pStatic }
     {
         if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
-            pStatic->SetBitmap( m_bitmap );
+            m_pStatic->SetBitmap( m_bitmap );
         } else {
             debug( L"CZStrip::`ctor: CreateBitmap failed\n" );
         }
@@ -50,6 +51,7 @@ private:
 
     CColorPickerDoc const* m_pDoc;
     CBitmap                m_bitmap;
+    CStatic*               m_pStatic;
 
     AllChannels            m_channelZ    { AllChannels::unknown };
 

@@ -284,18 +284,13 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     }
 
     m_staticSwatch.SetColor( m_pDoc->GetSrgbColor( ) );
-    m_staticSwatch.Invalidate( FALSE );
 
-    if ( fUpdateZ ) {
-        m_pZStrip->SetChannel( m_channelZ );
+    if ( fUpdateZ && m_pZStrip->SetChannel( m_channelZ ) ) {
         m_pZStrip->Update( );
-        m_staticZStrip.Invalidate( FALSE );
     }
 
-    if ( fUpdateXy ) {
-        m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
+    if ( fUpdateXy && m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ ) ) {
         m_pXyGrid->Update( );
-        m_staticXyGrid.Invalidate( FALSE );
     }
 }
 

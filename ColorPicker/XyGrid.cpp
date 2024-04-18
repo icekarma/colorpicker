@@ -33,6 +33,7 @@ void CXyGrid::Update( ) {
     }
 
     m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
+    m_pStatic->Invalidate( FALSE );
 
 #if defined TIMING
     timing.Stop( );
