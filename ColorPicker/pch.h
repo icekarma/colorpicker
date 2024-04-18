@@ -20,6 +20,33 @@
 #define  VC_EXTRALEAN
 #define  WIN32_LEAN_AND_MEAN
 
+#pragma warning( disable: 4061 4191 4514 4625 4626 4710 4711 4820 5027 5045 5245 )
+// C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
+// C4191: 'operator/operation' : unsafe conversion from 'type of expression' to 'type required'
+// C4514: 'function' : unreferenced inline function has been removed
+// C4625: 'derived class': copy constructor was implicitly defined as deleted because a base class copy constructor is inaccessible or deleted
+// C4626: 'derived class': assignment operator was implicitly defined as deleted because a base class assignment operator is inaccessible or deleted
+// C4710: 'function' : function not inlined
+// C4711: function 'function' selected for inline expansion
+// C4820: 'bytes' bytes padding added after construct 'member_name'
+// C5027: 'type': move assignment operator was implicitly defined as deleted
+// C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+// C5245: unreferenced function with internal linkage has been removed
+
+#pragma warning( push )
+#pragma warning( disable: 4081 4263 4264 4266 4365 4946 5026 5204 5220 5240 5246 )
+// C4081: expected 'token1'; found 'token2'
+// C4263: 'function' : member function does not override any base class virtual member function
+// C4264: 'virtual_function' : no override available for virtual member function from base 'class'; function is hidden
+// C4266: 'function' : no override available for virtual member function from base 'type'; function is hidden
+// C4365: 'action' : conversion from 'type_1' to 'type_2', signed/unsigned mismatch
+// C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
+// C5026: 'type': move constructor was implicitly defined as deleted
+// C5204: 'type-name': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+// C5220: 'name': a non-static data member with a volatile qualified type no longer implies that compiler generated copy/move constructors and copy/move assignment operators are not trivial
+// C5240: 'attribute-name': attribute is ignored in this syntactic position
+// C5246: 'member': the initialization of a subobject should be wrapped in braces
+
 #include "targetver.h"
 
 #include <cassert>
@@ -56,7 +83,20 @@ using std::min;
 #include <afxwinappex.h>
 #include <afxdialogex.h>
 
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable: 4081 4365 4946 5204 5240 5246 )
+// C4081: expected 'token1'; found 'token2'
+// C4365: 'action' : conversion from 'type_1' to 'type_2', signed/unsigned mismatch
+// C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
+// C5204: 'type-name': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+// C5240: 'attribute-name': attribute is ignored in this syntactic position
+// C5246: 'member': the initialization of a subobject should be wrapped in braces
+
 #include <lcms2.h>
+
+#pragma warning( pop )
 
 #include "Resource.h"
 

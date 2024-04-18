@@ -59,12 +59,12 @@ namespace {
     //
 
     std::unordered_map<AllChannels, AllChannelsTriplet> const _ChannelXyzTriplets {
-        { AllChannels::LabL,  { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  } },
-        { AllChannels::LabA,  { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  } },
-        { AllChannels::LabB,  { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  } },
-        { AllChannels::SrgbR, { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR } },
-        { AllChannels::SrgbG, { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG } },
-        { AllChannels::SrgbB, { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB } }
+        { AllChannels::LabL,  { { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  } } },
+        { AllChannels::LabA,  { { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  } } },
+        { AllChannels::LabB,  { { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  } } },
+        { AllChannels::SrgbR, { { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR } } },
+        { AllChannels::SrgbG, { { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG } } },
+        { AllChannels::SrgbB, { { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB } } }
     };
 
     std::unordered_map<UINT, AllChannels> const _ControlIdToChannel {
@@ -144,7 +144,7 @@ namespace {
         }
         ++cbText;
 
-        wchar_t* pwszText { new wchar_t[cbText + 1] { } };
+        wchar_t* pwszText { new wchar_t[cbText + 1u] { } };
         if ( !pwszText ) {
             debug( L"_SafeGetWindowText: bail 2: memory allocation failure\n" );
             return nullptr;
@@ -241,7 +241,7 @@ namespace {
         int g { ( tmp >>  8 ) & 0xFF };
         int b {   tmp         & 0xFF };
 
-        values = { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) };
+        values = { { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) } };
         delete[] pwszText;
         return true;
     }
@@ -353,7 +353,7 @@ void CChildView::OnInitialUpdate( ) {
         { IDC_HEX_COLOR_VALUE, &m_editHexColor   },
     };
 
-    CColorPickerDoc* pDoc { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc* pDoc { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
 
     SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
     SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
@@ -505,7 +505,7 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 void CChildView::OnColorValueUpdate( UINT const uId ) {
     //debug( L"CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 
-    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet       newLabValues  {  oldLabValues };
@@ -562,7 +562,7 @@ sRGB:
 }
 
 void CChildView::OnHexColorUpdate( ) {
-    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet       newLabValues  {  oldLabValues };
@@ -604,7 +604,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     m_fBlockBitmapUpdates = true;
 
-    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
@@ -638,7 +638,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     m_fBlockBitmapUpdates = true;
 
-    CColorPickerDoc* pDoc          { dynamic_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
     LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
