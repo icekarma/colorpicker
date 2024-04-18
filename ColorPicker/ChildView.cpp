@@ -283,8 +283,7 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
         return;
     }
 
-    CColorPickerDoc* pDoc { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    m_staticSwatch.SetColor( pDoc->GetSrgbColor( ) );
+    m_staticSwatch.SetColor( m_pDoc->GetSrgbColor( ) );
     m_staticSwatch.Invalidate( FALSE );
 
     if ( fUpdateZ ) {
@@ -354,7 +353,7 @@ void CChildView::OnInitialUpdate( ) {
         { IDC_HEX_COLOR_VALUE, &m_editHexColor   },
     };
 
-    CColorPickerDoc* pDoc { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
+    m_pDoc = static_downcast<CColorPickerDoc>( GetDocument( ) );
 
     SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
     SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
@@ -394,14 +393,14 @@ void CChildView::OnInitialUpdate( ) {
 
     m_fBlockBitmapUpdates = true;
 
-    m_pZStrip = new CZStrip { pDoc, &m_staticZStrip };
+    m_pZStrip = new CZStrip { m_pDoc, &m_staticZStrip };
     m_pZStrip->SetChannel( m_channelZ );
 
-    m_pXyGrid = new CXyGrid { pDoc, &m_staticXyGrid };
+    m_pXyGrid = new CXyGrid { m_pDoc, &m_staticXyGrid };
     m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
 
-    LabTriplet  labValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet srgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  labValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     _PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
     _PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
@@ -504,12 +503,11 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 void CChildView::OnColorValueUpdate( UINT const uId ) {
     //debug( L"CChildView::OnColorValueUpdate(uId=%u):\n", uId );
 
-    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    LabTriplet       newLabValues  {  oldLabValues };
-    SrgbTriplet      newSrgbValues { oldSrgbValues };
-    bool             fChanged      { };
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  newLabValues  {  oldLabValues };
+    SrgbTriplet newSrgbValues { oldSrgbValues };
+    bool        fChanged      { };
 
     //debug( L"CChildView::OnColorValueUpdate: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
     //debug( L"CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
@@ -523,8 +521,8 @@ Lab:
             //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
-                newSrgbValues = pDoc->GetSrgbColor( ).GetChannelValues( );
+                m_pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
+                newSrgbValues = m_pDoc->GetSrgbColor( ).GetChannelValues( );
 
                 _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
                 _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
@@ -542,8 +540,8 @@ sRGB:
             //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
 
             if ( fChanged ) {
-                pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
-                newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
+                m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
+                newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
                 _UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
                 _UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
@@ -561,9 +559,8 @@ sRGB:
 }
 
 void CChildView::OnHexColorUpdate( ) {
-    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet       oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet      oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet       newLabValues  {  oldLabValues };
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
@@ -578,8 +575,8 @@ void CChildView::OnHexColorUpdate( ) {
     //debug( L"CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? L"true" : L"false" );
 
     if ( fChanged ) {
-        pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
-        newLabValues = pDoc->GetLabColor( ).GetChannelValues( );
+        m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
+        newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
         //debug( L"CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
         //debug( L"CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
@@ -603,14 +600,13 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     m_fBlockBitmapUpdates = true;
 
-    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    pDoc->SetChannelValue( m_channelZ, y );
+    m_pDoc->SetChannelValue( m_channelZ, y );
 
-    LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -637,15 +633,14 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     m_fBlockBitmapUpdates = true;
 
-    CColorPickerDoc* pDoc          { static_downcast<CColorPickerDoc>( GetDocument( ) ) };
-    LabTriplet       oldLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      oldSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    pDoc->SetChannelValue( m_channelX, x );
-    pDoc->SetChannelValue( m_channelY, y );
+    m_pDoc->SetChannelValue( m_channelX, x );
+    m_pDoc->SetChannelValue( m_channelY, y );
 
-    LabTriplet       newLabValues  { pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      newSrgbValues { pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );

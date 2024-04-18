@@ -95,8 +95,9 @@ protected:
 
     std::unordered_map<unsigned, CEdit*> m_mapEditControls;
 
-    CEdit* m_pCurrentEdit        { };
-    bool   m_fBlockBitmapUpdates { };
+    CColorPickerDoc* m_pDoc                { };
+    CEdit*           m_pCurrentEdit        { };
+    bool             m_fBlockBitmapUpdates { };
 
     //
     // Controls
