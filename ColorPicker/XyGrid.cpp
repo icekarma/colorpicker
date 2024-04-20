@@ -3,15 +3,24 @@
 #include "XyGrid.h"
 
 #include "ColorPicker.h"
-#include "ColorPickerDoc.h"
 
 #undef TIMING
 
 #include "Timing.h"
 
-void CXyGrid::Update( ) {
+IMPLEMENT_DYNCREATE( CXyGrid, CStaticBitmap )
+
+BEGIN_MESSAGE_MAP( CXyGrid, CStaticBitmap )
+    ON_WM_ERASEBKGND( )
+    ON_WM_LBUTTONDOWN( )
+    ON_WM_LBUTTONUP( )
+    ON_WM_MOUSEMOVE( )
+    ON_WM_SIZE( )
+END_MESSAGE_MAP( )
+
+void CXyGrid::UpdateBitmap( ) {
 #if defined TIMING
-    Timing timing( L"CXyGrid::Update", true );
+    Timing timing( L"CXyGrid::UpdateBitmap", true );
 #endif // defined TIMING
 
     switch ( m_channelZ ) {
@@ -28,16 +37,16 @@ void CXyGrid::Update( ) {
             break;
 
         default:
-            debug( L"CXyGrid::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
+            debug( L"CXyGrid::UpdateBitmap: Unknown value %d for m_channelZ\n", +m_channelZ );
             return;
     }
-
-    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
-    m_pStatic->Invalidate( FALSE );
 
 #if defined TIMING
     timing.Stop( );
 #endif // defined TIMING
+
+    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
+    Invalidate( FALSE );
 }
 
 void CXyGrid::_UpdateLab( ) {
@@ -79,4 +88,14 @@ void CXyGrid::_UpdateSrgb( ) {
             *ptr++ = 0;
         }
     }
+}
+
+void CXyGrid::OnSize( UINT nType, int cx, int cy ) {
+    CStaticBitmap::OnSize( nType, cx, cy );
+
+    if ( !m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
+        debug( L"CXyGrid::OnSize: CreateBitmap failed\n" );
+        return;
+    }
+    SetBitmap( m_bitmap );
 }

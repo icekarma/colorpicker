@@ -31,7 +31,7 @@ public:
     void Stop( ) {
         _GetSystemTime( m_uStopTime );
         m_uDelta = m_uStopTime - m_uStartTime;
-        debug( L"%s: elapsed time %.4f ms; rate %.2f Hz\n", (wchar_t const*) m_strReportTag, m_uDelta / 10'000.0, 1.0 / ( m_uDelta / 10'000'000.0 ) );
+        debug( L"%s: elapsed time %.4f ms; rate %.2f Hz\n", (LPCWSTR) m_strReportTag, static_cast<double>( m_uDelta ) / 10'000.0, 1.0 / ( static_cast<double>( m_uDelta ) / 10'000'000.0 ) );
     }
 
     uint64_t GetElapsedTime( ) const {
@@ -60,6 +60,7 @@ public:
     Timing( )                            = delete;
     Timing( CString const& )             { /*empty*/ }
     Timing( CString const&, bool const ) { /*empty*/ }
+    ~Timing( )                           = default;
 
     void Start( ) {
         /*empty*/

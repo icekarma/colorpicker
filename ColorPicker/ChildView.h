@@ -26,17 +26,7 @@ protected:
         /*empty*/
     }
 
-    virtual ~CChildView( ) override {
-        if ( m_pZStrip ) {
-            delete m_pZStrip;
-            m_pZStrip = nullptr;
-        }
-
-        if ( m_pXyGrid ) {
-            delete m_pXyGrid;
-            m_pXyGrid = nullptr;
-        }
-    }
+    virtual ~CChildView( ) override = default;
 
     //============================================
     // Methods
@@ -123,24 +113,17 @@ protected:
     CEdit         m_editHexColor;
 
     CStaticBrush  m_staticSwatch;
-    CStaticBitmap m_staticZStrip;
-    CStaticBitmap m_staticXyGrid;
+    CZStrip       m_staticZStrip;
+    CXyGrid       m_staticXyGrid;
 
     CButton       m_buttonClose;
-
-    //
-    // Bitmap generators
-    //
-
-    CZStrip*      m_pZStrip              { };
-    CXyGrid*      m_pXyGrid              { };
 
     //
     // Channel mapping
     //
 
-    AllChannels   m_channelX             { AllChannels::LabA };
-    AllChannels   m_channelY             { AllChannels::LabB };
-    AllChannels   m_channelZ             { AllChannels::LabL };
+    AllChannels   m_channelX { AllChannels::LabA };
+    AllChannels   m_channelY { AllChannels::LabB };
+    AllChannels   m_channelZ { AllChannels::LabL };
 
 };

@@ -2,6 +2,8 @@
 
 #include "StaticBrush.h"
 
+IMPLEMENT_DYNCREATE( CStaticBrush, CStatic )
+
 BEGIN_MESSAGE_MAP( CStaticBrush, CStatic )
     ON_WM_ERASEBKGND( )
     ON_WM_PAINT( )

@@ -285,12 +285,14 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
 
     m_staticSwatch.SetColor( m_pDoc->GetSrgbColor( ) );
 
-    if ( fUpdateZ && m_pZStrip->SetChannel( m_channelZ ) ) {
-        m_pZStrip->Update( );
+    if ( fUpdateZ ) {
+        m_staticZStrip.SetChannel( m_channelZ );
+        m_staticZStrip.UpdateBitmap( );
     }
 
-    if ( fUpdateXy && m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ ) ) {
-        m_pXyGrid->Update( );
+    if ( fUpdateXy ) {
+        m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
+        m_staticXyGrid.UpdateBitmap( );
     }
 }
 
@@ -388,11 +390,11 @@ void CChildView::OnInitialUpdate( ) {
 
     m_fBlockBitmapUpdates = true;
 
-    m_pZStrip = new CZStrip { m_pDoc, &m_staticZStrip };
-    m_pZStrip->SetChannel( m_channelZ );
+    m_staticZStrip.SetDocument( m_pDoc );
+    m_staticZStrip.SetChannel( m_channelZ );
 
-    m_pXyGrid = new CXyGrid { m_pDoc, &m_staticXyGrid };
-    m_pXyGrid->SetChannels( m_channelX, m_channelY, m_channelZ );
+    m_staticXyGrid.SetDocument( m_pDoc );
+    m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
 
     LabTriplet  labValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };

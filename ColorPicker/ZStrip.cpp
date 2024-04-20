@@ -3,15 +3,24 @@
 #include "ZStrip.h"
 
 #include "ColorPicker.h"
-#include "ColorPickerDoc.h"
 
 #undef TIMING
 
 #include "Timing.h"
 
-void CZStrip::Update( ) {
+IMPLEMENT_DYNCREATE( CZStrip, CStaticBitmap )
+
+BEGIN_MESSAGE_MAP( CZStrip, CStaticBitmap )
+    ON_WM_ERASEBKGND( )
+    ON_WM_LBUTTONDOWN( )
+    ON_WM_LBUTTONUP( )
+    ON_WM_MOUSEMOVE( )
+    ON_WM_SIZE( )
+END_MESSAGE_MAP( )
+
+void CZStrip::UpdateBitmap( ) {
 #if defined TIMING
-    Timing timing( L"CZStrip::Update", true );
+    Timing timing( L"CZStrip::UpdateBitmap", true );
 #endif // defined TIMING
 
     switch ( m_channelZ ) {
@@ -28,16 +37,16 @@ void CZStrip::Update( ) {
             break;
 
         default:
-            debug( L"CZStrip::Update: Unknown value %d for m_channelZ\n", +m_channelZ );
+            debug( L"CZStrip::UpdateBitmap: Unknown value %d for m_channelZ\n", +m_channelZ );
             return;
     }
-
-    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
-    m_pStatic->Invalidate( FALSE );
 
 #if defined TIMING
     timing.Stop( );
 #endif // defined TIMING
+
+    m_bitmap.SetBitmapBits( ImageWidth * ImageHeight * ImageSrgbValuesPerPixel, m_SrgbImage );
+    Invalidate( FALSE );
 }
 
 void CZStrip::_UpdateLab( ) {
@@ -73,4 +82,14 @@ void CZStrip::_UpdateSrgb( ) {
             *ptr++ = 0;
         }
     }
+}
+
+void CZStrip::OnSize( UINT nType, int cx, int cy ) {
+    CStaticBitmap::OnSize( nType, cx, cy );
+
+    if ( !m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
+        debug( L"CZStrip::OnSize: CreateBitmap failed\n" );
+        return;
+    }
+    SetBitmap( m_bitmap );
 }

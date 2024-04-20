@@ -2,6 +2,7 @@
 
 class CStaticBrush: public CStatic {
 
+    DECLARE_DYNCREATE( CStaticBrush )
     DECLARE_MESSAGE_MAP( )
 
 public:

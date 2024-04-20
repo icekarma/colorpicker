@@ -1,25 +1,16 @@
 #pragma once
 
 #include "ColorPickerDoc.h"
+#include "StaticBitmap.h"
 
-class CZStrip {
+class CZStrip: public CStaticBitmap {
+
+    DECLARE_DYNCREATE( CZStrip )
+    DECLARE_MESSAGE_MAP( )
 
 public:
 
-    CZStrip( ) = delete;
-
-    CZStrip( CColorPickerDoc const* pDoc, CStatic* pStatic ):
-        m_pDoc    { pDoc    },
-        m_pStatic { pStatic }
-    {
-        if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
-            m_pStatic->SetBitmap( m_bitmap );
-        } else {
-            debug( L"CZStrip::`ctor: CreateBitmap failed\n" );
-        }
-    }
-
-    ~CZStrip( ) {
+    virtual ~CZStrip( ) override {
         if ( m_RawLabImage ) {
             delete[] m_RawLabImage;
             m_RawLabImage = nullptr;
@@ -31,27 +22,30 @@ public:
         }
     }
 
+    void SetDocument( CColorPickerDoc const* pDoc ) {
+        m_pDoc = pDoc;
+    }
+
     bool SetChannel( AllChannels const channelZ ) {
         bool changed = m_channelZ != channelZ;
-
         m_channelZ = channelZ;
-
         return changed;
     }
 
-    void Update( );
+    void UpdateBitmap( );
 
 private:
 
     void _UpdateLab( );
     void _UpdateSrgb( );
 
+    afx_msg void OnSize( UINT nType, int cx, int cy );
+
     int const static       ImageWidth    {  20 };
     int const static       ImageHeight   { 256 };
 
-    CColorPickerDoc const* m_pDoc;
+    CColorPickerDoc const* m_pDoc        { };
     CBitmap                m_bitmap;
-    CStatic*               m_pStatic;
 
     AllChannels            m_channelZ    { AllChannels::unknown };
 

@@ -8,8 +8,6 @@ struct ZSB_MOUSEMOVE: NMHDR {
 
 class CStaticBitmap: public CStatic {
 
-    DECLARE_MESSAGE_MAP( )
-
 public:
 
     virtual ~CStaticBitmap( ) override = default;

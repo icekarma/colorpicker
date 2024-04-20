@@ -1,25 +1,16 @@
 #pragma once
 
 #include "ColorPickerDoc.h"
+#include "StaticBitmap.h"
 
-class CXyGrid {
+class CXyGrid: public CStaticBitmap {
+
+    DECLARE_DYNCREATE( CXyGrid )
+    DECLARE_MESSAGE_MAP( )
 
 public:
 
-    CXyGrid( ) = delete;
-
-    CXyGrid( CColorPickerDoc* pDoc, CStatic* pStatic ):
-        m_pDoc    { pDoc    },
-        m_pStatic { pStatic }
-    {
-        if ( m_bitmap.CreateBitmap( ImageWidth, ImageHeight, 1, 32, nullptr ) ) {
-            m_pStatic->SetBitmap( m_bitmap );
-        } else {
-            debug( L"CXyGrid::`ctor: CreateBitmap failed\n" );
-        }
-    }
-
-    ~CXyGrid( ) {
+    virtual ~CXyGrid( ) override {
         if ( m_RawLabImage ) {
             delete[] m_RawLabImage;
             m_RawLabImage = nullptr;
@@ -29,6 +20,10 @@ public:
             delete[] m_SrgbImage;
             m_SrgbImage = nullptr;
         }
+    }
+
+    void SetDocument( CColorPickerDoc const* pDoc ) {
+        m_pDoc = pDoc;
     }
 
     bool SetChannels( AllChannels const channelX, AllChannels const channelY, AllChannels const channelZ ) {
@@ -41,19 +36,20 @@ public:
         return changed;
     }
 
-    void Update( );
+    void UpdateBitmap( );
 
 private:
 
     void _UpdateLab( );
     void _UpdateSrgb( );
 
+    afx_msg void OnSize( UINT nType, int cx, int cy );
+
     int const static       ImageWidth    { 256 };
     int const static       ImageHeight   { 256 };
 
-    CColorPickerDoc const* m_pDoc;
+    CColorPickerDoc const* m_pDoc        { };
     CBitmap                m_bitmap;
-    CStatic*               m_pStatic;
 
     AllChannels            m_channelX    { AllChannels::unknown };
     AllChannels            m_channelY    { AllChannels::unknown };
