@@ -476,8 +476,6 @@ void CChildView::OnCloseButtonClicked( ) {
 }
 
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
-    //debug( L"CChildView::OnChannelButtonClicked: uId: %u\n", uId );
-
     AllChannels channel { _MapControlIdToChannel( uId ) };
     if ( channel == AllChannels::unknown ) {
         return;
@@ -498,16 +496,11 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {
-    //debug( L"CChildView::OnColorValueUpdate(uId=%u):\n", uId );
-
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet  newLabValues  {  oldLabValues };
     SrgbTriplet newSrgbValues { oldSrgbValues };
     bool        fChanged      { };
-
-    //debug( L"CChildView::OnColorValueUpdate: L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    //debug( L"CChildView::OnColorValueUpdate: sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
@@ -515,8 +508,6 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
         case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
         {
 Lab:
-            //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
-
             if ( fChanged ) {
                 m_pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
                 newSrgbValues = m_pDoc->GetSrgbColor( ).GetChannelValues( );
@@ -534,8 +525,6 @@ Lab:
         case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
         {
 sRGB:
-            //debug( L"CChildView::OnColorValueUpdate: fChanged: %s\n", fChanged ? L"true" : L"false" );
-
             if ( fChanged ) {
                 m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
                 newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
@@ -549,9 +538,6 @@ sRGB:
         }
     }
 
-    //debug( L"CChildView::OnColorValueUpdate: L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-    //debug( L"CChildView::OnColorValueUpdate: sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
-
     UpdateBitmaps( );
 }
 
@@ -562,21 +548,13 @@ void CChildView::OnHexColorUpdate( ) {
     SrgbTriplet      newSrgbValues { oldSrgbValues };
     bool             fChanged      { };
 
-    //debug( L"CChildView::OnHexColorUpdate:   L*a*b*, before update: (%4d, %4d, %4d)\n",  oldLabValues[ +LabChannels::L],  oldLabValues[ +LabChannels::a],  oldLabValues[ +LabChannels::b] );
-    //debug( L"CChildView::OnHexColorUpdate:   sRGB,   before update: (%4d, %4d, %4d)\n", oldSrgbValues[+SrgbChannels::R], oldSrgbValues[+SrgbChannels::G], oldSrgbValues[+SrgbChannels::B] );
-
     if ( !_GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
-        //debug( L"CChildView::OnHexColorUpdate:   _GetHexColorAndChangedFromEdit failed\n" );
         return;
     }
-    //debug( L"CChildView::OnHexColorUpdate:   fChanged: %s\n", fChanged ? L"true" : L"false" );
 
     if ( fChanged ) {
         m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
         newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
-
-        //debug( L"CChildView::OnHexColorUpdate:   L*a*b*, after update:  (%4d, %4d, %4d)\n",  newLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::b] );
-        //debug( L"CChildView::OnHexColorUpdate:   sRGB,   after update:  (%4d, %4d, %4d)\n", newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] );
 
         _UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
         _UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -592,8 +570,6 @@ void CChildView::OnHexColorUpdate( ) {
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int y { mm->point.y };
-
-    //debug( L"CChildView::OnZStripMouseMove: point: (%d,%d)\n", x, y );
 
     m_fBlockBitmapUpdates = true;
 
@@ -625,8 +601,6 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int x { mm->point.x };
     int y { mm->point.y };
-
-    //debug( L"CChildView::OnXyGridMouseMove: point: (%d,%d)\n", x, y );
 
     m_fBlockBitmapUpdates = true;
 
