@@ -286,12 +286,10 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     m_staticSwatch.SetColor( m_pDoc->GetSrgbColor( ) );
 
     if ( fUpdateZ ) {
-        m_staticZStrip.SetChannel( m_channelZ );
         m_staticZStrip.UpdateBitmap( );
     }
 
     if ( fUpdateXy ) {
-        m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
         m_staticXyGrid.UpdateBitmap( );
     }
 }
@@ -485,12 +483,18 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
         return;
     }
 
-    AllChannelsTriplet const& channels { _ChannelXyzTriplets.at( channel ) };
+    AllChannelsTriplet const  oldChannels { m_channelX, m_channelY, m_channelZ };
+    AllChannelsTriplet const&    channels { _ChannelXyzTriplets.at( channel )  };
     m_channelX = channels[0];
     m_channelY = channels[1];
     m_channelZ = channels[2];
 
-    UpdateBitmaps( );
+    if ( oldChannels != channels ) {
+        m_staticZStrip.SetChannel( m_channelZ );
+        m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
+
+        UpdateBitmaps( );
+    }
 }
 
 void CChildView::OnColorValueUpdate( UINT const uId ) {

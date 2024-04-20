@@ -26,10 +26,8 @@ public:
         m_pDoc = pDoc;
     }
 
-    bool SetChannel( AllChannels const channelZ ) {
-        bool changed = m_channelZ != channelZ;
+    void SetChannel( AllChannels const channelZ ) {
         m_channelZ = channelZ;
-        return changed;
     }
 
     void UpdateBitmap( );
