@@ -460,14 +460,10 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnEditGotFocus( UINT uId ) {
-    debug( L"CChildView::OnEditGotFocus: uId: %u, old m_pCurrentEdit: 0x%p\n", uId, m_pCurrentEdit );
     m_pCurrentEdit = MapControlIdToPointer( uId );
-    debug( L"CChildView::OnEditGotFocus: new m_pCurrentEdit: 0x%p\n", m_pCurrentEdit );
 }
 
-void CChildView::OnEditLostFocus( UINT uId ) {
-    debug( L"CChildView::OnEditLostFocus: uId: %u, m_pCurrentEdit: 0x%p\n", uId, m_pCurrentEdit );
-
+void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
     if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
         // TODO range check
     } else {
