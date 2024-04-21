@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_UPDATE_COMMAND_UI( ID_EDIT_CLEAR,      &CChildView::OnUpdateEditClear     )
     ON_UPDATE_COMMAND_UI( ID_EDIT_UNDO,       &CChildView::OnUpdateEditUndo      )
     ON_UPDATE_COMMAND_UI( ID_EDIT_SELECT_ALL, &CChildView::OnUpdateEditSelectAll )
+    ON_UPDATE_COMMAND_UI( ID_VIEW_INVERT,     &CChildView::OnUpdateViewInvert    )
 
     ON_COMMAND          ( ID_EDIT_CUT,        &CChildView::OnEditCut             )
     ON_COMMAND          ( ID_EDIT_COPY,       &CChildView::OnEditCopy            )
@@ -47,6 +48,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_COMMAND          ( ID_EDIT_CLEAR,      &CChildView::OnEditClear           )
     ON_COMMAND          ( ID_EDIT_UNDO,       &CChildView::OnEditUndo            )
     ON_COMMAND          ( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll       )
+    ON_COMMAND          ( ID_VIEW_INVERT,     &CChildView::OnViewInvert          )
 
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
@@ -388,6 +390,9 @@ void CChildView::OnInitialUpdate( ) {
 
     m_fBlockBitmapUpdates = true;
 
+    m_staticZStrip.SetInverted( !m_fInverted );
+    m_staticXyGrid.SetInverted( !m_fInverted );
+
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
 
@@ -429,6 +434,11 @@ void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && m_pCurrentEdit->CanUndo( ) );
 }
 
+void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( m_fInverted ? 1 : 0 );
+}
+
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
@@ -455,6 +465,14 @@ void CChildView::OnEditUndo( ) {
 
 void CChildView::OnEditSelectAll( ) {
     m_pCurrentEdit->SetSel( 0, -1 );
+}
+
+void CChildView::OnViewInvert( ) {
+    m_fInverted = !m_fInverted;
+
+    m_staticZStrip.SetInverted( !m_fInverted );
+    m_staticXyGrid.SetInverted( !m_fInverted );
+    UpdateBitmaps( );
 }
 
 void CChildView::OnEditGotFocus( UINT uId ) {
