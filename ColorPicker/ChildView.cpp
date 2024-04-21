@@ -499,6 +499,16 @@ void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
 }
 
 void CChildView::OnCloseButtonClicked( ) {
+    RawLabTriplet labValues { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
+    theApp.WriteProfileInt( L"SavedValues", L"LabL", labValues[+LabChannels::L] );
+    theApp.WriteProfileInt( L"SavedValues", L"LabA", labValues[+LabChannels::a] );
+    theApp.WriteProfileInt( L"SavedValues", L"LabB", labValues[+LabChannels::b] );
+
+    SrgbTriplet srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    theApp.WriteProfileInt( L"SavedValues", L"SrgbR", srgbValues[+SrgbChannels::R] );
+    theApp.WriteProfileInt( L"SavedValues", L"SrgbG", srgbValues[+SrgbChannels::G] );
+    theApp.WriteProfileInt( L"SavedValues", L"SrgbB", srgbValues[+SrgbChannels::B] );
+
     ::PostQuitMessage( 0 );
 }
 
