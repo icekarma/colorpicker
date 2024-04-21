@@ -56,7 +56,7 @@ void CXyGrid::_UpdateLab( ) {
     LabChannels   channelY { AllChannelsToLabChannels( m_channelY ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+channelY] = static_cast<RawLabValueT>( y );
+        channels[+channelY] = static_cast<RawLabValueT>( m_fInverted ? ImageHeight - y - 1 : y );
 
         for ( int x { }; x < ImageWidth; ++x ) {
             channels[+channelX] = static_cast<RawLabValueT>( x );
@@ -77,7 +77,7 @@ void CXyGrid::_UpdateSrgb( ) {
     SrgbChannels channelY { AllChannelsToSrgbChannels( m_channelY ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+channelY] = static_cast<SrgbValueT>( y );
+        channels[+channelY] = static_cast<SrgbValueT>( m_fInverted ? ImageHeight - y - 1 : y );
 
         for ( int x { }; x < ImageWidth; ++x ) {
             channels[+channelX] = static_cast<SrgbValueT>( x );

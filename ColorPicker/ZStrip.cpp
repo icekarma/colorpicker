@@ -55,7 +55,7 @@ void CZStrip::_UpdateLab( ) {
     LabChannels   channel  { AllChannelsToLabChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+channel] = static_cast<RawLabValueT>( y );
+        channels[+channel] = static_cast<RawLabValueT>( m_fInverted ? ImageHeight - y - 1 : y );
 
         for ( int x { }; x < ImageWidth; ++x ) {
             *ptr++ = static_cast<RawLabValueT>( channels[+LabChannels::L] );
@@ -73,7 +73,7 @@ void CZStrip::_UpdateSrgb( ) {
     SrgbChannels channel  { AllChannelsToSrgbChannels( m_channelZ ) };
 
     for ( int y { }; y < ImageHeight; ++y ) {
-        channels[+channel] = static_cast<SrgbValueT>( y );
+        channels[+channel] = static_cast<SrgbValueT>( m_fInverted ? ImageHeight - y - 1 : y );
 
         for ( int x { }; x < ImageWidth; ++x ) {
             *ptr++ = static_cast<SrgbValueT>( channels[+SrgbChannels::B] );

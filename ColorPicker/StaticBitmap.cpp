@@ -17,6 +17,10 @@ void CStaticBitmap::NotifyPosition( CPoint const& point ) {
     if ( CPoint pt { ClipPointToRect( point, m_rcClient ) }; pt != m_ptLast ) {
         m_ptLast = pt;
 
+        if ( m_fInverted ) {
+            pt.y = m_rcClient.Height( ) - pt.y - 1;
+        }
+
         UINT_PTR const uControlId { static_cast<UINT_PTR>( m_nControlId ) };
         ZSB_MOUSEMOVE mm { { GetSafeHwnd( ), uControlId, ZSBN_MOUSEMOVE }, pt };
         GetOwner( )->SendMessage( WM_NOTIFY, uControlId, reinterpret_cast<LPARAM>( &mm ) );

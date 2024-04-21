@@ -12,6 +12,10 @@ public:
 
     virtual ~CStaticBitmap( ) override = default;
 
+    void SetInverted( bool const fInverted ) {
+        m_fInverted = fInverted;
+    }
+
 protected:
 
     void NotifyPosition( CPoint const& point );
@@ -24,6 +28,7 @@ protected:
 
     CRect  m_rcClient;
     int    m_nControlId   { };
+    bool   m_fInverted    { true };
     bool   m_fLButtonDown { };
     CPoint m_ptLast       { -1, -1 };
 
