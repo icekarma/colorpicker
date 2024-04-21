@@ -399,8 +399,17 @@ void CChildView::OnInitialUpdate( ) {
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
 
-    LabTriplet  labValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet const labValues { ScaleLabColor( RawLabTriplet { {
+        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabL", 255 ) ),
+        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabA", 128 ) ),
+        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabL", 128 ) )
+    } } ) };
+
+    SrgbTriplet const srgbValues { {
+        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbR", 255 ) ),
+        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbG", 255 ) ),
+        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbB", 255 ) )
+    } };
 
     _PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
     _PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
