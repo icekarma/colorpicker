@@ -332,7 +332,7 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 
     cs.style     &= ~WindowStylesToRemove;
     cs.dwExStyle &= ~ExtendedWindowStylesToRemove;
-    cs.lpszClass  = AfxRegisterWndClass( CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS, ::LoadCursor( nullptr, IDC_ARROW ), reinterpret_cast<HBRUSH>( COLOR_WINDOW + 1 ), nullptr );
+    cs.lpszClass  = AfxRegisterWndClass( CS_DROPSHADOW | CS_SAVEBITS, ::LoadCursor( nullptr, IDC_ARROW ), reinterpret_cast<HBRUSH>( COLOR_WINDOW + 1 ), nullptr );
 
     return TRUE;
 }
