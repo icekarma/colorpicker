@@ -16,8 +16,8 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
 
     // Reinitialization (SDI applications will reuse this document)
 
-    m_LabColor  = { };
-    m_SrgbColor = { };
+    m_LabColor  = { 100,   0,   0 };
+    m_SrgbColor = { 255, 255, 255 };
 
     return TRUE;
 }
