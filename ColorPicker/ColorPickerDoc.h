@@ -9,7 +9,7 @@ class CColorPickerDoc:
 
 protected:
 
-    CColorPickerDoc( ) = default;
+    CColorPickerDoc( );
 
     virtual ~CColorPickerDoc( ) override = default;
 

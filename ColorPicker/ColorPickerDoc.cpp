@@ -9,6 +9,18 @@ IMPLEMENT_DYNCREATE( CColorPickerDoc, CDocument )
 BEGIN_MESSAGE_MAP( CColorPickerDoc, CDocument )
 END_MESSAGE_MAP( )
 
+namespace {
+
+    RawLabTriplet const RawLabDefaultColor { { 255, 128, 128 } };
+    SrgbTriplet   const   SrgbDefaultColor { { 255, 255, 255 } };
+
+}
+
+CColorPickerDoc::CColorPickerDoc( ) {
+    m_LabColor  = RawLabDefaultColor;
+    m_SrgbColor =   SrgbDefaultColor;
+}
+
 BOOL CColorPickerDoc::OnNewDocument( ) {
     if ( !CDocument::OnNewDocument( ) ) {
         return FALSE;
@@ -16,8 +28,8 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
 
     // Reinitialization (SDI applications will reuse this document)
 
-    m_LabColor  = { 100,   0,   0 };
-    m_SrgbColor = { 255, 255, 255 };
+    m_LabColor  = RawLabDefaultColor;
+    m_SrgbColor =   SrgbDefaultColor;
 
     return TRUE;
 }
