@@ -168,7 +168,7 @@ public:
     }
 
     constexpr LabColorTemplate( int const L, int const a, int const b ) noexcept:
-        _values { static_cast<ValueT>( L ), static_cast<ValueT>( a ), static_cast<ValueT>( b ) }
+        _values { { static_cast<ValueT>( L ), static_cast<ValueT>( a ), static_cast<ValueT>( b ) } }
     {
         /*empty*/
     }
@@ -320,7 +320,7 @@ public:
     }
 
     constexpr SrgbColorTemplate( int const R, int const G, int const B ) noexcept:
-        _values { static_cast<SrgbValueT>( R ), static_cast<SrgbValueT>( G ), static_cast<SrgbValueT>( B ) }
+        _values { { static_cast<SrgbValueT>( R ), static_cast<SrgbValueT>( G ), static_cast<SrgbValueT>( B ) } }
     {
         /*empty*/
     }
