@@ -30,13 +30,13 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_UPDATE_COMMAND_UI( ID_EDIT_SELECT_ALL, &CChildView::OnUpdateEditSelectAll )
     ON_UPDATE_COMMAND_UI( ID_VIEW_INVERT,     &CChildView::OnUpdateViewInvert    )
 
-    ON_COMMAND          ( ID_EDIT_CUT,        &CChildView::OnEditCut             )
-    ON_COMMAND          ( ID_EDIT_COPY,       &CChildView::OnEditCopy            )
-    ON_COMMAND          ( ID_EDIT_PASTE,      &CChildView::OnEditPaste           )
-    ON_COMMAND          ( ID_EDIT_CLEAR,      &CChildView::OnEditClear           )
-    ON_COMMAND          ( ID_EDIT_UNDO,       &CChildView::OnEditUndo            )
-    ON_COMMAND          ( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll       )
-    ON_COMMAND          ( ID_VIEW_INVERT,     &CChildView::OnViewInvert          )
+    ON_COMMAND( ID_EDIT_CUT,        &CChildView::OnEditCut       )
+    ON_COMMAND( ID_EDIT_COPY,       &CChildView::OnEditCopy      )
+    ON_COMMAND( ID_EDIT_PASTE,      &CChildView::OnEditPaste     )
+    ON_COMMAND( ID_EDIT_CLEAR,      &CChildView::OnEditClear     )
+    ON_COMMAND( ID_EDIT_UNDO,       &CChildView::OnEditUndo      )
+    ON_COMMAND( ID_EDIT_SELECT_ALL, &CChildView::OnEditSelectAll )
+    ON_COMMAND( ID_VIEW_INVERT,     &CChildView::OnViewInvert    )
 
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
@@ -571,11 +571,11 @@ sRGB:
 }
 
 void CChildView::OnHexColorUpdate( ) {
-    LabTriplet       oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet      oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    LabTriplet       newLabValues  {  oldLabValues };
-    SrgbTriplet      newSrgbValues { oldSrgbValues };
-    bool             fChanged      { };
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet  newLabValues  {  oldLabValues };
+    SrgbTriplet newSrgbValues { oldSrgbValues };
+    bool        fChanged      { };
 
     if ( !_GetHexColorAndChangedFromEdit( m_editHexColor, newSrgbValues, fChanged ) ) {
         return;
