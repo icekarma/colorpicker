@@ -78,21 +78,23 @@ void CColorPickerDoc::LoadFromRegistry( ) {
 
     m_fInverted = !!theApp.GetProfileIntW( L"Settings", L"Inverted", 0 );
 
-    m_SelectedChannel = static_cast<AllChannels>( theApp.GetProfileIntW( L"Settings", L"Selected channel", +AllChannels::LabL ) );
+    m_SelectedChannel = static_cast<AllChannels>( theApp.GetProfileIntW( L"Settings", L"Selected channel", static_cast<int>( AllChannels::LabL ) ) );
+    if ( m_SelectedChannel > AllChannels::Max ) {
+        m_SelectedChannel = AllChannels::LabL;
+    }
 }
 
 void CColorPickerDoc::SaveToRegistry( ) {
     RawLabTriplet labValues { ScaleLabColor( m_LabColor.GetChannelValues( ) ) };
-    theApp.WriteProfileInt( L"Settings\\Saved Values",  L"LabL",  labValues[ +LabChannels::L] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values",  L"LabA",  labValues[ +LabChannels::a] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values",  L"LabB",  labValues[ +LabChannels::b] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabL", labValues[+LabChannels::L] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabA", labValues[+LabChannels::a] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabB", labValues[+LabChannels::b] );
 
     SrgbTriplet srgbValues { m_SrgbColor.GetChannelValues( ) };
     theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbR", srgbValues[+SrgbChannels::R] );
     theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbG", srgbValues[+SrgbChannels::G] );
     theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbB", srgbValues[+SrgbChannels::B] );
 
-    theApp.WriteProfileInt( L"Settings", L"Inverted", m_fInverted ? 1 : 0 );
-
-    theApp.WriteProfileInt( L"Settings", L"Selected channel", +m_SelectedChannel );
+    theApp.WriteProfileInt( L"Settings", L"Inverted",         m_fInverted ? 1 : 0 );
+    theApp.WriteProfileInt( L"Settings", L"Selected channel", static_cast<int>( m_SelectedChannel ) );
 }
