@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FEB664FA-D198-4D35-A557-6899FC0ABD33}"
 	ProjectSection(SolutionItems) = preProject
 		ColorPicker\OldCode.txt = ColorPicker\OldCode.txt
+		FeatureIdeas.txt = FeatureIdeas.txt
 		pscolorpicker.png = pscolorpicker.png
 		ColorPicker\Screenshot.png = ColorPicker\Screenshot.png
 	EndProjectSection
