@@ -31,7 +31,7 @@ BOOL CColorPickerApp::InitInstance( ) {
 
     EnableTaskbarInteraction( FALSE );
 
-    SetRegistryKey( L"Zive Technology Research\\ColorPicker" );
+    SetRegistryKey( L"Zive Technology Research" );
     LoadStdProfileSettings( 4 );
 
     CSingleDocTemplate* pDocTemplate {
