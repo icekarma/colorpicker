@@ -175,7 +175,7 @@ namespace {
         }
 
         wchar_t* pwszEnd { };
-        long tmp = wcstol( pwszText, &pwszEnd, 10 );
+        long tmp { wcstol( pwszText, &pwszEnd, 10 ) };
         if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
             delete[] pwszText;
             debug( L"_GetValueFromEdit: bail 2: garbage in number\n" );
@@ -232,7 +232,7 @@ namespace {
         }
 
         wchar_t* pwszEnd { };
-        long tmp = wcstol( pwszText, &pwszEnd, 16 );
+        long tmp { wcstol( pwszText, &pwszEnd, 16 ) };
         if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
             delete[] pwszText;
             debug( L"_GetHexColorFromEdit: bail 2: garbage in number\n" );
