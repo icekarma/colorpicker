@@ -504,11 +504,18 @@ void CChildView::OnEditGotFocus( UINT uId ) {
     m_pCurrentEdit = MapControlIdToPointer( uId );
 }
 
-void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
+void CChildView::OnEditLostFocus( UINT uId ) {
+    if ( !m_pCurrentEdit ) {
+        debug( L"CChildView::OnEditLostFocus: uId %d: weird, lost focus with m_pCurrentEdit==nullptr\n" );
+        return;
+    }
+
     if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
         // TODO range check
     } else {
-        debug( L"CChildView::OnEditLostFocus: garbage in edit control\n" );
+        wchar_t* pwszText { _SafeGetWindowText( *m_pCurrentEdit ) };
+        debug( L"CChildView::OnEditLostFocus: garbage in edit control %u: '%s'\n", uId, pwszText );
+        delete[] pwszText;
     }
 
     m_pCurrentEdit = nullptr;
