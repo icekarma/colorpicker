@@ -47,6 +47,9 @@ public:
         m_fInverted = !m_fInverted;
     }
 
+    void LoadFromRegistry( );
+    void SaveToRegistry( );
+
 protected:
 
     virtual BOOL OnNewDocument( ) override;
