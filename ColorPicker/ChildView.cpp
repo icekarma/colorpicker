@@ -397,25 +397,25 @@ void CChildView::OnInitialUpdate( ) {
     m_fBlockBitmapUpdates = true;
     m_pDoc->LoadFromRegistry( );
 
-    bool        const fGuiInverted { !m_pDoc->IsInverted( ) };
+    bool               const  fGuiInverted     { !m_pDoc->IsInverted( ) };
 
-    LabTriplet  const  labValues   {  m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet const srgbValues   {  m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet         const   labValues       {  m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet        const  srgbValues       {  m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    AllChannels        const  selectedChannel  { m_pDoc->GetSelectedChannel( ) };
+    AllChannelsTriplet const& selectedChannels { _ChannelXyzTriplets.at( selectedChannel ) };
+
+    m_channelX = selectedChannels[0];
+    m_channelY = selectedChannels[1];
+    m_channelZ = selectedChannels[2];
 
     //
     // Apply them to the controls
     //
 
-    // TODO store last-selected channel and reload it here
-    m_buttonLabLChannel.SetCheck( BST_CHECKED );
-
-    m_staticZStrip.SetDocument( m_pDoc );
-    m_staticZStrip.SetChannel( m_channelZ );
-    m_staticZStrip.SetInverted( fGuiInverted );
-
-    m_staticXyGrid.SetDocument( m_pDoc );
-    m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-    m_staticXyGrid.SetInverted( fGuiInverted );
+    for ( AllChannels channel { AllChannels::Min }; channel <= AllChannels::Max; channel = static_cast<AllChannels>( +channel + 1 ) ) {
+        m_mapRadioButtons.at( channel )->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
+    }
 
     _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
     _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
@@ -424,6 +424,14 @@ void CChildView::OnInitialUpdate( ) {
     _PutValueToEdit   ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
     _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
     _PutHexColorToEdit( m_editHexColor, srgbValues );
+
+    m_staticZStrip.SetDocument( m_pDoc );
+    m_staticZStrip.SetChannel( m_channelZ );
+    m_staticZStrip.SetInverted( fGuiInverted );
+
+    m_staticXyGrid.SetDocument( m_pDoc );
+    m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
+    m_staticXyGrid.SetInverted( fGuiInverted );
 
     m_fBlockBitmapUpdates = false;
     UpdateBitmaps( );
@@ -520,13 +528,15 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
 
     AllChannelsTriplet const  oldChannels { m_channelX, m_channelY, m_channelZ };
     AllChannelsTriplet const&    channels { _ChannelXyzTriplets.at( channel )  };
-    m_channelX = channels[0];
-    m_channelY = channels[1];
-    m_channelZ = channels[2];
-
     if ( oldChannels != channels ) {
+        m_channelX = channels[0];
+        m_channelY = channels[1];
+        m_channelZ = channels[2];
+
         m_staticZStrip.SetChannel( m_channelZ );
         m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
+
+        m_pDoc->SetSelectedChannel( m_channelZ );
 
         UpdateBitmaps( );
     }
