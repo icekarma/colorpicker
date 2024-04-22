@@ -67,7 +67,7 @@ void CColorPickerDoc::LoadFromRegistry( ) {
     m_LabColor = RawLabTriplet { {
         static_cast<RawLabValueT>( theApp.GetProfileIntW( L"Settings\\Saved Values", L"LabL", RawLabDefaultColor[+LabChannels::L] ) ),
         static_cast<RawLabValueT>( theApp.GetProfileIntW( L"Settings\\Saved Values", L"LabA", RawLabDefaultColor[+LabChannels::a] ) ),
-        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"Settings\\Saved Values", L"LabL", RawLabDefaultColor[+LabChannels::b] ) )
+        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"Settings\\Saved Values", L"LabB", RawLabDefaultColor[+LabChannels::b] ) )
     } };
 
     m_SrgbColor = SrgbTriplet { {
