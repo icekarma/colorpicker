@@ -332,6 +332,14 @@ void CChildView::OnInitialUpdate( ) {
     // Initialize member variables
     //
 
+    m_mapRadioButtons = {
+        { AllChannels::LabL,   &m_radioLabL  },
+        { AllChannels::LabA,   &m_radioLabA  },
+        { AllChannels::LabB,   &m_radioLabB  },
+        { AllChannels::SrgbR,  &m_radioSrgbR },
+        { AllChannels::SrgbG,  &m_radioSrgbG },
+        { AllChannels::SrgbB,  &m_radioSrgbB }
+    };
     m_mapEditControls = {
         { IDC_LAB_L_VALUE,     &m_editLabL     },
         { IDC_LAB_A_VALUE,     &m_editLabA     },

@@ -84,7 +84,8 @@ protected:
     // Member variables
     //============================================
 
-    std::unordered_map<unsigned, CEdit*> m_mapEditControls;
+    std::unordered_map<AllChannels, CButton*> m_mapRadioButtons;
+    std::unordered_map<unsigned,    CEdit*>   m_mapEditControls;
 
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };
