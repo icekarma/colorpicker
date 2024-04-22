@@ -35,6 +35,18 @@ public:
 
     void SetChannelValue( AllChannels const channel, int const nValue );
 
+    bool IsInverted( ) {
+        return m_fInverted;
+    }
+
+    void SetInverted( bool const fInverted ) {
+        m_fInverted = fInverted;
+    }
+
+    void ToggleInverted( ) {
+        m_fInverted = !m_fInverted;
+    }
+
 protected:
 
     virtual BOOL OnNewDocument( ) override;
@@ -42,5 +54,7 @@ protected:
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
     LabColor  m_LabColor  { };
     SrgbColor m_SrgbColor { };
+
+    bool      m_fInverted { };
 
 };
