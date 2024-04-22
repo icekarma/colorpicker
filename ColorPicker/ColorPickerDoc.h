@@ -15,6 +15,10 @@ protected:
 
 public:
 
+    //
+    // Color stuff
+    //
+
     void SetColor( LabColor const& color ) {
         m_LabColor  = color;
         m_SrgbColor = Transforms.ConvertColor( color );
@@ -35,6 +39,10 @@ public:
 
     void SetChannelValue( AllChannels const channel, int const nValue );
 
+    //
+    // Inversion stuff
+    //
+
     bool IsInverted( ) const {
         return m_fInverted;
     }
@@ -47,6 +55,10 @@ public:
         m_fInverted = !m_fInverted;
     }
 
+    //
+    // Selected channel stuff
+    //
+
     AllChannels GetSelectedChannel( ) const {
         return m_SelectedChannel;
     }
@@ -54,6 +66,10 @@ public:
     void SetSelectedChannel( AllChannels const channel ) {
         m_SelectedChannel = channel;
     }
+
+    //
+    // Registry stuff
+    //
 
     void LoadFromRegistry( );
     void SaveToRegistry( );
