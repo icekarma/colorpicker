@@ -30,6 +30,8 @@ enum class AllChannels: unsigned {
     SrgbR   =  3, SrgbG   =  4, SrgbB   =  5,
 
     unknown = ~0u,
+    Min     = AllChannels::LabL,
+    Max     = AllChannels::SrgbB,
     LabMin  = AllChannels::LabL,
     LabMax  = AllChannels::LabB,
     SrgbMin = AllChannels::SrgbR,
@@ -256,12 +258,12 @@ public:
     }
 
     [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
-        assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
+        assert( ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax ) );
         return _values[+AllChannelsToLabChannels( channel )];
     }
 
     virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
-        assert( ( channel >= AllChannels::LabL ) && ( channel <= AllChannels::LabB ) );
+        assert( ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax ) );
         _values[+AllChannelsToLabChannels( channel )] = value;
     }
 
@@ -388,12 +390,12 @@ public:
     }
 
     [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
-        assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
+        assert( ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax ) );
         return _values[+AllChannelsToSrgbChannels( channel )];
     }
 
     [[nodiscard]] virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
-        assert( ( channel >= AllChannels::SrgbR ) && ( channel <= AllChannels::SrgbB ) );
+        assert( ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax ) );
         _values[+AllChannelsToSrgbChannels( channel )] = value;
     }
 
