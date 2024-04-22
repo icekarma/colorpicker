@@ -95,20 +95,20 @@ protected:
     //
 
     CButton       m_groupBoxLab;
-    CButton       m_buttonLabLChannel;
-    CButton       m_buttonLabAChannel;
-    CButton       m_buttonLabBChannel;
-    CEdit         m_editLabLValue;
-    CEdit         m_editLabAValue;
-    CEdit         m_editLabBValue;
+    CButton       m_radioLabL;
+    CButton       m_radioLabA;
+    CButton       m_radioLabB;
+    CEdit         m_editLabL;
+    CEdit         m_editLabA;
+    CEdit         m_editLabB;
 
     CButton       m_groupBoxSrgb;
-    CButton       m_buttonSrgbRChannel;
-    CButton       m_buttonSrgbGChannel;
-    CButton       m_buttonSrgbBChannel;
-    CEdit         m_editSrgbRValue;
-    CEdit         m_editSrgbGValue;
-    CEdit         m_editSrgbBValue;
+    CButton       m_radioSrgbR;
+    CButton       m_radioSrgbG;
+    CButton       m_radioSrgbB;
+    CEdit         m_editSrgbR;
+    CEdit         m_editSrgbG;
+    CEdit         m_editSrgbB;
 
     CStatic       m_labelHexColor;
     CEdit         m_editHexColor;

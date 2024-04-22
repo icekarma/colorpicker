@@ -287,30 +287,30 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 
-    DDX_Control( pDX, IDC_GROUPBOX_LAB,    m_groupBoxLab        );
-    DDX_Control( pDX, IDC_LAB_L_CHANNEL,   m_buttonLabLChannel  );
-    DDX_Control( pDX, IDC_LAB_A_CHANNEL,   m_buttonLabAChannel  );
-    DDX_Control( pDX, IDC_LAB_B_CHANNEL,   m_buttonLabBChannel  );
-    DDX_Control( pDX, IDC_LAB_L_VALUE,     m_editLabLValue      );
-    DDX_Control( pDX, IDC_LAB_A_VALUE,     m_editLabAValue      );
-    DDX_Control( pDX, IDC_LAB_B_VALUE,     m_editLabBValue      );
+    DDX_Control( pDX, IDC_GROUPBOX_LAB,    m_groupBoxLab   );
+    DDX_Control( pDX, IDC_LAB_L_CHANNEL,   m_radioLabL     );
+    DDX_Control( pDX, IDC_LAB_A_CHANNEL,   m_radioLabA     );
+    DDX_Control( pDX, IDC_LAB_B_CHANNEL,   m_radioLabB     );
+    DDX_Control( pDX, IDC_LAB_L_VALUE,     m_editLabL      );
+    DDX_Control( pDX, IDC_LAB_A_VALUE,     m_editLabA      );
+    DDX_Control( pDX, IDC_LAB_B_VALUE,     m_editLabB      );
 
-    DDX_Control( pDX, IDC_GROUPBOX_SRGB,   m_groupBoxSrgb       );
-    DDX_Control( pDX, IDC_SRGB_R_CHANNEL,  m_buttonSrgbRChannel );
-    DDX_Control( pDX, IDC_SRGB_G_CHANNEL,  m_buttonSrgbGChannel );
-    DDX_Control( pDX, IDC_SRGB_B_CHANNEL,  m_buttonSrgbBChannel );
-    DDX_Control( pDX, IDC_SRGB_R_VALUE,    m_editSrgbRValue     );
-    DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbGValue     );
-    DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbBValue     );
+    DDX_Control( pDX, IDC_GROUPBOX_SRGB,   m_groupBoxSrgb  );
+    DDX_Control( pDX, IDC_SRGB_R_CHANNEL,  m_radioSrgbR    );
+    DDX_Control( pDX, IDC_SRGB_G_CHANNEL,  m_radioSrgbG    );
+    DDX_Control( pDX, IDC_SRGB_B_CHANNEL,  m_radioSrgbB    );
+    DDX_Control( pDX, IDC_SRGB_R_VALUE,    m_editSrgbR     );
+    DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbG     );
+    DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbB     );
 
-    DDX_Control( pDX, IDC_HEX_COLOR_LABEL, m_labelHexColor      );
-    DDX_Control( pDX, IDC_HEX_COLOR_VALUE, m_editHexColor       );
+    DDX_Control( pDX, IDC_HEX_COLOR_LABEL, m_labelHexColor );
+    DDX_Control( pDX, IDC_HEX_COLOR_VALUE, m_editHexColor  );
 
-    DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch       );
-    DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip       );
-    DDX_Control( pDX, IDC_XY_GRID,         m_staticXyGrid       );
+    DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch  );
+    DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip  );
+    DDX_Control( pDX, IDC_XY_GRID,         m_staticXyGrid  );
 
-    DDX_Control( pDX, IDCLOSE,             m_buttonClose        );
+    DDX_Control( pDX, IDCLOSE,             m_buttonClose   );
 }
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -333,13 +333,13 @@ void CChildView::OnInitialUpdate( ) {
     //
 
     m_mapEditControls = {
-        { IDC_LAB_L_VALUE,     &m_editLabLValue  },
-        { IDC_LAB_A_VALUE,     &m_editLabAValue  },
-        { IDC_LAB_B_VALUE,     &m_editLabBValue  },
-        { IDC_SRGB_R_VALUE,    &m_editSrgbRValue },
-        { IDC_SRGB_G_VALUE,    &m_editSrgbGValue },
-        { IDC_SRGB_B_VALUE,    &m_editSrgbBValue },
-        { IDC_HEX_COLOR_VALUE, &m_editHexColor   },
+        { IDC_LAB_L_VALUE,     &m_editLabL     },
+        { IDC_LAB_A_VALUE,     &m_editLabA     },
+        { IDC_LAB_B_VALUE,     &m_editLabB     },
+        { IDC_SRGB_R_VALUE,    &m_editSrgbR    },
+        { IDC_SRGB_G_VALUE,    &m_editSrgbG    },
+        { IDC_SRGB_B_VALUE,    &m_editSrgbB    },
+        { IDC_HEX_COLOR_VALUE, &m_editHexColor },
     };
 
     m_pDoc = static_downcast<CColorPickerDoc>( GetDocument( ) );
@@ -353,34 +353,34 @@ void CChildView::OnInitialUpdate( ) {
     SIZE constexpr adjustDown1 { 0,  1 }; SIZE constexpr adjustRight1 {  1, 0 };
     SIZE constexpr adjustDown2 { 0,  2 }; SIZE constexpr adjustRight2 {  2, 0 };
 
-    _AdjustSize    ( &m_groupBoxLab,        adjustUp1    );
-    _AdjustPosition( &m_buttonLabLChannel,  adjustDown1  );
-    _AdjustPosition( &m_buttonLabAChannel,  adjustUp1    );
-    _AdjustPosition( &m_buttonLabBChannel,  adjustUp2    );
-    // m_editLabLValue
-    // m_editLabAValue
-    _AdjustPosition( &m_editLabBValue,      adjustUp2    );
+    _AdjustSize    ( &m_groupBoxLab,   adjustUp1    );
+    _AdjustPosition( &m_radioLabL,     adjustDown1  );
+    _AdjustPosition( &m_radioLabA,     adjustUp1    );
+    _AdjustPosition( &m_radioLabB,     adjustUp2    );
+    // m_editLabL
+    // m_editLabA
+    _AdjustPosition( &m_editLabB,      adjustUp2    );
 
-    _AdjustPosition( &m_groupBoxSrgb,       adjustDown2  );
-    _AdjustSize    ( &m_groupBoxSrgb,       adjustUp1    );
-    _AdjustPosition( &m_buttonSrgbRChannel, adjustDown2  );
-    // m_buttonSrgbGChannel
-    _AdjustPosition( &m_buttonSrgbBChannel, adjustUp2    );
-    _AdjustPosition( &m_editSrgbRValue,     adjustDown2  );
-    _AdjustPosition( &m_editSrgbGValue,     adjustDown2  );
-    _AdjustPosition( &m_editSrgbBValue,     adjustUp1    );
+    _AdjustPosition( &m_groupBoxSrgb,  adjustDown2  );
+    _AdjustSize    ( &m_groupBoxSrgb,  adjustUp1    );
+    _AdjustPosition( &m_radioSrgbR,    adjustDown2  );
+    // m_radioSrgbG
+    _AdjustPosition( &m_radioSrgbB,    adjustUp2    );
+    _AdjustPosition( &m_editSrgbR,     adjustDown2  );
+    _AdjustPosition( &m_editSrgbG,     adjustDown2  );
+    _AdjustPosition( &m_editSrgbB,     adjustUp1    );
 
-    _AdjustPosition( &m_editHexColor,       adjustUp1    );
-    _AdjustSize    ( &m_editHexColor,       {   1,   0 } );
+    _AdjustPosition( &m_editHexColor,  adjustUp1    );
+    _AdjustSize    ( &m_editHexColor,  {   1,   0 } );
 
-    _AdjustSize    ( &m_staticSwatch,       {  -1,  -1 } );
+    _AdjustSize    ( &m_staticSwatch,  {  -1,  -1 } );
 
-    _SetSize       ( &m_staticZStrip,       {  20, 256 } );
+    _SetSize       ( &m_staticZStrip,  {  20, 256 } );
 
-    _AdjustPosition( &m_staticXyGrid,       adjustLeft1  );
-    _SetSize       ( &m_staticXyGrid,       { 256, 256 } );
+    _AdjustPosition( &m_staticXyGrid,  adjustLeft1  );
+    _SetSize       ( &m_staticXyGrid,  { 256, 256 } );
 
-    _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
+    _AdjustPosition( &m_buttonClose,   {  -1,  -2 } );
 
     //
     // Load settings from registry
@@ -409,13 +409,13 @@ void CChildView::OnInitialUpdate( ) {
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
     m_staticXyGrid.SetInverted( fGuiInverted );
 
-    _PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
-    _PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
-    _PutValueToEdit   ( m_editLabBValue,   labValues[ +LabChannels::b] );
-    _PutValueToEdit   ( m_editSrgbRValue, srgbValues[+SrgbChannels::R] );
-    _PutValueToEdit   ( m_editSrgbGValue, srgbValues[+SrgbChannels::G] );
-    _PutValueToEdit   ( m_editSrgbBValue, srgbValues[+SrgbChannels::B] );
-    _PutHexColorToEdit( m_editHexColor,   srgbValues );
+    _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
+    _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
+    _PutValueToEdit   ( m_editLabB,      labValues[ +LabChannels::b] );
+    _PutValueToEdit   ( m_editSrgbR,    srgbValues[+SrgbChannels::R] );
+    _PutValueToEdit   ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
+    _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
+    _PutHexColorToEdit( m_editHexColor, srgbValues );
 
     m_fBlockBitmapUpdates = false;
     UpdateBitmaps( );
@@ -532,35 +532,35 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
     bool        fChanged      { };
 
     switch ( uId ) {
-        case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
-        case IDC_LAB_A_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
-        case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+        case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
+        case IDC_LAB_A_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabA, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
+        case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabB, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
         {
 Lab:
             if ( fChanged ) {
                 m_pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
                 newSrgbValues = m_pDoc->GetSrgbColor( ).GetChannelValues( );
 
-                _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-                _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-                _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+                _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+                _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+                _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
                 _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
         }
 
-        case IDC_SRGB_R_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
-        case IDC_SRGB_G_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
-        case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+        case IDC_SRGB_R_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
+        case IDC_SRGB_G_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
+        case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
         {
 sRGB:
             if ( fChanged ) {
                 m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
                 newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
-                _UpdateEditIfValueChanged( m_editLabLValue, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
-                _UpdateEditIfValueChanged( m_editLabAValue, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
-                _UpdateEditIfValueChanged( m_editLabBValue, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+                _UpdateEditIfValueChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
+                _UpdateEditIfValueChanged( m_editLabA, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
+                _UpdateEditIfValueChanged( m_editLabB, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
                 _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
             break;
@@ -585,12 +585,12 @@ void CChildView::OnHexColorUpdate( ) {
         m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
         newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
-        _UpdateEditIfValueChanged( m_editLabLValue,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-        _UpdateEditIfValueChanged( m_editLabAValue,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-        _UpdateEditIfValueChanged( m_editLabBValue,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-        _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-        _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-        _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+        _UpdateEditIfValueChanged( m_editLabL,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+        _UpdateEditIfValueChanged( m_editLabA,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+        _UpdateEditIfValueChanged( m_editLabB,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+        _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+        _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+        _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     }
 
     UpdateBitmaps( );
@@ -610,12 +610,12 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    _UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     if ( oldSrgbValues != newSrgbValues ) {
         _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
@@ -642,12 +642,12 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    _UpdateEditIfValueChanged(  m_editLabLValue,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    _UpdateEditIfValueChanged(  m_editLabAValue,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    _UpdateEditIfValueChanged(  m_editLabBValue,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    _UpdateEditIfValueChanged( m_editSrgbRValue, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbGValue, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbBValue, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
     if ( oldSrgbValues != newSrgbValues ) {
         _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
