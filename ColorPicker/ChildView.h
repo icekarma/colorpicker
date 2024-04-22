@@ -89,7 +89,6 @@ protected:
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };
     bool             m_fBlockBitmapUpdates { };
-    bool             m_fInverted           { };
 
     //
     // Controls

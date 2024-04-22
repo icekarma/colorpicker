@@ -340,6 +340,10 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
 void CChildView::OnInitialUpdate( ) {
     CFormView::OnInitialUpdate( );
 
+    //
+    // Initialize member variables
+    //
+
     m_mapEditControls = {
         { IDC_LAB_L_VALUE,     &m_editLabLValue  },
         { IDC_LAB_A_VALUE,     &m_editLabAValue  },
@@ -351,6 +355,10 @@ void CChildView::OnInitialUpdate( ) {
     };
 
     m_pDoc = static_downcast<CColorPickerDoc>( GetDocument( ) );
+
+    //
+    // Adjust UI controls
+    //
 
     SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
     SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
@@ -386,30 +394,32 @@ void CChildView::OnInitialUpdate( ) {
 
     _AdjustPosition( &m_buttonClose,        {  -1,  -2 } );
 
-    m_buttonLabLChannel.SetCheck( BST_CHECKED );
+    //
+    // Load settings from registry
+    //
 
     m_fBlockBitmapUpdates = true;
+    m_pDoc->LoadFromRegistry( );
 
-    m_staticZStrip.SetInverted( !m_fInverted );
-    m_staticXyGrid.SetInverted( !m_fInverted );
+    bool        const fGuiInverted { !m_pDoc->IsInverted( ) };
+
+    LabTriplet  const  labValues   {  m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet const srgbValues   {  m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    //
+    // Apply them to the controls
+    //
+
+    // TODO store last-selected channel and reload it here
+    m_buttonLabLChannel.SetCheck( BST_CHECKED );
 
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
+    m_staticZStrip.SetInverted( fGuiInverted );
 
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-
-    LabTriplet const labValues { ScaleLabColor( RawLabTriplet { {
-        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabL", 255 ) ),
-        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabA", 128 ) ),
-        static_cast<RawLabValueT>( theApp.GetProfileIntW( L"SavedValues", L"LabL", 128 ) )
-    } } ) };
-
-    SrgbTriplet const srgbValues { {
-        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbR", 255 ) ),
-        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbG", 255 ) ),
-        static_cast<SrgbValueT>( theApp.GetProfileIntW( L"SavedValues", L"SrgbB", 255 ) )
-    } };
+    m_staticXyGrid.SetInverted( fGuiInverted );
 
     _PutValueToEdit   ( m_editLabLValue,   labValues[ +LabChannels::L] );
     _PutValueToEdit   ( m_editLabAValue,   labValues[ +LabChannels::a] );
@@ -445,7 +455,7 @@ void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
 
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( m_fInverted ? 1 : 0 );
+    pCmdUI->SetCheck( m_pDoc->IsInverted( ) ? 1 : 0 );
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
@@ -477,10 +487,12 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnViewInvert( ) {
-    m_fInverted = !m_fInverted;
+    m_pDoc->ToggleInverted( );
 
-    m_staticZStrip.SetInverted( !m_fInverted );
-    m_staticXyGrid.SetInverted( !m_fInverted );
+    bool const fGuiInverted { !m_pDoc->IsInverted( ) };
+    m_staticZStrip.SetInverted( fGuiInverted );
+    m_staticXyGrid.SetInverted( fGuiInverted );
+
     UpdateBitmaps( );
 }
 
@@ -499,15 +511,7 @@ void CChildView::OnEditLostFocus( UINT /*uId*/ ) {
 }
 
 void CChildView::OnCloseButtonClicked( ) {
-    RawLabTriplet labValues { ScaleLabColor( m_pDoc->GetLabColor( ).GetChannelValues( ) ) };
-    theApp.WriteProfileInt( L"SavedValues", L"LabL", labValues[+LabChannels::L] );
-    theApp.WriteProfileInt( L"SavedValues", L"LabA", labValues[+LabChannels::a] );
-    theApp.WriteProfileInt( L"SavedValues", L"LabB", labValues[+LabChannels::b] );
-
-    SrgbTriplet srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    theApp.WriteProfileInt( L"SavedValues", L"SrgbR", srgbValues[+SrgbChannels::R] );
-    theApp.WriteProfileInt( L"SavedValues", L"SrgbG", srgbValues[+SrgbChannels::G] );
-    theApp.WriteProfileInt( L"SavedValues", L"SrgbB", srgbValues[+SrgbChannels::B] );
+    m_pDoc->SaveToRegistry( );
 
     ::PostQuitMessage( 0 );
 }
