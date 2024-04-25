@@ -399,8 +399,8 @@ void CChildView::OnInitialUpdate( ) {
 
     bool               const  fGuiInverted     { !m_pDoc->IsInverted( ) };
 
-    LabTriplet         const   labValues       {  m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet        const  srgbValues       {  m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    LabTriplet         const   labValues       { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet        const  srgbValues       { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     AllChannels        const  selectedChannel  { m_pDoc->GetSelectedChannel( ) };
     AllChannelsTriplet const& selectedChannels { _ChannelXyzTriplets.at( selectedChannel ) };
@@ -417,14 +417,6 @@ void CChildView::OnInitialUpdate( ) {
         m_mapRadioButtons.at( channel )->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
     }
 
-    _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
-    _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
-    _PutValueToEdit   ( m_editLabB,      labValues[ +LabChannels::b] );
-    _PutValueToEdit   ( m_editSrgbR,    srgbValues[+SrgbChannels::R] );
-    _PutValueToEdit   ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
-    _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
-    _PutHexColorToEdit( m_editHexColor, srgbValues );
-
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
     m_staticZStrip.SetInverted( fGuiInverted );
@@ -432,6 +424,14 @@ void CChildView::OnInitialUpdate( ) {
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
     m_staticXyGrid.SetInverted( fGuiInverted );
+
+    _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
+    _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
+    _PutValueToEdit   ( m_editLabB,      labValues[ +LabChannels::b] );
+    _PutValueToEdit   ( m_editSrgbR,    srgbValues[+SrgbChannels::R] );
+    _PutValueToEdit   ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
+    _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
+    _PutHexColorToEdit( m_editHexColor, srgbValues );
 
     m_fBlockBitmapUpdates = false;
     UpdateBitmaps( );
