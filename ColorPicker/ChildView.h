@@ -74,6 +74,7 @@ protected:
     afx_msg void OnEditGotFocus( UINT uId );
     afx_msg void OnEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
+    afx_msg void OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
     afx_msg void OnChannelButtonClicked( UINT uId );
     afx_msg void OnColorValueUpdate( UINT uId );
     afx_msg void OnHexColorUpdate( );

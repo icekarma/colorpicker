@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
 
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_Z_STRIP, &CChildView::OnZStripMouseMove )
     ON_NOTIFY( ZSBN_MOUSEMOVE, IDC_XY_GRID, &CChildView::OnXyGridMouseMove )
+    ON_WM_KEYDOWN( )
 END_MESSAGE_MAP( )
 
 namespace {
@@ -525,6 +526,24 @@ void CChildView::OnCloseButtonClicked( ) {
     m_pDoc->SaveToRegistry( );
 
     ::PostQuitMessage( 0 );
+}
+
+void CChildView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags ) {
+    debug( L"CChildView::OnKeyDown: nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", nChar, nRepCnt, nFlags );
+    switch ( nChar ) {
+        case VK_UP:
+            debug( L"+ Up arrow pressed\n" );
+            return;
+
+        case VK_DOWN:
+            debug( L"+ Down arrow pressed\n" );
+            return;
+
+        default:
+            break;
+    }
+
+    CFormView::OnKeyDown( nChar, nRepCnt, nFlags );
 }
 
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
