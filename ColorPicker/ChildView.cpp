@@ -413,7 +413,7 @@ void CChildView::OnInitialUpdate( ) {
     // Apply them to the controls
     //
 
-    for ( AllChannels channel { AllChannels::Min }; channel <= AllChannels::Max; channel = static_cast<AllChannels>( +channel + 1 ) ) {
+    for ( AllChannels channel { AllChannels::Min }; channel <= AllChannels::Max; ++channel ) {
         m_mapRadioButtons.at( channel )->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
     }
 
