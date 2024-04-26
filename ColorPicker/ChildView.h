@@ -36,8 +36,19 @@ protected:
     // Own methods
     //
 
-    CEdit* MapControlIdToPointer( UINT const uId );
     void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
+
+    CEdit* MapChannelToEditControl( AllChannels const channel ) const {
+        return _MapImpl( m_mapChannelToEditControl, channel );
+    }
+
+    AllChannels MapHwndToChannel( HWND const hwnd ) const {
+        return _MapImpl( m_mapHwndToChannel, hwnd, AllChannels::unknown );
+    }
+
+    WNDPROC MapHwndToWndProc( HWND const hwnd ) const {
+        return _MapImpl( m_mapHwndToWndProc, hwnd );
+    }
 
     void UpdateBitmaps( ) {
         UpdateBitmaps( true, true );
@@ -85,8 +96,10 @@ protected:
     // Member variables
     //============================================
 
-    std::unordered_map<AllChannels, CButton*> m_mapRadioButtons;
-    std::unordered_map<unsigned,    CEdit*>   m_mapEditControls;
+    std::unordered_map<AllChannels, CButton*>    m_mapChannelToButtonControl;
+    std::unordered_map<AllChannels, CEdit*>      m_mapChannelToEditControl;
+    std::unordered_map<HWND,        AllChannels> m_mapHwndToChannel;
+    std::unordered_map<HWND,        WNDPROC>     m_mapHwndToWndProc;
 
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };

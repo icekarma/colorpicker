@@ -162,3 +162,16 @@ inline Class* static_downcast( ValueT* p ) {
     return static_cast<Class*>( p );
 #endif // defined _DEBUG
 }
+
+//================================================
+// Global template functions
+//================================================
+
+template<typename KeyT, typename ValueT, typename HasherT, typename KeyEqT, typename AllocT>
+ValueT _MapImpl( std::unordered_map<KeyT, ValueT, HasherT, KeyEqT, AllocT> const& map, KeyT const& key, ValueT const defaultValue = { } ) {
+    if ( map.contains( key ) ) {
+        return map.at( key );
+    } else {
+        return defaultValue;
+    }
+}
