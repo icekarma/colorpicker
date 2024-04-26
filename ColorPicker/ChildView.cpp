@@ -4,8 +4,8 @@
 
 #include "ColorPicker.h"
 #include "ColorPickerDoc.h"
-
 #include "ChannelInformation.h"
+#include "Utils.h"
 
 //===================//
 // Hair space: -> <- //
@@ -40,8 +40,6 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
 
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                            &CChildView::OnZStripMouseMove      )
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                            &CChildView::OnXyGridMouseMove      )
-
-    ON_WM_KEYDOWN( )
 END_MESSAGE_MAP( )
 
 namespace {
@@ -94,6 +92,12 @@ namespace {
         { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
         { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
     };
+
+    //
+    // Private variables
+    //
+
+    CChildView* g_pChildView { };
 
     //
     // Private functions
@@ -286,6 +290,68 @@ namespace {
 
 }
 
+CChildView::CChildView( ):
+    CFormView { IDD_CHILDVIEW }
+{
+#if defined _DEBUG
+    if ( g_pChildView ) {
+        debug( L"CChildView::`ctor: WARNING: g_pChildView is not null! (0x%p)\n", g_pChildView );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    g_pChildView = this;
+}
+
+CChildView::~CChildView( ) {
+#if defined _DEBUG
+    if ( !g_pChildView ) {
+        debug( L"CChildView::`dtor: WARNING: g_pChildView is null!\n" );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    g_pChildView = nullptr;
+}
+
+LRESULT CChildView::_EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam ) {
+#if defined _DEBUG
+    if ( !g_pChildView ) {
+        debug( L"CChildVIew::_EditWndProc: panic: g_pChildView is nullptr!\n" );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    return g_pChildView->EditWndProc( hwnd, uMessage, wParam, lParam );
+}
+
+LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam ) {
+    debug( L"CChildView::EditWndProc: hwnd: 0x%p, uMessage: 0x%04X, wParam: 0x%08lX, lParam: 0x%08lX; %s\n", hwnd, uMessage, wParam, lParam, (LPCWSTR) GetNameForWindowsMessage( uMessage ) );
+
+    WNDPROC wndProc { MapHwndToWndProc( hwnd ) };
+    if ( !wndProc ) {
+        debug( L"CChildView::EditWndProc: Uh-oh: Window handle didn't map to a wndproc\n" );
+        abort( );
+    }
+
+    AllChannels channel { MapHwndToChannel( hwnd ) };
+    if ( channel != AllChannels::unknown ) {
+        if ( uMessage == WM_KEYDOWN ) {
+            if ( EditControl_OnKeyDown( channel, static_cast<UINT>( wParam ), LOWORD( lParam ), HIWORD( lParam ) ) ) {
+                return 0;
+            } else {
+                //debug( L"CChildView::EditWndProc: Passing message: EditControl_OnKeyDown wasn't interested\n" );
+            }
+        } else {
+            //debug( L"CChildView::EditWndProc: Passing message: not interested\n" );
+        }
+    } else {
+        debug( L"CChildView::EditWndProc: Passing message: Window handle didn't map to a channel\n" );
+    }
+
+    return CallWindowProc( wndProc, hwnd, uMessage, wParam, lParam );
+}
+
 void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     if ( m_fBlockBitmapUpdates ) {
         return;
@@ -299,6 +365,39 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
 
     if ( fUpdateXy ) {
         m_staticXyGrid.UpdateBitmap( );
+    }
+}
+
+void CChildView::SubclassEditControl( CEdit& pEdit, WNDPROC const wndProc ) {
+    HWND hwndEdit { pEdit.GetSafeHwnd( ) };
+
+    SetLastError( ERROR_SUCCESS );
+    LONG_PTR result = SetWindowLongPtr( hwndEdit, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( wndProc ) );
+    if ( result ) {
+        m_mapHwndToWndProc[hwndEdit] = reinterpret_cast<WNDPROC>( result );
+    } else {
+        if ( DWORD const dwLastError = GetLastError( ); dwLastError ) {
+            debug( L"CChildView::SubclassEditControl: SetWindowLongPtr failed for pEdit 0x%p, hwnd 0x%p, error: %lu\n", &pEdit, hwndEdit, dwLastError );
+        }
+    }
+}
+
+void CChildView::UnSubclassEditControl( CEdit& pEdit ) {
+    HWND hwndEdit { pEdit.GetSafeHwnd( ) };
+
+    WNDPROC wndProc { MapHwndToWndProc( hwndEdit ) };
+    if ( !wndProc ) {
+        return;
+    }
+
+    SetLastError( ERROR_SUCCESS );
+    LONG_PTR result = SetWindowLongPtr( hwndEdit, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( wndProc ) );
+    if ( result ) {
+        m_mapHwndToWndProc.erase( hwndEdit );
+    } else {
+        if ( DWORD const dwLastError = GetLastError( ); dwLastError ) {
+            debug( L"CChildView::UnSubclassEditControl: SetWindowLongPtr failed for pEdit 0x%p, hwnd 0x%p, error: %lu\n", &pEdit, hwndEdit, dwLastError );
+        }
     }
 }
 
@@ -460,6 +559,17 @@ void CChildView::OnInitialUpdate( ) {
 
     m_fBlockBitmapUpdates = false;
     UpdateBitmaps( );
+
+    //
+    // Subclass edit controls
+    //
+
+    SubclassEditControl( m_editLabL,  _EditWndProc );
+    SubclassEditControl( m_editLabA,  _EditWndProc );
+    SubclassEditControl( m_editLabB,  _EditWndProc );
+    SubclassEditControl( m_editSrgbR, _EditWndProc );
+    SubclassEditControl( m_editSrgbG, _EditWndProc );
+    SubclassEditControl( m_editSrgbB, _EditWndProc );
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
@@ -555,25 +665,50 @@ void CChildView::OnEditLostFocus( UINT uId ) {
 void CChildView::OnCloseButtonClicked( ) {
     m_pDoc->SaveToRegistry( );
 
+    UnSubclassEditControl( m_editSrgbB );
+    UnSubclassEditControl( m_editSrgbG );
+    UnSubclassEditControl( m_editSrgbR );
+    UnSubclassEditControl( m_editLabB  );
+    UnSubclassEditControl( m_editLabA  );
+    UnSubclassEditControl( m_editLabL  );
+
     ::PostQuitMessage( 0 );
 }
 
-void CChildView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags ) {
-    debug( L"CChildView::OnKeyDown: nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", nChar, nRepCnt, nFlags );
+bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags ) {
+    debug( L"CChildView::EditControl_OnKeyDown: channel: %u, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", +channel, nChar, nRepCnt, nFlags );
+
+    int adjust { };
     switch ( nChar ) {
-        case VK_UP:
-            debug( L"+ Up arrow pressed\n" );
-            return;
-
-        case VK_DOWN:
-            debug( L"+ Down arrow pressed\n" );
-            return;
-
-        default:
-            break;
+        case VK_UP:   debug( L"+ Up arrow pressed\n"   ); adjust =  1; break;
+        case VK_DOWN: debug( L"+ Down arrow pressed\n" ); adjust = -1; break;
+        default:      return false;
     }
 
-    CFormView::OnKeyDown( nChar, nRepCnt, nFlags );
+    m_fBlockBitmapUpdates = true;
+
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    m_pDoc->SetChannelValue( channel, m_pDoc->GetChannelValue( channel ) + adjust );
+
+    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
+    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
+    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
+    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
+    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
+    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+    if ( oldSrgbValues != newSrgbValues ) {
+        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
+    }
+
+    m_fBlockBitmapUpdates = false;
+    UpdateBitmaps( );
+
+    return true;
 }
 
 void CChildView::OnChannelButtonClicked( UINT const uId ) {
@@ -582,17 +717,15 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
         return;
     }
 
-    AllChannelsTriplet const  oldChannels { m_channelX, m_channelY, m_channelZ };
-    AllChannelsTriplet const&    channels { _ChannelXyzTriplets[+channel]      };
-    if ( oldChannels != channels ) {
+    if ( AllChannelsTriplet const& channels { _ChannelXyzTriplets[+channel] }; channels != AllChannelsTriplet { { m_channelX, m_channelY, m_channelZ } } ) {
         m_channelX = channels[0];
         m_channelY = channels[1];
         m_channelZ = channels[2];
 
+        m_pDoc->SetSelectedChannel( m_channelZ );
+
         m_staticZStrip.SetChannel( m_channelZ );
         m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-
-        m_pDoc->SetSelectedChannel( m_channelZ );
 
         UpdateBitmaps( );
     }
@@ -612,7 +745,7 @@ void CChildView::OnColorValueUpdate( UINT const uId ) {
         {
 Lab:
             if ( fChanged ) {
-                m_pDoc->SetColor( LabColor { newLabValues[+LabChannels::L], newLabValues[+LabChannels::a], newLabValues[+LabChannels::b] } );
+                m_pDoc->SetColor( LabColor { newLabValues } );
                 newSrgbValues = m_pDoc->GetSrgbColor( ).GetChannelValues( );
 
                 _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
@@ -629,7 +762,7 @@ Lab:
         {
 sRGB:
             if ( fChanged ) {
-                m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
+                m_pDoc->SetColor( SrgbColor { newSrgbValues } );
                 newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
                 _UpdateEditIfValueChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
@@ -656,7 +789,7 @@ void CChildView::OnHexColorUpdate( ) {
     }
 
     if ( fChanged ) {
-        m_pDoc->SetColor( SrgbColor { newSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::B] } );
+        m_pDoc->SetColor( SrgbColor { newSrgbValues } );
         newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
         _UpdateEditIfValueChanged( m_editLabL,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
@@ -710,8 +843,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    m_pDoc->SetChannelValue( m_channelX, x );
-    m_pDoc->SetChannelValue( m_channelY, y );
+    m_pDoc->SetChannelValues( { { m_channelX, x }, { m_channelY, y } } );
 
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };

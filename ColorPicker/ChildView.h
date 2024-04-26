@@ -1,9 +1,10 @@
 #pragma once
 
-#include "XyGrid.h"
-#include "ZStrip.h"
+#include "ColorPickerDoc.h"
 #include "StaticBitmap.h"
 #include "StaticBrush.h"
+#include "XyGrid.h"
+#include "ZStrip.h"
 
 class CChildView:
     public CFormView
@@ -20,23 +21,24 @@ public:
 
 protected:
 
-    CChildView( ):
-        CFormView { IDD_CHILDVIEW }
-    {
-        /*empty*/
-    }
-
-    virtual ~CChildView( ) override = default;
+    CChildView( );
+    virtual ~CChildView( ) override;
 
     //============================================
     // Methods
     //============================================
 
     //
+    // Static methods
+    //
+
+    LRESULT static _EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
+
+    //
     // Own methods
     //
 
-    void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
+    LRESULT EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
 
     CEdit* MapChannelToEditControl( AllChannels const channel ) const {
         return _MapImpl( m_mapChannelToEditControl, channel );
@@ -53,6 +55,11 @@ protected:
     void UpdateBitmaps( ) {
         UpdateBitmaps( true, true );
     }
+
+    void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
+
+    void SubclassEditControl( CEdit& pEdit, WNDPROC const wndProc );
+    void UnSubclassEditControl( CEdit& pEdit );
 
     //
     // Overrides
@@ -85,7 +92,7 @@ protected:
     afx_msg void OnEditGotFocus( UINT uId );
     afx_msg void OnEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
-    afx_msg void OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
+    afx_msg bool EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags );
     afx_msg void OnChannelButtonClicked( UINT uId );
     afx_msg void OnColorValueUpdate( UINT uId );
     afx_msg void OnHexColorUpdate( );
@@ -101,9 +108,9 @@ protected:
     std::unordered_map<HWND,        AllChannels> m_mapHwndToChannel;
     std::unordered_map<HWND,        WNDPROC>     m_mapHwndToWndProc;
 
-    CColorPickerDoc* m_pDoc                { };
-    CEdit*           m_pCurrentEdit        { };
-    bool             m_fBlockBitmapUpdates { };
+    CColorPickerDoc* m_pDoc                     { };
+    CEdit*           m_pCurrentEdit             { };
+    bool             m_fBlockBitmapUpdates      { };
 
     //
     // Controls
