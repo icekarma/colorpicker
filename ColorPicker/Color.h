@@ -481,6 +481,14 @@ protected:
 // Function definitions
 //================================================
 
+[[nodiscard]] inline constexpr bool IsLabChannel( AllChannels const channel ) {
+    return ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax );
+}
+
+[[nodiscard]] inline constexpr bool IsSrgbChannel( AllChannels const channel ) {
+    return ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax );
+}
+
 [[nodiscard]] inline constexpr LabChannels AllChannelsToLabChannels( AllChannels const channel ) {
     return static_cast<LabChannels>( +channel - +AllChannels::LabMin );
 }
