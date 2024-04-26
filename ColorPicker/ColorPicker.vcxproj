@@ -250,6 +250,7 @@
     <ClInclude Include="StaticBitmap.h" />
     <ClInclude Include="StaticBrush.h" />
     <ClInclude Include="Timing.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="XyGrid.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="pch.h" />
@@ -267,6 +268,7 @@
     <ClCompile Include="ColorPickerDoc.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
     <ClCompile Include="StaticBrush.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="XyGrid.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="pch.cpp">

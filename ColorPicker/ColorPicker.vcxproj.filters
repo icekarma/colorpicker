@@ -63,6 +63,9 @@
     <ClInclude Include="Early.h">
       <Filter>02 Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>02 Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorPicker.cpp">
@@ -99,6 +102,9 @@
       <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChannelInformation.cpp">
+      <Filter>01 Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
   </ItemGroup>
