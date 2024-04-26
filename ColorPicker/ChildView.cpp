@@ -17,7 +17,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_BN_CLICKED( IDCLOSE,             &CChildView::OnCloseButtonClicked )
     ON_EN_UPDATE ( IDC_HEX_COLOR_VALUE, &CChildView::OnHexColorUpdate     )
 
-    ON_CONTROL_RANGE( BN_CLICKED,   IDC_LAB_L_CHANNEL, IDC_SRGB_B_CHANNEL,  &CChildView::OnChannelButtonClicked )
+    ON_CONTROL_RANGE( BN_CLICKED,   IDC_LAB_L_LABEL,   IDC_SRGB_B_LABEL,    &CChildView::OnChannelButtonClicked )
     ON_CONTROL_RANGE( EN_KILLFOCUS, IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditLostFocus        )
     ON_CONTROL_RANGE( EN_SETFOCUS,  IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditGotFocus         )
     ON_CONTROL_RANGE( EN_UPDATE,    IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,    &CChildView::OnColorValueUpdate     )
@@ -59,12 +59,12 @@ namespace {
     };
 
     std::unordered_map<UINT, AllChannels> const _ControlIdToChannel {
-        { IDC_LAB_L_CHANNEL,  AllChannels::LabL  },
-        { IDC_LAB_A_CHANNEL,  AllChannels::LabA  },
-        { IDC_LAB_B_CHANNEL,  AllChannels::LabB  },
-        { IDC_SRGB_R_CHANNEL, AllChannels::SrgbR },
-        { IDC_SRGB_G_CHANNEL, AllChannels::SrgbG },
-        { IDC_SRGB_B_CHANNEL, AllChannels::SrgbB }
+        { IDC_LAB_L_LABEL,  AllChannels::LabL  },
+        { IDC_LAB_A_LABEL,  AllChannels::LabA  },
+        { IDC_LAB_B_LABEL,  AllChannels::LabB  },
+        { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
+        { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
+        { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
     };
 
     //
@@ -289,17 +289,17 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     CFormView::DoDataExchange( pDX );
 
     DDX_Control( pDX, IDC_GROUPBOX_LAB,    m_groupBoxLab   );
-    DDX_Control( pDX, IDC_LAB_L_CHANNEL,   m_radioLabL     );
-    DDX_Control( pDX, IDC_LAB_A_CHANNEL,   m_radioLabA     );
-    DDX_Control( pDX, IDC_LAB_B_CHANNEL,   m_radioLabB     );
+    DDX_Control( pDX, IDC_LAB_L_LABEL,     m_radioLabL     );
+    DDX_Control( pDX, IDC_LAB_A_LABEL,     m_radioLabA     );
+    DDX_Control( pDX, IDC_LAB_B_LABEL,     m_radioLabB     );
     DDX_Control( pDX, IDC_LAB_L_VALUE,     m_editLabL      );
     DDX_Control( pDX, IDC_LAB_A_VALUE,     m_editLabA      );
     DDX_Control( pDX, IDC_LAB_B_VALUE,     m_editLabB      );
 
     DDX_Control( pDX, IDC_GROUPBOX_SRGB,   m_groupBoxSrgb  );
-    DDX_Control( pDX, IDC_SRGB_R_CHANNEL,  m_radioSrgbR    );
-    DDX_Control( pDX, IDC_SRGB_G_CHANNEL,  m_radioSrgbG    );
-    DDX_Control( pDX, IDC_SRGB_B_CHANNEL,  m_radioSrgbB    );
+    DDX_Control( pDX, IDC_SRGB_R_LABEL,    m_radioSrgbR    );
+    DDX_Control( pDX, IDC_SRGB_G_LABEL,    m_radioSrgbG    );
+    DDX_Control( pDX, IDC_SRGB_B_LABEL,    m_radioSrgbB    );
     DDX_Control( pDX, IDC_SRGB_R_VALUE,    m_editSrgbR     );
     DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbG     );
     DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbB     );
