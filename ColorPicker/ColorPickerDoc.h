@@ -37,7 +37,9 @@ public:
         return m_SrgbColor;
     }
 
+    int  GetChannelValue( AllChannels const channel );
     void SetChannelValue( AllChannels const channel, int const nValue );
+    void SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values );
 
     //
     // Inversion stuff
@@ -77,6 +79,8 @@ public:
 protected:
 
     virtual BOOL OnNewDocument( ) override;
+
+    void _SetChannelValueImpl( AllChannels const channel, int const nValue );
 
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
     LabColor    m_LabColor        { };

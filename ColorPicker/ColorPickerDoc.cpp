@@ -34,32 +34,66 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
     return TRUE;
 }
 
+int CColorPickerDoc::GetChannelValue( AllChannels const channel ) {
+    if ( IsLabChannel( channel ) ) {
+        return m_LabColor.GetChannelValue( channel );
+    } else {
+        return m_SrgbColor.GetChannelValue( channel );
+    }
+}
+
+void CColorPickerDoc::_SetChannelValueImpl( AllChannels const channel, int const nValue ) {
+    if ( IsLabChannel( channel ) ) {
+        // TODO should this really be rescaling the value? What guarantees that callers only pass values effectively of type RawLabValueT?
+        if ( channel == AllChannels::LabL ) {
+            m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue * 100 / 255 ) );
+        } else {
+            m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue - 128 ) );
+        }
+    } else {
+        m_SrgbColor.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
+    }
+}
+
 void CColorPickerDoc::SetChannelValue( AllChannels const channel, int const nValue ) {
-    switch ( channel ) {
-        case AllChannels::LabL:
-        case AllChannels::LabA:
-        case AllChannels::LabB: {
-            LabColor color { m_LabColor };
-            if ( channel == AllChannels::LabL ) {
-                color.SetChannelValue( channel, static_cast<LabValueT>( nValue * 100 / 255 ) );
-            } else {
-                color.SetChannelValue( channel, static_cast<LabValueT>( nValue - 128 ) );
-            }
-            SetColor( color );
-            break;
-        }
+    _SetChannelValueImpl( channel, nValue );
 
-        case AllChannels::SrgbR:
-        case AllChannels::SrgbG:
-        case AllChannels::SrgbB: {
-            SrgbColor color { m_SrgbColor };
-            color.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
-            SetColor( color );
-            break;
-        }
+    if ( IsLabChannel( channel ) ) {
+        SetColor( m_LabColor );
+    } else {
+        SetColor( m_SrgbColor );
+    }
+}
 
-        default:
-            break;
+void CColorPickerDoc::SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values ) {
+#if defined _DEBUG
+    if ( values.size( ) == 0 ) {
+        debug( L"CColorPickerDoc::SetChannelValues: Warning: No channels passed!\n" );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    bool fLab  { };
+    bool fSrgb { };
+
+    for ( auto const& value : values ) {
+        fLab  |= IsLabChannel ( value.first );
+        fSrgb |= IsSrgbChannel( value.first );
+
+        _SetChannelValueImpl( value.first, value.second );
+    }
+
+#if defined _DEBUG
+    if ( fLab && fSrgb ) {
+        debug( L"CColorPickerDoc::SetChannelValues: Warning: Both L*a*b* and sRGB channels passed!\n" );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    if ( fLab ) {
+        SetColor( m_LabColor );
+    } else if ( fSrgb ) {
+        SetColor( m_SrgbColor );
     }
 }
 
