@@ -52,7 +52,10 @@
 #include <cassert>
 #include <cerrno>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 
 #include <algorithm>
 #include <array>
@@ -60,6 +63,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
+#include <vector>
 
 using std::max;
 using std::min;
@@ -166,6 +170,11 @@ inline Class* static_downcast( ValueT* p ) {
 //================================================
 // Global template functions
 //================================================
+
+template<typename T>
+inline T constexpr typed_nullptr( ) {
+    return static_cast<T>( nullptr );
+}
 
 template<typename KeyT, typename ValueT, typename HasherT, typename KeyEqT, typename AllocT>
 ValueT _MapImpl( std::unordered_map<KeyT, ValueT, HasherT, KeyEqT, AllocT> const& map, KeyT const& key, ValueT const defaultValue = { } ) {

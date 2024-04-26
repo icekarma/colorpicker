@@ -16,6 +16,27 @@ std::underlying_type_t<T> constexpr operator+( T const rhs ) {
 }
 
 template<Enumeration T>
-T constexpr operator++( T const rhs ) {
-    return static_cast<T>( +rhs + +static_cast<T>( 1 ) );
+T constexpr operator++( T& rhs ) {
+    rhs = static_cast<T>( +rhs + +static_cast<T>( 1 ) );
+    return rhs;
+}
+
+template<Enumeration T>
+T constexpr operator++( T& rhs, int ) {
+    T old = rhs;
+    ++rhs;
+    return old;
+}
+
+template<Enumeration T>
+T constexpr operator--( T& rhs ) {
+    rhs = static_cast<T>( +rhs - +static_cast<T>( 1 ) );
+    return rhs;
+}
+
+template<Enumeration T>
+T constexpr operator--( T& rhs, int ) {
+    T old = rhs;
+    --rhs;
+    return old;
 }
