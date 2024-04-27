@@ -63,7 +63,6 @@
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
-#include <vector>
 
 using std::max;
 using std::min;
