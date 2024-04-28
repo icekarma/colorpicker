@@ -14,32 +14,32 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED        (                 IDCLOSE,                                &CChildView::OnCloseButtonClicked   )
-    ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,                    &CChildView::OnHexColorUpdate       )
+    ON_BN_CLICKED        (                 IDCLOSE,                           &CChildView::OnCloseButtonClicked   )
+    ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorUpdate       )
 
-    ON_CONTROL_RANGE     ( BN_CLICKED,     IDC_LAB_L_LABEL,   IDC_SRGB_B_LABEL,    &CChildView::OnChannelButtonClicked )
-    ON_CONTROL_RANGE     ( EN_KILLFOCUS,   IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditLostFocus        )
-    ON_CONTROL_RANGE     ( EN_SETFOCUS,    IDC_LAB_L_VALUE,   IDC_HEX_COLOR_VALUE, &CChildView::OnEditGotFocus         )
-    ON_CONTROL_RANGE     ( EN_UPDATE,      IDC_LAB_L_VALUE,   IDC_SRGB_B_VALUE,    &CChildView::OnColorValueUpdate     )
+    ON_CONTROL_RANGE     ( BN_CLICKED,     IDC_LAB_L_LABEL, IDC_SRGB_B_LABEL, &CChildView::OnChannelRadioClicked  )
+    ON_CONTROL_RANGE     ( EN_KILLFOCUS,   IDC_LAB_L_VALUE, IDC_SRGB_B_LABEL, &CChildView::OnValueEditLostFocus   )
+    ON_CONTROL_RANGE     ( EN_SETFOCUS,    IDC_LAB_L_VALUE, IDC_SRGB_B_LABEL, &CChildView::OnValueEditGotFocus    )
+    ON_CONTROL_RANGE     ( EN_UPDATE,      IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE, &CChildView::OnValueEditUpdate      )
 
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CUT,                            &CChildView::OnUpdateEditCut        )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                           &CChildView::OnUpdateEditCopy       )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                          &CChildView::OnUpdateEditPaste      )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                          &CChildView::OnUpdateEditClear      )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                           &CChildView::OnUpdateEditUndo       )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                     &CChildView::OnUpdateEditSelectAll  )
-    ON_UPDATE_COMMAND_UI (                 ID_VIEW_INVERT,                         &CChildView::OnUpdateViewInvert     )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CUT,                       &CChildView::OnUpdateEditCut        )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                      &CChildView::OnUpdateEditCopy       )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                     &CChildView::OnUpdateEditPaste      )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                     &CChildView::OnUpdateEditClear      )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                      &CChildView::OnUpdateEditUndo       )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                &CChildView::OnUpdateEditSelectAll  )
+    ON_UPDATE_COMMAND_UI (                 ID_VIEW_INVERT,                    &CChildView::OnUpdateViewInvert     )
 
-    ON_COMMAND           (                 ID_EDIT_CUT,                            &CChildView::OnEditCut              )
-    ON_COMMAND           (                 ID_EDIT_COPY,                           &CChildView::OnEditCopy             )
-    ON_COMMAND           (                 ID_EDIT_PASTE,                          &CChildView::OnEditPaste            )
-    ON_COMMAND           (                 ID_EDIT_CLEAR,                          &CChildView::OnEditClear            )
-    ON_COMMAND           (                 ID_EDIT_UNDO,                           &CChildView::OnEditUndo             )
-    ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                     &CChildView::OnEditSelectAll        )
-    ON_COMMAND           (                 ID_VIEW_INVERT,                         &CChildView::OnViewInvert           )
+    ON_COMMAND           (                 ID_EDIT_CUT,                       &CChildView::OnEditCut              )
+    ON_COMMAND           (                 ID_EDIT_COPY,                      &CChildView::OnEditCopy             )
+    ON_COMMAND           (                 ID_EDIT_PASTE,                     &CChildView::OnEditPaste            )
+    ON_COMMAND           (                 ID_EDIT_CLEAR,                     &CChildView::OnEditClear            )
+    ON_COMMAND           (                 ID_EDIT_UNDO,                      &CChildView::OnEditUndo             )
+    ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                &CChildView::OnEditSelectAll        )
+    ON_COMMAND           (                 ID_VIEW_INVERT,                    &CChildView::OnViewInvert           )
 
-    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                            &CChildView::OnZStripMouseMove      )
-    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                            &CChildView::OnXyGridMouseMove      )
+    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                       &CChildView::OnZStripMouseMove      )
+    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                       &CChildView::OnXyGridMouseMove      )
 END_MESSAGE_MAP( )
 
 namespace {
@@ -635,7 +635,7 @@ void CChildView::OnViewInvert( ) {
     UpdateBitmaps( );
 }
 
-void CChildView::OnEditGotFocus( UINT uId ) {
+void CChildView::OnValueEditGotFocus( UINT uId ) {
     m_pCurrentEdit = MapChannelToEditControl( _MapValueControlIdToChannel( uId ) );
 
 #if defined _DEBUG
@@ -645,7 +645,7 @@ void CChildView::OnEditGotFocus( UINT uId ) {
 #endif // defined _DEBUG
 }
 
-void CChildView::OnEditLostFocus( UINT uId ) {
+void CChildView::OnValueEditLostFocus( UINT uId ) {
     if ( !m_pCurrentEdit ) {
         debug( L"CChildView::OnEditLostFocus: uId %d: weird, lost focus with m_pCurrentEdit==nullptr\n" );
         return;
@@ -711,7 +711,7 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
     return true;
 }
 
-void CChildView::OnChannelButtonClicked( UINT const uId ) {
+void CChildView::OnChannelRadioClicked( UINT const uId ) {
     AllChannels channel { _MapLabelControlIdToChannel( uId ) };
     if ( channel == AllChannels::unknown ) {
         return;
@@ -731,7 +731,7 @@ void CChildView::OnChannelButtonClicked( UINT const uId ) {
     }
 }
 
-void CChildView::OnColorValueUpdate( UINT const uId ) {
+void CChildView::OnValueEditUpdate( UINT const uId ) {
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet  newLabValues  {  oldLabValues };

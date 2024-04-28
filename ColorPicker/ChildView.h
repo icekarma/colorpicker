@@ -89,12 +89,12 @@ protected:
     afx_msg void OnEditSelectAll( );
     afx_msg void OnViewInvert( );
 
-    afx_msg void OnEditGotFocus( UINT uId );
-    afx_msg void OnEditLostFocus( UINT uId );
+    afx_msg void OnValueEditGotFocus( UINT uId );
+    afx_msg void OnValueEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
     afx_msg bool EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags );
-    afx_msg void OnChannelButtonClicked( UINT uId );
-    afx_msg void OnColorValueUpdate( UINT uId );
+    afx_msg void OnChannelRadioClicked( UINT uId );
+    afx_msg void OnValueEditUpdate( UINT uId );
     afx_msg void OnHexColorUpdate( );
     afx_msg void OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
     afx_msg void OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
