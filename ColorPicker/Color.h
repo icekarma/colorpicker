@@ -78,17 +78,23 @@ LPCWSTR         constexpr  AllChannelNames[6]     { L"L*", L"a*", L"b*", L"R", L
 // Function prototypes
 //================================================
 
-[[nodiscard]] LabChannels   inline constexpr  AllChannelsToLabChannels ( AllChannels const channel );
-[[nodiscard]] SrgbChannels  inline constexpr  AllChannelsToSrgbChannels( AllChannels const channel );
+[[nodiscard]] inline constexpr bool           IsLabChannel(  AllChannels const channel );
+[[nodiscard]] inline constexpr bool           IsLabChannel(  LabChannels const channel );
+[[nodiscard]] inline constexpr bool          IsSrgbChannel(  AllChannels const channel );
+[[nodiscard]] inline constexpr bool          IsSrgbChannel( SrgbChannels const channel );
+[[nodiscard]] inline constexpr bool           IsAllChannel(  AllChannels const channel );
 
-[[nodiscard]] AllChannels   inline constexpr  LabChannelsToAllChannels(  LabChannels const channel );
-[[nodiscard]] AllChannels   inline constexpr SrgbChannelsToAllChannels( SrgbChannels const channel );
+[[nodiscard]] inline constexpr LabChannels    AllChannelsToLabChannels (  AllChannels const channel );
+[[nodiscard]] inline constexpr SrgbChannels   AllChannelsToSrgbChannels(  AllChannels const channel );
+[[nodiscard]] inline constexpr AllChannels    LabChannelsToAllChannels (  LabChannels const channel );
+[[nodiscard]] inline constexpr AllChannels   SrgbChannelsToAllChannels ( SrgbChannels const channel );
 
-[[nodiscard]] RawLabTriplet inline constexpr ScaleLabColor(    LabTriplet const& values );
-[[nodiscard]] LabTriplet    inline constexpr ScaleLabColor( RawLabTriplet const& values );
+[[nodiscard]] inline constexpr RawLabTriplet ScaleLabColor(    LabTriplet const& values );
+[[nodiscard]] inline constexpr LabTriplet    ScaleLabColor( RawLabTriplet const& values );
+[[nodiscard]] inline constexpr RawLabColor   ScaleLabColor(      LabColor const& color  );
+[[nodiscard]] inline constexpr LabColor      ScaleLabColor(   RawLabColor const& color  );
 
-[[nodiscard]] RawLabColor   inline constexpr ScaleLabColor(    LabColor const& color );
-[[nodiscard]] LabColor      inline constexpr ScaleLabColor( RawLabColor const& color );
+[[nodiscard]] inline constexpr int           ScaleLabColor( AllChannels const channel, int const value );
 
 [[nodiscard]] inline constexpr LPCWSTR       ToString(  LabChannels const channel );
 [[nodiscard]] inline constexpr LPCWSTR       ToString( SrgbChannels const channel );
