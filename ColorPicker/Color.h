@@ -518,19 +518,19 @@ protected:
 }
 
 [[nodiscard]] inline constexpr LabChannels AllChannelsToLabChannels( AllChannels const channel ) {
-    return static_cast<LabChannels>( +channel - +AllChannels::LabMin );
+    return IsLabChannel( channel ) ? static_cast<LabChannels>( +channel /*- +AllChannels::LabMin*/ ) : LabChannels::unknown;
 }
 
 [[nodiscard]] inline constexpr SrgbChannels AllChannelsToSrgbChannels( AllChannels const channel ) {
-    return static_cast<SrgbChannels>( +channel - +AllChannels::SrgbMin );
+    return IsSrgbChannel( channel ) ? static_cast<SrgbChannels>( +channel - +AllChannels::SrgbMin ) : SrgbChannels::unknown;
 }
 
 [[nodiscard]] inline constexpr AllChannels LabChannelsToAllChannels( LabChannels const channel ) {
-    return static_cast<AllChannels>( +channel + +AllChannels::LabMin );
+    return IsLabChannel(channel) ? static_cast<AllChannels>( +channel /*+ +AllChannels::LabMin*/ ) : AllChannels::unknown;
 }
 
 [[nodiscard]] inline constexpr AllChannels SrgbChannelsToAllChannels( SrgbChannels const channel ) {
-    return static_cast<AllChannels>( +channel + +AllChannels::SrgbMin );
+    return IsSrgbChannel( channel ) ? static_cast<AllChannels>( +channel + +AllChannels::SrgbMin ) : AllChannels::unknown;
 }
 
 [[nodiscard]] inline constexpr RawLabTriplet ScaleLabColor( LabTriplet const& values ) {
