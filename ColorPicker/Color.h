@@ -70,6 +70,10 @@ int             constexpr ImageSrgbValuesPerPixel { 4 };
 cmsUInt32Number constexpr  LabPixelFormat         { TYPE_Lab_8  };
 cmsUInt32Number constexpr SrgbPixelFormat         { TYPE_BGRA_8 };
 
+LPCWSTR         constexpr  LabChannelNames[3]     { L"L*", L"a*", L"b*" };
+LPCWSTR         constexpr SrgbChannelNames[3]     { L"R",  L"G",  L"B"  };
+LPCWSTR         constexpr  AllChannelNames[6]     { L"L*", L"a*", L"b*", L"R", L"G", L"B" };
+
 //================================================
 // Function prototypes
 //================================================
@@ -85,6 +89,10 @@ cmsUInt32Number constexpr SrgbPixelFormat         { TYPE_BGRA_8 };
 
 [[nodiscard]] RawLabColor   inline constexpr ScaleLabColor(    LabColor const& color );
 [[nodiscard]] LabColor      inline constexpr ScaleLabColor( RawLabColor const& color );
+
+[[nodiscard]] inline constexpr LPCWSTR       ToString(  LabChannels const channel );
+[[nodiscard]] inline constexpr LPCWSTR       ToString( SrgbChannels const channel );
+[[nodiscard]] inline constexpr LPCWSTR       ToString(  AllChannels const channel );
 
 //================================================
 // Classes
@@ -529,6 +537,27 @@ protected:
 
 [[nodiscard]] inline constexpr LabColor ScaleLabColor( RawLabColor const& color ) {
     return LabColor { ScaleLabColor( color.GetChannelValues( ) ) };
+}
+
+[[nodiscard]] inline constexpr LPCWSTR ToString( LabChannels const channel ) {
+    return
+        ( channel == LabChannels::unknown ) ? L"unknown"                :
+        IsLabChannel( channel )             ? LabChannelNames[+channel] :
+        nullptr;
+}
+
+[[nodiscard]] inline constexpr LPCWSTR ToString( SrgbChannels const channel ) {
+    return
+        ( channel == SrgbChannels::unknown ) ? L"unknown"                 :
+        IsSrgbChannel( channel )             ? SrgbChannelNames[+channel] :
+        nullptr;
+}
+
+[[nodiscard]] inline constexpr LPCWSTR ToString( AllChannels const channel ) {
+    return
+        ( channel == AllChannels::unknown ) ? L"unknown"                :
+        IsAllChannel( channel )             ? AllChannelNames[+channel] :
+        nullptr;
 }
 
 //================================================
