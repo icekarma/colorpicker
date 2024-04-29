@@ -12,30 +12,32 @@ template<typename ValueT> class SrgbColorTemplate;
 //================================================
 
 enum class LabChannels: unsigned {
+    L, a, b,
+
     unknown = ~0u,
-    L       =  0,
-    a       =  1,
-    b       =  2,
+    Min     =   L,
+    Max     =   b
 };
 
 enum class SrgbChannels: unsigned {
+    R, G, B,
+
     unknown = ~0u,
-    R       =  0,
-    G       =  1,
-    B       =  2,
+    Min     =   R,
+    Max     =   B
 };
 
 enum class AllChannels: unsigned {
-    LabL    =  0, LabA    =  1, LabB    =  2,
-    SrgbR   =  3, SrgbG   =  4, SrgbB   =  5,
+     LabL,  LabA,  LabB,
+    SrgbR, SrgbG, SrgbB,
 
-    unknown = ~0u,
-    Min     = AllChannels::LabL,
-    Max     = AllChannels::SrgbB,
-    LabMin  = AllChannels::LabL,
-    LabMax  = AllChannels::LabB,
-    SrgbMin = AllChannels::SrgbR,
-    SrgbMax = AllChannels::SrgbB,
+    unknown =   ~0u,
+    Min     =  LabL,
+    Max     = SrgbB,
+    LabMin  =  LabL,
+    LabMax  =  LabB,
+    SrgbMin = SrgbR,
+    SrgbMax = SrgbB
 };
 
 //================================================
