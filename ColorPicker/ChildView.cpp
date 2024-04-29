@@ -138,19 +138,19 @@ namespace {
     wchar_t* _SafeGetWindowText( CEdit const& edit ) {
         int cbText { edit.GetWindowTextLength( ) };
         if ( cbText < 1 ) {
-            debug( L"_SafeGetWindowText: bail 1: no text in control\n" );
+            debug( L"_SafeGetWindowText: no text in control\n" );
             return nullptr;
         }
         ++cbText;
 
         wchar_t* pwszText { new wchar_t[cbText + 1u] { } };
         if ( !pwszText ) {
-            debug( L"_SafeGetWindowText: bail 2: memory allocation failure\n" );
+            debug( L"_SafeGetWindowText: memory allocation failure\n" );
             return nullptr;
         }
         if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
             delete[] pwszText;
-            debug( L"_SafeGetWindowText: bail 3: GetWindowText failed\n" );
+            debug( L"_SafeGetWindowText: GetWindowText failed\n" );
             return nullptr;
         }
 
@@ -167,7 +167,7 @@ namespace {
     bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
-            debug( L"_GetValueFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            debug( L"_GetValueFromEdit: _SafeGetWindowText returned nullptr\n" );
             return false;
         }
 
@@ -175,7 +175,7 @@ namespace {
         long tmp { wcstol( pwszText, &pwszEnd, 10 ) };
         if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
             delete[] pwszText;
-            debug( L"_GetValueFromEdit: bail 2: garbage in number\n" );
+            debug( L"_GetValueFromEdit: garbage in number\n" );
             return false;
         }
 
@@ -224,7 +224,7 @@ namespace {
     bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
-            debug( L"_GetHexColorFromEdit: bail 1: _SafeGetWindowText returned nullptr\n" );
+            debug( L"_GetHexColorFromEdit: _SafeGetWindowText returned nullptr\n" );
             return false;
         }
 
@@ -232,7 +232,7 @@ namespace {
         long tmp { wcstol( pwszText, &pwszEnd, 16 ) };
         if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
             delete[] pwszText;
-            debug( L"_GetHexColorFromEdit: bail 2: garbage in number\n" );
+            debug( L"_GetHexColorFromEdit: garbage in number\n" );
             return false;
         }
 
@@ -273,7 +273,7 @@ CChildView::CChildView( ):
 {
 #if defined _DEBUG
     if ( g_pChildView ) {
-        debug( L"CChildView::`ctor: WARNING: g_pChildView is not null! (0x%p)\n", g_pChildView );
+        debug( L"CChildView::`ctor: WARNING: g_pChildView is not nullptr! (0x%p)\n", g_pChildView );
         DebugBreak( );
     }
 #endif // defined _DEBUG
@@ -284,7 +284,7 @@ CChildView::CChildView( ):
 CChildView::~CChildView( ) {
 #if defined _DEBUG
     if ( !g_pChildView ) {
-        debug( L"CChildView::`dtor: WARNING: g_pChildView is null!\n" );
+        debug( L"CChildView::`dtor: WARNING: g_pChildView is nullptr!\n" );
         DebugBreak( );
     }
 #endif // defined _DEBUG
@@ -304,12 +304,13 @@ LRESULT CChildView::_EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARA
 }
 
 LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam ) {
-    debug( L"CChildView::EditWndProc: hwnd: 0x%p, uMessage: 0x%04X, wParam: 0x%08lX, lParam: 0x%08lX; %s\n", hwnd, uMessage, wParam, lParam, (LPCWSTR) GetNameForWindowsMessage( uMessage ) );
+    //debug( L"CChildView::EditWndProc: hwnd: 0x%p, uMessage: 0x%04X, wParam: 0x%08lX, lParam: 0x%08lX; %s\n", hwnd, uMessage, wParam, lParam, static_cast<LPCWSTR>( GetNameForWindowsMessage( uMessage ) ) );
 
     WNDPROC wndProc { MapHwndToWndProc( hwnd ) };
     if ( !wndProc ) {
-        debug( L"CChildView::EditWndProc: Uh-oh: Window handle didn't map to a wndproc\n" );
-        abort( );
+        debug( L"CChildView::EditWndProc: Uh oh: Window handle didn't map to a WNDPROC\n" );
+        DebugBreak( );
+        return 0;
     }
 
     AllChannels channel { MapHwndToChannel( hwnd ) };
@@ -601,17 +602,28 @@ void CChildView::OnValueEditGotFocus( UINT uId ) {
     m_pCurrentEdit = MapValueControlIdToEditControl( uId );
 
 #if defined _DEBUG
-    if ( !m_pCurrentEdit ) {
-        debug( L"CChildView::OnEditGotFocus: Mapping control ID %u to object failed\n", uId );
+    if ( m_pCurrentEdit ) {
+        debug( L"CChildView::OnValueEditGotFocus: Uh oh: m_pCurrentEdit not nullptr on entry\n" );
+        DebugBreak( );
     }
 #endif // defined _DEBUG
 }
 
 void CChildView::OnValueEditLostFocus( UINT uId ) {
     if ( !m_pCurrentEdit ) {
-        debug( L"CChildView::OnEditLostFocus: uId %d: weird, lost focus with m_pCurrentEdit==nullptr\n" );
+        // this signifies it's not of the L*a*b* or RGB edit controls
         return;
     }
+
+#if defined _DEBUG
+    if ( CEdit* pEdit { MapValueControlIdToEditControl( uId ) }; !pEdit ) {
+        debug( L"CChildView::OnValueEditGotFocus: Couldn't map control ID to edit control\n" );
+        DebugBreak( );
+    } else if ( m_pCurrentEdit != pEdit ) {
+        debug( L"CChildView::OnValueEditGotFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
 
     if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
         // TODO range check
@@ -642,9 +654,10 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
 
     int adjust { };
     switch ( nChar ) {
-        case VK_UP:   debug( L"+ Up arrow pressed\n"   ); adjust =  1; break;
-        case VK_DOWN: debug( L"+ Down arrow pressed\n" ); adjust = -1; break;
-        default:      return false;
+        case VK_UP:   adjust =  1; break;
+        case VK_DOWN: adjust = -1; break;
+
+        default: return false;
     }
 
     m_fBlockBitmapUpdates = true;
