@@ -128,7 +128,7 @@ namespace {
         ctrl->SetWindowPlacement( &wp );
     }
 
-    bool _IsTextSelected( CEdit const* pEdit ) {
+    [[nodiscard]] bool _IsTextSelected( CEdit const* pEdit ) {
         int nStartIndex, nEndIndex;
 
         pEdit->GetSel( nStartIndex, nEndIndex );
@@ -163,7 +163,7 @@ namespace {
         return pwszText;
     }
 
-    bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
+    [[nodiscard]] bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
             debug( L"_GetValueFromEdit: _SafeGetWindowText returned nullptr\n" );
@@ -183,7 +183,7 @@ namespace {
         return true;
     }
 
-    bool _GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+    [[nodiscard]] bool _GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
         int nOldValue { nValue };
 
         if ( _GetValueFromEdit( edit, nValue ) ) {
@@ -220,7 +220,7 @@ namespace {
         }
     }
 
-    bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
+    [[nodiscard]] bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
         wchar_t* pwszText { _SafeGetWindowText( edit ) };
         if ( !pwszText ) {
             debug( L"_GetHexColorFromEdit: _SafeGetWindowText returned nullptr\n" );
@@ -244,7 +244,7 @@ namespace {
         return true;
     }
 
-    bool _GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
+    [[nodiscard]] bool _GetHexColorAndChangedFromEdit( CEdit const& edit, SrgbTriplet& values, bool& fChanged ) {
         SrgbTriplet oldValues { values };
 
         if ( _GetHexColorFromEdit( edit, values ) ) {
