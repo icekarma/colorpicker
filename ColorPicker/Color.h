@@ -264,22 +264,22 @@ public:
     }
 
     [[nodiscard]] constexpr ValueT GetChannelValue( LabChannels const channel ) const noexcept {
-        assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
+        assert( IsLabChannel( channel ) );
         return _values[+channel];
     }
 
     constexpr void SetChannelValue( LabChannels const channel, ValueT const value ) noexcept {
-        assert( ( channel >= LabChannels::L ) && ( channel <= LabChannels::b ) );
+        assert( IsLabChannel( channel ) );
         _values[+channel] = value;
     }
 
     [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
-        assert( ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax ) );
+        assert( IsLabChannel( channel ) );
         return _values[+AllChannelsToLabChannels( channel )];
     }
 
     virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
-        assert( ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax ) );
+        assert( IsLabChannel( channel ) );
         _values[+AllChannelsToLabChannels( channel )] = value;
     }
 
@@ -396,22 +396,22 @@ public:
     }
 
     [[nodiscard]] constexpr ValueT GetChannelValue( SrgbChannels const channel ) const noexcept {
-        assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
+        assert( IsSrgbChannel( channel ) );
         return _values[+channel];
     }
 
     [[nodiscard]] constexpr void SetChannelValue( SrgbChannels const channel, ValueT const value ) noexcept {
-        assert( ( channel >= SrgbChannels::R ) && ( channel <= SrgbChannels::B ) );
+        assert( IsSrgbChannel( channel ) );
         _values[+channel] = value;
     }
 
     [[nodiscard]] virtual constexpr ValueT GetChannelValue( AllChannels const channel ) const noexcept override {
-        assert( ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax ) );
+        assert( IsSrgbChannel( channel ) );
         return _values[+AllChannelsToSrgbChannels( channel )];
     }
 
     [[nodiscard]] virtual constexpr void SetChannelValue( AllChannels const channel, ValueT const value ) noexcept override {
-        assert( ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax ) );
+        assert( IsSrgbChannel( channel ) );
         _values[+AllChannelsToSrgbChannels( channel )] = value;
     }
 
