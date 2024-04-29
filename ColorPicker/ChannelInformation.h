@@ -20,4 +20,4 @@ public:
 
 };
 
-extern std::unordered_map<AllChannels, ChannelInformation> const AllChannelsInformation;
+extern ChannelInformation const AllChannelsInformation[6];
