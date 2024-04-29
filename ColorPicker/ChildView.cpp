@@ -141,20 +141,19 @@ namespace {
             debug( L"_SafeGetWindowText: no text in control\n" );
             return nullptr;
         }
-        ++cbText;
 
-        wchar_t* pwszText { new wchar_t[cbText + 1u] { } };
+        wchar_t* pwszText { new wchar_t[static_cast<size_t>( cbText + 1 )] };
         if ( !pwszText ) {
             debug( L"_SafeGetWindowText: memory allocation failure\n" );
             return nullptr;
         }
-        if ( edit.GetWindowText( pwszText, cbText ) < 1 ) {
+        if ( edit.GetWindowText( pwszText, cbText + 1 ) < 1 ) {
             delete[] pwszText;
             debug( L"_SafeGetWindowText: GetWindowText failed\n" );
             return nullptr;
         }
 
-        for ( int index { cbText - 2 }; index >= 0; --index ) {
+        for ( int index { cbText - 1 }; index >= 0; --index ) {
             if ( !iswspace( pwszText[index] ) ) {
                 break;
             }
