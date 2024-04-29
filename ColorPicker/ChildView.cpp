@@ -42,55 +42,41 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                       &CChildView::OnXyGridMouseMove      )
 END_MESSAGE_MAP( )
 
+//
+// Global constants
+//
+
+std::unordered_map<UINT, AllChannels> const g_mapLabelControlIdToChannel {
+    { IDC_LAB_L_LABEL,  AllChannels::LabL  },
+    { IDC_LAB_A_LABEL,  AllChannels::LabA  },
+    { IDC_LAB_B_LABEL,  AllChannels::LabB  },
+    { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
+    { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
+    { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
+};
+
+std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel {
+    { IDC_LAB_L_VALUE,  AllChannels::LabL  },
+    { IDC_LAB_A_VALUE,  AllChannels::LabA  },
+    { IDC_LAB_B_VALUE,  AllChannels::LabB  },
+    { IDC_SRGB_R_VALUE, AllChannels::SrgbR },
+    { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
+    { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
+};
+
 namespace {
 
     //
-    // Constants
+    // Private constants
     //
 
-    std::vector<AllChannelsTriplet> const _ChannelXyzTriplets {
-        { { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  } }, // AllChannels::LabL
-        { { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  } }, // AllChannels::LabA
-        { { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  } }, // AllChannels::LabB
-        { { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR } }, // AllChannels::SrgbR
-        { { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG } }, // AllChannels::SrgbG
-        { { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB } }  // AllChannels::SrgbB
-    };
-
-    std::vector<UINT> const _ChannelToLabelControlIdMap {
-        IDC_LAB_L_LABEL,
-        IDC_LAB_A_LABEL,
-        IDC_LAB_B_LABEL,
-        IDC_SRGB_R_LABEL,
-        IDC_SRGB_G_LABEL,
-        IDC_SRGB_B_LABEL
-    };
-
-    std::vector<UINT> const _ChannelToValueControlIdMap {
-        IDC_LAB_L_VALUE,
-        IDC_LAB_A_VALUE,
-        IDC_LAB_B_VALUE,
-        IDC_SRGB_R_VALUE,
-        IDC_SRGB_G_VALUE,
-        IDC_SRGB_B_VALUE
-    };
-
-    std::unordered_map<UINT, AllChannels> const _LabelControlIdToChannelMap {
-        { IDC_LAB_L_LABEL,  AllChannels::LabL  },
-        { IDC_LAB_A_LABEL,  AllChannels::LabA  },
-        { IDC_LAB_B_LABEL,  AllChannels::LabB  },
-        { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
-        { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
-        { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
-    };
-
-    std::unordered_map<UINT, AllChannels> const _ValueControlIdToChannelMap {
-        { IDC_LAB_L_VALUE,  AllChannels::LabL  },
-        { IDC_LAB_A_VALUE,  AllChannels::LabA  },
-        { IDC_LAB_B_VALUE,  AllChannels::LabB  },
-        { IDC_SRGB_R_VALUE, AllChannels::SrgbR },
-        { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
-        { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
+    AllChannelsTriplet const _ChannelXyzTriplets[6] {
+        { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  },
+        { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  },
+        { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  },
+        { AllChannels::SrgbB, AllChannels::SrgbG, AllChannels::SrgbR },
+        { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG },
+        { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB }
     };
 
     //
@@ -102,14 +88,6 @@ namespace {
     //
     // Private functions
     //
-
-    AllChannels _MapLabelControlIdToChannel( UINT const uId ) {
-        return _MapImpl( _LabelControlIdToChannelMap, uId, AllChannels::unknown );
-    }
-
-    AllChannels _MapValueControlIdToChannel( UINT const uId ) {
-        return _MapImpl( _ValueControlIdToChannelMap, uId, AllChannels::unknown );
-    }
 
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
         WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
@@ -449,22 +427,6 @@ void CChildView::OnInitialUpdate( ) {
     // Initialize member variables
     //
 
-    m_mapChannelToButtonControl = {
-        { AllChannels::LabL,          &m_radioLabL  },
-        { AllChannels::LabA,          &m_radioLabA  },
-        { AllChannels::LabB,          &m_radioLabB  },
-        { AllChannels::SrgbR,         &m_radioSrgbR },
-        { AllChannels::SrgbG,         &m_radioSrgbG },
-        { AllChannels::SrgbB,         &m_radioSrgbB }
-    };
-    m_mapChannelToEditControl = {
-        { AllChannels::LabL,          &m_editLabL  },
-        { AllChannels::LabA,          &m_editLabA  },
-        { AllChannels::LabB,          &m_editLabB  },
-        { AllChannels::SrgbR,         &m_editSrgbR },
-        { AllChannels::SrgbG,         &m_editSrgbG },
-        { AllChannels::SrgbB,         &m_editSrgbB }
-    };
     m_mapHwndToChannel = {
         { m_editLabL .GetSafeHwnd( ), AllChannels::LabL  },
         { m_editLabA .GetSafeHwnd( ), AllChannels::LabA  },
@@ -538,7 +500,7 @@ void CChildView::OnInitialUpdate( ) {
     //
 
     for ( AllChannels channel { AllChannels::Min }; channel <= AllChannels::Max; ++channel ) {
-        m_mapChannelToButtonControl[channel]->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
+        m_mapChannelToButtonControl[+channel]->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
     }
 
     m_staticZStrip.SetDocument( m_pDoc );
@@ -636,7 +598,7 @@ void CChildView::OnViewInvert( ) {
 }
 
 void CChildView::OnValueEditGotFocus( UINT uId ) {
-    m_pCurrentEdit = MapChannelToEditControl( _MapValueControlIdToChannel( uId ) );
+    m_pCurrentEdit = MapValueControlIdToEditControl( uId );
 
 #if defined _DEBUG
     if ( !m_pCurrentEdit ) {
@@ -712,7 +674,7 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
 }
 
 void CChildView::OnChannelRadioClicked( UINT const uId ) {
-    AllChannels channel { _MapLabelControlIdToChannel( uId ) };
+    AllChannels channel { MapLabelControlIdToChannel( uId ) };
     if ( channel == AllChannels::unknown ) {
         return;
     }

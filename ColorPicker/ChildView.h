@@ -6,6 +6,9 @@
 #include "XyGrid.h"
 #include "ZStrip.h"
 
+extern std::unordered_map<UINT, AllChannels> const g_mapLabelControlIdToChannel;
+extern std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel;
+
 class CChildView:
     public CFormView
 {
@@ -40,8 +43,8 @@ protected:
 
     LRESULT EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
 
-    CEdit* MapChannelToEditControl( AllChannels const channel ) const {
-        return _MapImpl( m_mapChannelToEditControl, channel );
+    CButton* MapChannelToButtonControl( AllChannels const channel ) const {
+        return ( channel <= AllChannels::Max ) ? m_mapChannelToButtonControl[+channel] : nullptr;
     }
 
     AllChannels MapHwndToChannel( HWND const hwnd ) const {
@@ -50,6 +53,18 @@ protected:
 
     WNDPROC MapHwndToWndProc( HWND const hwnd ) const {
         return _MapImpl( m_mapHwndToWndProc, hwnd );
+    }
+
+    AllChannels MapLabelControlIdToChannel( UINT const uId ) const {
+        return _MapImpl( g_mapLabelControlIdToChannel, uId, AllChannels::unknown );
+    }
+
+    AllChannels MapValueControlIdToChannel( UINT const uId ) const {
+        return _MapImpl( g_mapValueControlIdToChannel, uId, AllChannels::unknown );
+    }
+
+    CEdit* MapValueControlIdToEditControl( UINT const uId ) const {
+        return _MapImpl( m_mapValueControlIdToEditControl, uId );
     }
 
     void UpdateBitmaps( ) {
@@ -103,10 +118,27 @@ protected:
     // Member variables
     //============================================
 
-    std::unordered_map<AllChannels, CButton*>    m_mapChannelToButtonControl;
-    std::unordered_map<AllChannels, CEdit*>      m_mapChannelToEditControl;
-    std::unordered_map<HWND,        AllChannels> m_mapHwndToChannel;
-    std::unordered_map<HWND,        WNDPROC>     m_mapHwndToWndProc;
+    CButton* const m_mapChannelToButtonControl[6] {
+        &m_radioLabL,
+        &m_radioLabA,
+        &m_radioLabB,
+        &m_radioSrgbR,
+        &m_radioSrgbG,
+        &m_radioSrgbB,
+    };
+
+    std::unordered_map<UINT, CEdit*> const m_mapValueControlIdToEditControl {
+        {     IDC_LAB_L_VALUE, &m_editLabL     },
+        {     IDC_LAB_A_VALUE, &m_editLabA     },
+        {     IDC_LAB_B_VALUE, &m_editLabB     },
+        {    IDC_SRGB_R_VALUE, &m_editSrgbR    },
+        {    IDC_SRGB_G_VALUE, &m_editSrgbG    },
+        {    IDC_SRGB_B_VALUE, &m_editSrgbB    },
+        { IDC_HEX_COLOR_VALUE, &m_editHexColor },
+    };
+
+    std::unordered_map<HWND, AllChannels> m_mapHwndToChannel;
+    std::unordered_map<HWND, WNDPROC>     m_mapHwndToWndProc;
 
     CColorPickerDoc* m_pDoc                     { };
     CEdit*           m_pCurrentEdit             { };
