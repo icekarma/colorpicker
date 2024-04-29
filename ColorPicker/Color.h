@@ -498,11 +498,23 @@ protected:
 //================================================
 
 [[nodiscard]] inline constexpr bool IsLabChannel( AllChannels const channel ) {
-    return ( channel >= AllChannels::LabMin ) && ( channel <= AllChannels::LabMax );
+    return /*( channel >= AllChannels::LabMin ) &&*/ ( channel <= AllChannels::LabMax );
+}
+
+[[nodiscard]] inline constexpr bool IsLabChannel( LabChannels const channel ) {
+    return /*( channel >= LabChannels::Min ) &&*/ ( channel <= LabChannels::Max );
 }
 
 [[nodiscard]] inline constexpr bool IsSrgbChannel( AllChannels const channel ) {
     return ( channel >= AllChannels::SrgbMin ) && ( channel <= AllChannels::SrgbMax );
+}
+
+[[nodiscard]] inline constexpr bool IsSrgbChannel( SrgbChannels const channel ) {
+    return /*( channel >= SrgbChannels::Min ) &&*/ ( channel <= SrgbChannels::Max );
+}
+
+[[nodiscard]] inline constexpr bool IsAllChannel( AllChannels const channel ) {
+    return /*( channel >= AllChannels::Min ) &&*/ ( channel <= AllChannels::Max );
 }
 
 [[nodiscard]] inline constexpr LabChannels AllChannelsToLabChannels( AllChannels const channel ) {
@@ -523,17 +535,17 @@ protected:
 
 [[nodiscard]] inline constexpr RawLabTriplet ScaleLabColor( LabTriplet const& values ) {
     return { {
-        static_cast<RawLabValueT>( static_cast<int>( values[0] ) * 255 / 100 ),
-        static_cast<RawLabValueT>( static_cast<int>( values[1] ) + 128       ),
-        static_cast<RawLabValueT>( static_cast<int>( values[2] ) + 128       )
+        static_cast<RawLabValueT>( static_cast<int>( values[+LabChannels::L] ) * 255 / 100 ),
+        static_cast<RawLabValueT>( static_cast<int>( values[+LabChannels::a] ) + 128       ),
+        static_cast<RawLabValueT>( static_cast<int>( values[+LabChannels::b] ) + 128       )
     } };
 }
 
 [[nodiscard]] inline constexpr LabTriplet ScaleLabColor( RawLabTriplet const& values ) {
     return { {
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[0] ) ) * 100 / 255 ),
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[1] ) ) - 128       ),
-        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[2] ) ) - 128       )
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[+LabChannels::L] ) ) * 100 / 255 ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[+LabChannels::a] ) ) - 128       ),
+        static_cast<LabValueT>( static_cast<int>( static_cast<unsigned>( values[+LabChannels::b] ) ) - 128       )
     } };
 }
 
@@ -543,6 +555,18 @@ protected:
 
 [[nodiscard]] inline constexpr LabColor ScaleLabColor( RawLabColor const& color ) {
     return LabColor { ScaleLabColor( color.GetChannelValues( ) ) };
+}
+
+[[nodiscard]] inline constexpr int ScaleLabColor( AllChannels const channel, int const value ) {
+    if ( IsLabChannel( channel ) ) {
+        if ( channel == AllChannels::LabL ) {
+            return value * 100 / 255;
+        } else {
+            return value - 128;
+        }
+    } else {
+        return value;
+    }
 }
 
 [[nodiscard]] inline constexpr LPCWSTR ToString( LabChannels const channel ) {
