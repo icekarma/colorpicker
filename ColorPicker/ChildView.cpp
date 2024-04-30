@@ -266,6 +266,11 @@ namespace {
         return GetLastError( );
     }
 
+    [[nodiscard]] int _ClipToChannelRange( AllChannels const channel, int const value ) {
+        ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
+        return std::min( std::max( value, channelInfo.m_minimumValue ), channelInfo.m_maximumValue );
+    }
+
 }
 
 CChildView::CChildView( ):
