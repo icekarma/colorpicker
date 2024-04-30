@@ -16,11 +16,6 @@ namespace {
 
 }
 
-CColorPickerDoc::CColorPickerDoc( ) {
-    m_LabColor  = RawLabDefaultColor;
-    m_SrgbColor =   SrgbDefaultColor;
-}
-
 BOOL CColorPickerDoc::OnNewDocument( ) {
     if ( !CDocument::OnNewDocument( ) ) {
         return FALSE;
