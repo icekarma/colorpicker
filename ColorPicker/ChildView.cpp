@@ -352,36 +352,33 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     }
 }
 
-void CChildView::SubclassEditControl( CEdit& pEdit, WNDPROC const wndProc ) {
-    HWND hwndEdit { pEdit.GetSafeHwnd( ) };
+void CChildView::SubclassEditControl( CEdit& pEdit, WNDPROC const newWndProc ) {
+    HWND    hwndEdit { pEdit.GetSafeHwnd( ) };
+    WNDPROC wndProc;
 
-    SetLastError( ERROR_SUCCESS );
-    LONG_PTR result = SetWindowLongPtr( hwndEdit, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( wndProc ) );
-    if ( result ) {
-        m_mapHwndToWndProc[hwndEdit] = reinterpret_cast<WNDPROC>( result );
+    if ( DWORD dwError { _SetWindowProcedure( hwndEdit, newWndProc, wndProc ) }; !dwError ) {
+        m_mapHwndToWndProc[hwndEdit] = wndProc;
     } else {
-        if ( DWORD const dwLastError = GetLastError( ); dwLastError ) {
-            debug( L"CChildView::SubclassEditControl: SetWindowLongPtr failed for pEdit 0x%p, hwnd 0x%p, error: %lu\n", &pEdit, hwndEdit, dwLastError );
-        }
+        debug( L"CChildView::SubclassEditControl: pEdit 0x%p, hwnd 0x%p: SetWindowLongPtr failed: error %lu\n", &pEdit, hwndEdit, dwError );
+        DebugBreak( );
     }
 }
 
 void CChildView::UnSubclassEditControl( CEdit& pEdit ) {
     HWND hwndEdit { pEdit.GetSafeHwnd( ) };
-
-    WNDPROC wndProc { MapHwndToWndProc( hwndEdit ) };
-    if ( !wndProc ) {
+    if ( !m_mapHwndToWndProc.contains( hwndEdit ) ) {
+        debug( L"CChildView::UnSubclassEditControl: pEdit 0x%p, hwnd 0x%p: Control isn't subclassed\n", &pEdit, hwndEdit );
+        DebugBreak( );
         return;
     }
 
-    SetLastError( ERROR_SUCCESS );
-    LONG_PTR result = SetWindowLongPtr( hwndEdit, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( wndProc ) );
-    if ( result ) {
+    WNDPROC wndProc { m_mapHwndToWndProc.at( hwndEdit ) };
+    WNDPROC oldWndProc;
+    if ( DWORD dwError { _SetWindowProcedure( hwndEdit, wndProc, oldWndProc ) }; !dwError ) {
         m_mapHwndToWndProc.erase( hwndEdit );
     } else {
-        if ( DWORD const dwLastError = GetLastError( ); dwLastError ) {
-            debug( L"CChildView::UnSubclassEditControl: SetWindowLongPtr failed for pEdit 0x%p, hwnd 0x%p, error: %lu\n", &pEdit, hwndEdit, dwLastError );
-        }
+        debug( L"CChildView::UnSubclassEditControl: pEdit 0x%p, hwnd 0x%p: SetWindowLongPtr failed: error %lu\n", &pEdit, hwndEdit, dwError );
+        DebugBreak( );
     }
 }
 
