@@ -32,8 +32,10 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
 int CColorPickerDoc::GetChannelValue( AllChannels const channel ) {
     if ( IsLabChannel( channel ) ) {
         return m_LabColor.GetChannelValue( channel );
-    } else {
+    } else if ( IsSrgbChannel( channel ) ) {
         return m_SrgbColor.GetChannelValue( channel );
+    } else {
+        return INT_MIN;
     }
 }
 
@@ -45,7 +47,7 @@ void CColorPickerDoc::_SetChannelValueImpl( AllChannels const channel, int const
         } else {
             m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue - 128 ) );
         }
-    } else {
+    } else if ( IsSrgbChannel( channel ) ) {
         m_SrgbColor.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
     }
 }
@@ -55,7 +57,7 @@ void CColorPickerDoc::SetChannelValue( AllChannels const channel, int const nVal
 
     if ( IsLabChannel( channel ) ) {
         SetColor( m_LabColor );
-    } else {
+    } else if ( IsSrgbChannel( channel ) ) {
         SetColor( m_SrgbColor );
     }
 }
