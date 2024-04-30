@@ -41,12 +41,7 @@ int CColorPickerDoc::GetChannelValue( AllChannels const channel ) {
 
 void CColorPickerDoc::_SetChannelValueImpl( AllChannels const channel, int const nValue ) {
     if ( IsLabChannel( channel ) ) {
-        // TODO should this really be rescaling the value? What guarantees that callers only pass values effectively of type RawLabValueT?
-        if ( channel == AllChannels::LabL ) {
-            m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue * 100 / 255 ) );
-        } else {
-            m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue - 128 ) );
-        }
+        m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue ) );
     } else if ( IsSrgbChannel( channel ) ) {
         m_SrgbColor.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
     }
