@@ -154,22 +154,23 @@ namespace {
     }
 
     [[nodiscard]] bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
-        wchar_t* pwszText { _SafeGetWindowText( edit ) };
-        if ( !pwszText ) {
-            debug( L"_GetValueFromEdit: _SafeGetWindowText returned nullptr\n" );
+        CString strText { _SafeGetWindowText( edit ) };
+        if ( strText.IsEmpty( ) ) {
+            debug( L"_GetValueFromEdit: no text in edit control\n" );
             return false;
         }
 
         wchar_t* pwszEnd { };
-        long tmp { wcstol( pwszText, &pwszEnd, 10 ) };
-        if ( !pwszEnd || *pwszEnd || ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
-            delete[] pwszText;
-            debug( L"_GetValueFromEdit: garbage in number\n" );
+        long tmp { wcstol( strText, &pwszEnd, 10 ) };
+        if ( !pwszEnd || *pwszEnd ) {
+            debug( L"_GetValueFromEdit: garbage in number: '%s'\n", pwszEnd );
+            return false;
+        } else if ( ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+            debug( L"_GetValueFromEdit: number out of range: %ld\n", tmp );
             return false;
         }
 
         nValue = static_cast<int>( tmp );
-        delete[] pwszText;
         return true;
     }
 
@@ -211,26 +212,30 @@ namespace {
     }
 
     [[nodiscard]] bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
-        wchar_t* pwszText { _SafeGetWindowText( edit ) };
-        if ( !pwszText ) {
-            debug( L"_GetHexColorFromEdit: _SafeGetWindowText returned nullptr\n" );
+        CString strText { _SafeGetWindowText( edit ) };
+        if ( strText.IsEmpty( ) ) {
+            debug( L"_GetHexColorFromEdit: no text in edit control\n" );
             return false;
+        }
+        if ( strText[0] == '#' ) {
+            strText.Delete( 0, 1 );
         }
 
         wchar_t* pwszEnd { };
-        long tmp { wcstol( pwszText, &pwszEnd, 16 ) };
-        if ( !pwszEnd || *pwszEnd || ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
-            delete[] pwszText;
-            debug( L"_GetHexColorFromEdit: garbage in number\n" );
+        long tmp { wcstol( strText, &pwszEnd, 16 ) };
+        if ( !pwszEnd || *pwszEnd ) {
+            debug( L"_GetHexColorFromEdit: garbage in number: '%s'\n", pwszEnd );
+            return false;
+        } else if ( ( tmp < 0 ) || ( tmp > 0xFFFFFF ) ) {
+            debug( L"_GetHexColorFromEdit: number out of range: %ld\n", tmp );
             return false;
         }
 
-        int r {   tmp >> 16          };
-        int g { ( tmp >>  8 ) & 0xFF };
-        int b {   tmp         & 0xFF };
+        int r { static_cast<int>( ( tmp >> 16L ) & 0xFFL ) };
+        int g { static_cast<int>( ( tmp >>  8L ) & 0xFFL ) };
+        int b { static_cast<int>(   tmp          & 0xFFL ) };
 
         values = { { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) } };
-        delete[] pwszText;
         return true;
     }
 
