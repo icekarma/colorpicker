@@ -260,6 +260,12 @@ namespace {
         edit.SetWindowText( str );
     }
 
+    [[nodiscard]] DWORD _SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
+        SetLastError( ERROR_SUCCESS );
+        oldWndProc = reinterpret_cast<WNDPROC>( SetWindowLongPtr( hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( newWndProc ) ) );
+        return GetLastError( );
+    }
+
 }
 
 CChildView::CChildView( ):
