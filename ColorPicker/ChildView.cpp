@@ -135,32 +135,22 @@ namespace {
         return nStartIndex != nEndIndex;
     }
 
-    wchar_t* _SafeGetWindowText( CEdit const& edit ) {
+    [[nodiscard]] CString _SafeGetWindowText( CEdit const& edit ) {
         int cbText { edit.GetWindowTextLength( ) };
         if ( cbText < 1 ) {
             debug( L"_SafeGetWindowText: no text in control\n" );
-            return nullptr;
+            return { };
         }
 
-        wchar_t* pwszText { new wchar_t[static_cast<size_t>( cbText + 1 )] };
-        if ( !pwszText ) {
-            debug( L"_SafeGetWindowText: memory allocation failure\n" );
-            return nullptr;
-        }
-        if ( edit.GetWindowText( pwszText, cbText + 1 ) < 1 ) {
-            delete[] pwszText;
+        CString str;
+        wchar_t* pwszStr { str.GetBufferSetLength( cbText + 1 ) };
+        if ( edit.GetWindowText( pwszStr, cbText + 1 ) < 1 ) {
             debug( L"_SafeGetWindowText: GetWindowText failed\n" );
-            return nullptr;
+            return { };
         }
+        str.ReleaseBuffer( cbText );
 
-        for ( int index { cbText - 1 }; index >= 0; --index ) {
-            if ( !iswspace( pwszText[index] ) ) {
-                break;
-            }
-            pwszText[index] = '\0';
-        }
-
-        return pwszText;
+        return str.Trim( );
     }
 
     [[nodiscard]] bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
