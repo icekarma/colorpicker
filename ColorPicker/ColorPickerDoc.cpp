@@ -68,11 +68,11 @@ void CColorPickerDoc::SetChannelValues( std::initializer_list<std::pair<AllChann
     bool fLab  { };
     bool fSrgb { };
 
-    for ( auto const& value : values ) {
-        fLab  |= IsLabChannel ( value.first );
-        fSrgb |= IsSrgbChannel( value.first );
+    for ( auto const& [channel, value] : values ) {
+        fLab  |= IsLabChannel ( channel );
+        fSrgb |= IsSrgbChannel( channel );
 
-        _SetChannelValueImpl( value.first, value.second );
+        _SetChannelValueImpl( channel, value );
     }
 
 #if defined _DEBUG
