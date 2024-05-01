@@ -35,7 +35,7 @@ protected:
     // Static methods
     //
 
-    LRESULT static _EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
+    LRESULT static CALLBACK _EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
 
     //
     // Own methods
