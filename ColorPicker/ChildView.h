@@ -140,38 +140,38 @@ protected:
     std::unordered_map<HWND, AllChannels> m_mapHwndToChannel;
     std::unordered_map<HWND, WNDPROC>     m_mapHwndToWndProc;
 
-    CColorPickerDoc* m_pDoc                     { };
-    CEdit*           m_pCurrentEdit             { };
-    bool             m_fBlockBitmapUpdates      { };
+    CColorPickerDoc* m_pDoc                { };
+    CEdit*           m_pCurrentEdit        { };
+    bool             m_fBlockBitmapUpdates { };
 
     //
     // Controls
     //
 
-    CButton       m_groupBoxLab;
-    CButton       m_radioLabL;
-    CButton       m_radioLabA;
-    CButton       m_radioLabB;
-    CEdit         m_editLabL;
-    CEdit         m_editLabA;
-    CEdit         m_editLabB;
+    CButton      m_groupBoxLab;
+    CButton      m_radioLabL;
+    CButton      m_radioLabA;
+    CButton      m_radioLabB;
+    CEdit        m_editLabL;
+    CEdit        m_editLabA;
+    CEdit        m_editLabB;
 
-    CButton       m_groupBoxSrgb;
-    CButton       m_radioSrgbR;
-    CButton       m_radioSrgbG;
-    CButton       m_radioSrgbB;
-    CEdit         m_editSrgbR;
-    CEdit         m_editSrgbG;
-    CEdit         m_editSrgbB;
+    CButton      m_groupBoxSrgb;
+    CButton      m_radioSrgbR;
+    CButton      m_radioSrgbG;
+    CButton      m_radioSrgbB;
+    CEdit        m_editSrgbR;
+    CEdit        m_editSrgbG;
+    CEdit        m_editSrgbB;
 
-    CStatic       m_labelHexColor;
-    CEdit         m_editHexColor;
+    CStatic      m_labelHexColor;
+    CEdit        m_editHexColor;
 
-    CStaticBrush  m_staticSwatch;
-    CZStrip       m_staticZStrip;
-    CXyGrid       m_staticXyGrid;
+    CStaticBrush m_staticSwatch;
+    CZStrip      m_staticZStrip;
+    CXyGrid      m_staticXyGrid;
 
-    CButton       m_buttonClose;
+    CButton      m_buttonClose;
 
     //
     // Channel mapping

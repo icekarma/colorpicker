@@ -335,11 +335,9 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     }
 
     m_staticSwatch.SetColor( m_pDoc->GetSrgbColor( ) );
-
     if ( fUpdateZ ) {
         m_staticZStrip.UpdateBitmap( );
     }
-
     if ( fUpdateXy ) {
         m_staticXyGrid.UpdateBitmap( );
     }
@@ -813,7 +811,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     m_pDoc->SetChannelValues( { { m_channelX, x }, { m_channelY, y } } );
 
-    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    LabTriplet   newLabValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
