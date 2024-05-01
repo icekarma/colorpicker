@@ -164,9 +164,12 @@ namespace {
         if ( !pwszEnd || *pwszEnd ) {
             debug( L"_GetValueFromEdit: garbage in number: '%s'\n", pwszEnd );
             return false;
-        } else if ( ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
-            debug( L"_GetValueFromEdit: number out of range: %ld\n", tmp );
-            return false;
+        }
+        if constexpr ( sizeof( long ) > sizeof( int ) ) {
+            if ( ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
+                debug( L"_GetValueFromEdit: number out of range: %ld\n", tmp );
+                return false;
+            }
         }
 
         nValue = static_cast<int>( tmp );
