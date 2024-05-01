@@ -675,15 +675,8 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
 
     ++m_nBlockBitmapUpdates;
 
-    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-    if ( oldSrgbValues != newSrgbValues ) {
-        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
-    }
+    UpdateLabEditsIfValuesChanged (  oldLabValues,  newLabValues );
+    UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
 
     --m_nBlockBitmapUpdates;
     UpdateBitmaps( );
@@ -777,12 +770,8 @@ void CChildView::OnHexColorUpdate( ) {
 
         ++m_nBlockBitmapUpdates;
 
-        _UpdateEditIfValueChanged( m_editLabL,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-        _UpdateEditIfValueChanged( m_editLabA,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-        _UpdateEditIfValueChanged( m_editLabB,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-        _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-        _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-        _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
+        UpdateLabEditsIfValuesChanged (  oldLabValues,  newLabValues );
+        UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
 
         --m_nBlockBitmapUpdates;
         UpdateBitmaps( );
@@ -803,15 +792,8 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     ++m_nBlockBitmapUpdates;
 
-    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-    if ( oldSrgbValues != newSrgbValues ) {
-        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
-    }
+    UpdateLabEditsIfValuesChanged (  oldLabValues,  newLabValues );
+    UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
 
     --m_nBlockBitmapUpdates;
     UpdateBitmaps( false, true );
@@ -834,15 +816,8 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     ++m_nBlockBitmapUpdates;
 
-    _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
-    _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
-    _UpdateEditIfValueChanged(  m_editLabB,  oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
-    _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-    if ( oldSrgbValues != newSrgbValues ) {
-        _PutHexColorToEdit( m_editHexColor, newSrgbValues );
-    }
+    UpdateLabEditsIfValuesChanged( oldLabValues, newLabValues );
+    UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
 
     --m_nBlockBitmapUpdates;
     UpdateBitmaps( true, false );
