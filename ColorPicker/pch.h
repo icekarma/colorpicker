@@ -20,6 +20,10 @@
 #define  VC_EXTRALEAN
 #define  WIN32_LEAN_AND_MEAN
 
+//
+// Global warning management
+//
+
 #pragma warning( disable: 4061 4191 4514 4625 4626 4710 4711 4820 5027 5045 5245 )
 // C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
 // C4191: 'operator/operation' : unsafe conversion from 'type of expression' to 'type required'
@@ -32,6 +36,13 @@
 // C5027: 'type': move assignment operator was implicitly defined as deleted
 // C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 // C5245: unreferenced function with internal linkage has been removed
+
+//
+// Warning management for #include:s for:
+// * C runtime library
+// * C++ Standard Template Library
+// * MFC (incl. the Windows SDK)
+//
 
 #pragma warning( push )
 #pragma warning( disable: 4081 4263 4264 4266 4365 4946 5026 5204 5220 5240 5246 )
@@ -63,6 +74,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
+#include <utility>
 
 using std::max;
 using std::min;
@@ -87,6 +99,10 @@ using std::min;
 #include <afxdialogex.h>
 
 #pragma warning( pop )
+
+//
+// Warning management for #include:s for LCMS2
+//
 
 #pragma warning( push )
 #pragma warning( disable: 4081 4365 4946 5204 5240 5246 )
@@ -122,7 +138,7 @@ void debug( wchar_t const* format, ArgsT... args ) {
 
 #else // !defined _DEBUG
 
-// A wprintf()-like function to record a message to the debugging facility.
+// A wprintf()-like function to pretend to record a message to the debugging facility.
 template<typename... ArgsT>
 void debug( wchar_t const*, ArgsT... ) {
     /*empty*/
