@@ -51,10 +51,6 @@ public:
         m_fInverted = fInverted;
     }
 
-    void ToggleInverted( ) {
-        m_fInverted = !m_fInverted;
-    }
-
     //
     // Selected channel stuff
     //
