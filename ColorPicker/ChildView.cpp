@@ -319,10 +319,8 @@ LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM
 
     AllChannels channel { MapHwndToChannel( hwnd ) };
     if ( channel != AllChannels::unknown ) {
-        if ( uMessage == WM_KEYDOWN ) {
-            if ( EditControl_OnKeyDown( channel, static_cast<UINT>( wParam ), LOWORD( lParam ), HIWORD( lParam ) ) ) {
-                return 0;
-            }
+        if ( ( uMessage == WM_KEYDOWN ) && EditControl_OnKeyDown( channel, static_cast<UINT>( wParam ), LOWORD( lParam ), HIWORD( lParam ) ) ) {
+            return 0;
         }
     }
 
