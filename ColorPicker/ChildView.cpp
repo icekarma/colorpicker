@@ -491,33 +491,33 @@ void CChildView::OnInitialUpdate( ) {
 
     m_pDoc->LoadFromRegistry( );
 
-    bool               const  fGuiInverted     { !m_pDoc->IsInverted( ) };
-
-    LabTriplet         const   labValues       { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet        const  srgbValues       { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-
-    AllChannels        const  selectedChannel  { m_pDoc->GetSelectedChannel( ) };
-    AllChannelsTriplet const& selectedChannels { _ChannelXyzTriplets[+selectedChannel] };
-
-    m_channelX = selectedChannels[0];
-    m_channelY = selectedChannels[1];
-    m_channelZ = selectedChannels[2];
-
     //
     // Apply them to the controls
     //
 
-    for ( AllChannels channel { AllChannels::Min }; channel <= AllChannels::Max; ++channel ) {
+    AllChannels        const  selectedChannel { m_pDoc->GetSelectedChannel( ) };
+    AllChannelsTriplet const& channels        { _ChannelXyzTriplets[+selectedChannel] };
+
+    m_channelX = channels[0];
+    m_channelY = channels[1];
+    m_channelZ = channels[2];
+
+    for ( AllChannels channel { }; channel <= AllChannels::Max; ++channel ) {
         m_mapChannelToButtonControl[+channel]->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
     }
 
+    bool const fInverted { m_pDoc->IsInverted( ) };
+
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
-    m_staticZStrip.SetInverted( fGuiInverted );
+    m_staticZStrip.SetInverted( fInverted );
 
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-    m_staticXyGrid.SetInverted( fGuiInverted );
+    m_staticXyGrid.SetInverted( fInverted );
+
+    LabTriplet  const  labValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet const srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
     ++m_nBlockBitmapUpdates;
 
@@ -598,24 +598,22 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnViewInvert( ) {
-    m_pDoc->ToggleInverted( );
-
-    bool const fGuiInverted { !m_pDoc->IsInverted( ) };
-    m_staticZStrip.SetInverted( fGuiInverted );
-    m_staticXyGrid.SetInverted( fGuiInverted );
-
+    bool const fInverted { !m_pDoc->IsInverted( ) };
+    m_pDoc       ->SetInverted( fInverted );
+    m_staticZStrip.SetInverted( fInverted );
+    m_staticXyGrid.SetInverted( fInverted );
     UpdateBitmaps( );
 }
 
 void CChildView::OnValueEditGotFocus( UINT uId ) {
-    m_pCurrentEdit = MapValueControlIdToEditControl( uId );
-
 #if defined _DEBUG
     if ( m_pCurrentEdit ) {
         debug( L"CChildView::OnValueEditGotFocus: Uh oh: m_pCurrentEdit not nullptr on entry\n" );
         DebugBreak( );
     }
 #endif // defined _DEBUG
+
+    m_pCurrentEdit = MapValueControlIdToEditControl( uId );
 }
 
 void CChildView::OnValueEditLostFocus( UINT uId ) {
