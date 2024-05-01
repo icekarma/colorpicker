@@ -414,13 +414,7 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     return TRUE;
 }
 
-void CChildView::OnInitialUpdate( ) {
-    CFormView::OnInitialUpdate( );
-
-    //
-    // Initialize member variables
-    //
-
+void CChildView::InitializeMemberVariables( ) {
     m_mapHwndToChannel = {
         { m_editLabL .GetSafeHwnd( ), AllChannels::LabL  },
         { m_editLabA .GetSafeHwnd( ), AllChannels::LabA  },
@@ -431,11 +425,9 @@ void CChildView::OnInitialUpdate( ) {
     };
 
     m_pDoc = static_downcast<CColorPickerDoc>( GetDocument( ) );
+}
 
-    //
-    // Adjust UI controls
-    //
-
+void CChildView::AdjustUIControls( ) {
     SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
     SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
     SIZE constexpr adjustDown1 { 0,  1 }; SIZE constexpr adjustRight1 {  1, 0 };
@@ -469,6 +461,13 @@ void CChildView::OnInitialUpdate( ) {
     _SetSize       ( &m_staticXyGrid,  { 256, 256 } );
 
     _AdjustPosition( &m_buttonClose,   {  -1,  -2 } );
+}
+
+void CChildView::OnInitialUpdate( ) {
+    CFormView::OnInitialUpdate( );
+
+    InitializeMemberVariables( );
+    AdjustUIControls( );
 
     //
     // Load settings from registry
