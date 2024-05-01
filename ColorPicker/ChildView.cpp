@@ -658,11 +658,12 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
     debug( L"CChildView::EditControl_OnKeyDown: channel: %s, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", ToString( channel ), nChar, nRepCnt, nFlags );
 
     int adjust { };
-    switch ( nChar ) {
-        case VK_UP:   adjust =  1; break;
-        case VK_DOWN: adjust = -1; break;
-
-        default: return false;
+    if ( nChar == VK_UP ) {
+        adjust = 1;
+    } else if ( nChar == VK_DOWN ) {
+        adjust = -1;
+    } else {
+        return false;
     }
 
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
