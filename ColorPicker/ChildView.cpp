@@ -331,7 +331,7 @@ LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM
 }
 
 void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
-    if ( m_fBlockBitmapUpdates ) {
+    if ( m_nBlockBitmapUpdates ) {
         return;
     }
 
@@ -474,7 +474,6 @@ void CChildView::OnInitialUpdate( ) {
     // Load settings from registry
     //
 
-    m_fBlockBitmapUpdates = true;
     m_pDoc->LoadFromRegistry( );
 
     bool               const  fGuiInverted     { !m_pDoc->IsInverted( ) };
@@ -505,6 +504,8 @@ void CChildView::OnInitialUpdate( ) {
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
     m_staticXyGrid.SetInverted( fGuiInverted );
 
+    ++m_nBlockBitmapUpdates;
+
     _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
     _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
     _PutValueToEdit   ( m_editLabB,      labValues[ +LabChannels::b] );
@@ -513,7 +514,7 @@ void CChildView::OnInitialUpdate( ) {
     _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
     _PutHexColorToEdit( m_editHexColor, srgbValues );
 
-    m_fBlockBitmapUpdates = false;
+    --m_nBlockBitmapUpdates;
     UpdateBitmaps( );
 
     //
@@ -651,8 +652,6 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
         default: return false;
     }
 
-    m_fBlockBitmapUpdates = true;
-
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
@@ -660,6 +659,8 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
 
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    ++m_nBlockBitmapUpdates;
 
     _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -671,7 +672,7 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
         _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
-    m_fBlockBitmapUpdates = false;
+    --m_nBlockBitmapUpdates;
     UpdateBitmaps( );
 
     return true;
@@ -703,6 +704,8 @@ void CChildView::OnValueEditUpdate( UINT const uId ) {
     LabTriplet  newLabValues  {  oldLabValues };
     SrgbTriplet newSrgbValues { oldSrgbValues };
     bool        fChanged      { };
+
+    ++m_nBlockBitmapUpdates;
 
     switch ( uId ) {
         case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
@@ -740,6 +743,7 @@ sRGB:
         }
     }
 
+    --m_nBlockBitmapUpdates;
     UpdateBitmaps( );
 }
 
@@ -758,22 +762,23 @@ void CChildView::OnHexColorUpdate( ) {
         m_pDoc->SetColor( SrgbColor { newSrgbValues } );
         newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
 
+        ++m_nBlockBitmapUpdates;
+
         _UpdateEditIfValueChanged( m_editLabL,   oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
         _UpdateEditIfValueChanged( m_editLabA,   oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
         _UpdateEditIfValueChanged( m_editLabB,   oldLabValues[ +LabChannels::b],  newLabValues[ +LabChannels::b] );
         _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
         _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
         _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-    }
 
-    UpdateBitmaps( );
+        --m_nBlockBitmapUpdates;
+        UpdateBitmaps( );
+    }
 }
 
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
     int y { mm->point.y };
-
-    m_fBlockBitmapUpdates = true;
 
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -782,6 +787,8 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    ++m_nBlockBitmapUpdates;
 
     _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -793,7 +800,7 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
         _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
-    m_fBlockBitmapUpdates = false;
+    --m_nBlockBitmapUpdates;
     UpdateBitmaps( false, true );
 
     *result = 0;
@@ -804,8 +811,6 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     int x { mm->point.x };
     int y { mm->point.y };
 
-    m_fBlockBitmapUpdates = true;
-
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
@@ -813,6 +818,8 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
     LabTriplet   newLabValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    ++m_nBlockBitmapUpdates;
 
     _UpdateEditIfValueChanged(  m_editLabL,  oldLabValues[ +LabChannels::L],  newLabValues[ +LabChannels::L] );
     _UpdateEditIfValueChanged(  m_editLabA,  oldLabValues[ +LabChannels::a],  newLabValues[ +LabChannels::a] );
@@ -824,7 +831,7 @@ void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
         _PutHexColorToEdit( m_editHexColor, newSrgbValues );
     }
 
-    m_fBlockBitmapUpdates = false;
+    --m_nBlockBitmapUpdates;
     UpdateBitmaps( true, false );
 
     *result = 0;

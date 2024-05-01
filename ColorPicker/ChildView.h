@@ -145,7 +145,7 @@ protected:
 
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };
-    bool             m_fBlockBitmapUpdates { };
+    int              m_nBlockBitmapUpdates { };
 
     //
     // Controls
