@@ -73,7 +73,7 @@ protected:
 
     void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
 
-    void SubclassEditControl( CEdit& pEdit, WNDPROC const wndProc );
+    void SubclassEditControl( CEdit& pEdit, WNDPROC const newWndProc );
     void UnSubclassEditControl( CEdit& pEdit );
 
     void InitializeMemberVariables( );
