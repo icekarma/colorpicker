@@ -51,6 +51,7 @@ using         SrgbValueT = uint8_t;
 template<typename T>
 using            Triplet = std::array<T, 3>;
 
+using         IntTriplet = Triplet<         int>;
 using         LabTriplet = Triplet<   LabValueT>;
 using      RawLabTriplet = Triplet<RawLabValueT>;
 using        SrgbTriplet = Triplet<  SrgbValueT>;
