@@ -780,12 +780,11 @@ void CChildView::OnHexColorUpdate( ) {
 
 void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
-    int y { mm->point.y };
 
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    m_pDoc->SetChannelValue( m_channelZ, y );
+    m_pDoc->SetChannelValue( m_channelZ, ScaleLabColor( m_channelZ, mm->point.y ) );
 
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -803,13 +802,14 @@ void CChildView::OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
 
 void CChildView::OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result ) {
     ZSB_MOUSEMOVE* mm { static_cast<ZSB_MOUSEMOVE*>( pNotifyStruct ) };
-    int x { mm->point.x };
-    int y { mm->point.y };
 
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    m_pDoc->SetChannelValues( { { m_channelX, x }, { m_channelY, y } } );
+    m_pDoc->SetChannelValues( {
+        { m_channelX, ScaleLabColor( m_channelX, mm->point.x ) },
+        { m_channelY, ScaleLabColor( m_channelY, mm->point.y ) }
+    } );
 
     LabTriplet   newLabValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
