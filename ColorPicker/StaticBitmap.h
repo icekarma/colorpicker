@@ -12,8 +12,12 @@ public:
 
     virtual ~CStaticBitmap( ) override = default;
 
+    bool GetInverted( ) const {
+        return !m_fInverted;
+    }
+
     void SetInverted( bool const fInverted ) {
-        m_fInverted = fInverted;
+        m_fInverted = !fInverted;
     }
 
 protected:
