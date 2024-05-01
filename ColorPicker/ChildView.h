@@ -76,6 +76,9 @@ protected:
     void SubclassEditControl( CEdit& pEdit, WNDPROC const wndProc );
     void UnSubclassEditControl( CEdit& pEdit );
 
+    void InitializeMemberVariables( );
+    void AdjustUIControls( );
+
     //
     // Overrides
     //
