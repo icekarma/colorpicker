@@ -76,6 +76,9 @@ protected:
     void SubclassEditControl( CEdit& pEdit, WNDPROC const newWndProc );
     void UnSubclassEditControl( CEdit& pEdit );
 
+    void  UpdateLabEditsIfValuesChanged(  LabTriplet const& oldValues,  LabTriplet const& newValues );
+    void UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, SrgbTriplet const& newValues );
+
     void InitializeMemberVariables( );
     void AdjustUIControls( );
 
