@@ -7,10 +7,6 @@
 #include "ChannelInformation.h"
 #include "Utils.h"
 
-//===================//
-// Hair space: -> <- //
-//===================//
-
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
