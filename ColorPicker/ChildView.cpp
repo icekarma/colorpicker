@@ -710,48 +710,45 @@ void CChildView::OnValueEditUpdate( UINT const uId ) {
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
     LabTriplet  newLabValues  {  oldLabValues };
     SrgbTriplet newSrgbValues { oldSrgbValues };
+    AllChannels channel       { MapValueControlIdToChannel( uId ) };
+    CEdit*      pEdit         { MapValueControlIdToEditControl( uId ) };
     bool        fChanged      { };
 
     ++m_nBlockBitmapUpdates;
 
-    switch ( uId ) {
-        case IDC_LAB_L_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] ); goto Lab;
-        case IDC_LAB_A_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabA, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] ); goto Lab;
-        case IDC_LAB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editLabB, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
-        {
-Lab:
-            if ( fChanged ) {
-                m_pDoc->SetColor( LabColor { newLabValues } );
-                newSrgbValues = m_pDoc->GetSrgbColor( ).GetChannelValues( );
+    if ( IsLabChannel( channel ) ) {
+        LabValueT oldValue { static_cast<LabValueT>( m_pDoc->GetChannelValue( channel ) ) };
+        LabValueT newValue { oldValue };
 
-                _UpdateEditIfValueChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] );
-                _UpdateEditIfValueChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] );
-                _UpdateEditIfValueChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-                _PutHexColorToEdit( m_editHexColor, newSrgbValues );
-            }
-            break;
+        fChanged = _UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
+        if ( fChanged ) {
+            newLabValues[+AllChannelsToLabChannels( channel )] = newValue;
+            m_pDoc->SetChannelValue( channel, newValue );
+
+            newSrgbValues = m_pDoc->GetSrgbColor( );
+            UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
         }
+    } else if ( IsSrgbChannel( channel ) ) {
+        SrgbValueT oldValue { static_cast<SrgbValueT>( m_pDoc->GetChannelValue( channel ) ) };
+        SrgbValueT newValue { oldValue };
 
-        case IDC_SRGB_R_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbR, oldSrgbValues[+SrgbChannels::R], newSrgbValues[+SrgbChannels::R] ); goto sRGB;
-        case IDC_SRGB_G_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbG, oldSrgbValues[+SrgbChannels::G], newSrgbValues[+SrgbChannels::G] ); goto sRGB;
-        case IDC_SRGB_B_VALUE: fChanged = _UpdateValueIfEditChanged( m_editSrgbB, oldSrgbValues[+SrgbChannels::B], newSrgbValues[+SrgbChannels::B] );
-        {
-sRGB:
-            if ( fChanged ) {
-                m_pDoc->SetColor( SrgbColor { newSrgbValues } );
-                newLabValues = m_pDoc->GetLabColor( ).GetChannelValues( );
-
-                _UpdateEditIfValueChanged( m_editLabL, oldLabValues[+LabChannels::L], newLabValues[+LabChannels::L] );
-                _UpdateEditIfValueChanged( m_editLabA, oldLabValues[+LabChannels::a], newLabValues[+LabChannels::a] );
-                _UpdateEditIfValueChanged( m_editLabB, oldLabValues[+LabChannels::b], newLabValues[+LabChannels::b] );
+        fChanged = _UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
+        if ( fChanged ) {
+            newSrgbValues[+AllChannelsToSrgbChannels( channel )] = newValue;
+            m_pDoc->SetChannelValue( channel, newValue );
+            if ( newSrgbValues != oldSrgbValues ) {
                 _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
-            break;
+
+            newLabValues = m_pDoc->GetLabColor( );
+            UpdateLabEditsIfValuesChanged( oldLabValues, newLabValues );
         }
     }
 
     --m_nBlockBitmapUpdates;
-    UpdateBitmaps( );
+    if ( fChanged ) {
+        UpdateBitmaps( );
+    }
 }
 
 void CChildView::OnHexColorUpdate( ) {
