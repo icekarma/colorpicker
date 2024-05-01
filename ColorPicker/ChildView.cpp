@@ -156,7 +156,6 @@ namespace {
     [[nodiscard]] bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
         CString strText { _SafeGetWindowText( edit ) };
         if ( strText.IsEmpty( ) ) {
-            debug( L"_GetValueFromEdit: no text in edit control\n" );
             return false;
         }
 
@@ -278,7 +277,7 @@ CChildView::CChildView( ):
 {
 #if defined _DEBUG
     if ( g_pChildView ) {
-        debug( L"CChildView::`ctor: WARNING: g_pChildView is not nullptr! (0x%p)\n", g_pChildView );
+        debug( L"CChildView::`ctor: WARNING: On entry, g_pChildView is not nullptr! (0x%p)\n", g_pChildView );
         DebugBreak( );
     }
 #endif // defined _DEBUG
@@ -289,7 +288,7 @@ CChildView::CChildView( ):
 CChildView::~CChildView( ) {
 #if defined _DEBUG
     if ( !g_pChildView ) {
-        debug( L"CChildView::`dtor: WARNING: g_pChildView is nullptr!\n" );
+        debug( L"CChildView::`dtor: WARNING: On entry, g_pChildView is nullptr!\n" );
         DebugBreak( );
     }
 #endif // defined _DEBUG
@@ -300,7 +299,7 @@ CChildView::~CChildView( ) {
 LRESULT CChildView::_EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam ) {
 #if defined _DEBUG
     if ( !g_pChildView ) {
-        debug( L"CChildVIew::_EditWndProc: panic: g_pChildView is nullptr!\n" );
+        debug( L"CChildView::_EditWndProc: WARNING: On entry, g_pChildView is nullptr!\n" );
         DebugBreak( );
     }
 #endif // defined _DEBUG
@@ -323,14 +322,8 @@ LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM
         if ( uMessage == WM_KEYDOWN ) {
             if ( EditControl_OnKeyDown( channel, static_cast<UINT>( wParam ), LOWORD( lParam ), HIWORD( lParam ) ) ) {
                 return 0;
-            } else {
-                //debug( L"CChildView::EditWndProc: Passing message: EditControl_OnKeyDown wasn't interested\n" );
             }
-        } else {
-            //debug( L"CChildView::EditWndProc: Passing message: not interested\n" );
         }
-    } else {
-        debug( L"CChildView::EditWndProc: Passing message: Window handle didn't map to a channel\n" );
     }
 
     return CallWindowProc( wndProc, hwnd, uMessage, wParam, lParam );
@@ -630,9 +623,7 @@ void CChildView::OnValueEditLostFocus( UINT uId ) {
     if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
         // TODO range check
     } else {
-        wchar_t* pwszText { _SafeGetWindowText( *m_pCurrentEdit ) };
-        debug( L"CChildView::OnEditLostFocus: garbage in edit control %u: '%s'\n", uId, pwszText );
-        delete[] pwszText;
+        // TODO complain
     }
 
     m_pCurrentEdit = nullptr;
@@ -652,7 +643,7 @@ void CChildView::OnCloseButtonClicked( ) {
 }
 
 bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags ) {
-    debug( L"CChildView::EditControl_OnKeyDown: channel: %u, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", +channel, nChar, nRepCnt, nFlags );
+    debug( L"CChildView::EditControl_OnKeyDown: channel: %s, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", ToString( channel ), nChar, nRepCnt, nFlags );
 
     int adjust { };
     switch ( nChar ) {
