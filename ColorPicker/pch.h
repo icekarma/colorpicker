@@ -182,6 +182,15 @@ inline ClassT* static_downcast( InstanceT* p ) {
 #endif // defined _DEBUG
 }
 
+template<typename DestinationT, typename SourceT>
+std::array<DestinationT, 3> triplet_cast( std::array<SourceT, 3> rhs ) {
+    return { {
+        static_cast<DestinationT>( rhs[0] ),
+        static_cast<DestinationT>( rhs[1] ),
+        static_cast<DestinationT>( rhs[2] ),
+    } };
+}
+
 //================================================
 // Global template functions
 //================================================
