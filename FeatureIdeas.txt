@@ -1,7 +1,6 @@
-﻿[24|06:47:37] <jglauche> I can tab/shift tab through the values but not through the selectors
-[24|06:47:50] <jglauche> if I add # in front of the html notation it doesn't work
-[24|06:48:47] <jglauche> I'd like if the number fields would respond to up and down arrow
-[24|06:49:16] <jglauche> (they do but they move the cursor instead of changing the value)
+﻿* Hex color field: eat the #
+* Hex color field: Make the field one D wider
+
 
 
 * Option for 0..255 vs 0..100
