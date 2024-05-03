@@ -79,7 +79,7 @@ namespace {
     // Private variables
     //
 
-    CChildView* g_pChildView { };
+    constinit CChildView* g_pChildView { };
 
     //
     // Private functions
