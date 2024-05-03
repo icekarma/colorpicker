@@ -458,12 +458,12 @@ void CChildView::AdjustUIControls( ) {
     _AdjustPosition( &m_radioSrgbR,    adjustDown2  );
     //djustPosition( &m_radioSrgbG,                 );
     _AdjustPosition( &m_radioSrgbB,    adjustUp2    );
-    _AdjustPosition( &m_editSrgbR,     adjustDown2 + adjustRight1 );
-    _AdjustPosition( &m_editSrgbG,     adjustDown2 + adjustRight1 );
-    _AdjustPosition( &m_editSrgbB,     adjustUp1   + adjustRight1 );
+    _AdjustPosition( &m_editSrgbR,     adjustDown2  + adjustRight1 );
+    _AdjustPosition( &m_editSrgbG,     adjustDown2  + adjustRight1 );
+    _AdjustPosition( &m_editSrgbB,     adjustUp1    + adjustRight1 );
 
-    _AdjustPosition( &m_editHexColor,  adjustUp1    );
-    _AdjustSize    ( &m_editHexColor,  {   1,   0 } );
+    _AdjustPosition( &m_editHexColor,  adjustUp1    + SIZE { -7, 0 } );
+    _AdjustSize    ( &m_editHexColor,  {   8,   0 } );
 
     _AdjustSize    ( &m_staticSwatch,  {  -1,  -1 } );
 
