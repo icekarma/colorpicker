@@ -192,6 +192,14 @@ std::array<DestinationT, 3> triplet_cast( std::array<SourceT, 3> rhs ) {
 }
 
 //================================================
+// Global overloaded operators
+//================================================
+
+SIZE constexpr operator+( SIZE const& lhs, SIZE const& rhs ) {
+    return SIZE { lhs.cx + rhs.cx, lhs.cy + rhs.cy };
+}
+
+//================================================
 // Global template functions
 //================================================
 
