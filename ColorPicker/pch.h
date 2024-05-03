@@ -128,15 +128,25 @@ using std::min;
 #       define new DEBUG_NEW
 #   endif // defined DEBUG_NEW
 
+// An fputws()-like function to record a message to the debugging facility.
+inline void debug( wchar_t const* message ) {
+    ::OutputDebugStringW( message );
+}
+
 // A wprintf()-like function to record a message to the debugging facility.
 template<typename... ArgsT>
 void debug( wchar_t const* format, ArgsT... args ) {
     CString message;
     message.Format( format, args... );
-    ::OutputDebugStringW( message );
+    debug( message );
 }
 
 #else // !defined _DEBUG
+
+// An fputws()-like function to record a message to the debugging facility.
+inline void debug( wchar_t const* ) {
+    /*empty*/
+}
 
 // A wprintf()-like function to pretend to record a message to the debugging facility.
 template<typename... ArgsT>
