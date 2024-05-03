@@ -449,14 +449,14 @@ void CChildView::AdjustUIControls( ) {
     _AdjustPosition( &m_radioLabL,     adjustDown1  );
     _AdjustPosition( &m_radioLabA,     adjustUp1    );
     _AdjustPosition( &m_radioLabB,     adjustUp2    );
-    // m_editLabL
-    // m_editLabA
+    //djustPosition( &m_editLabL,                   );
+    //djustPosition( &m_editLabA,                   );
     _AdjustPosition( &m_editLabB,      adjustUp2    );
 
     _AdjustPosition( &m_groupBoxSrgb,  adjustDown2  );
     _AdjustSize    ( &m_groupBoxSrgb,  adjustUp1    );
     _AdjustPosition( &m_radioSrgbR,    adjustDown2  );
-    // m_radioSrgbG
+    //djustPosition( &m_radioSrgbG,                 );
     _AdjustPosition( &m_radioSrgbB,    adjustUp2    );
     _AdjustPosition( &m_editSrgbR,     adjustDown2  );
     _AdjustPosition( &m_editSrgbG,     adjustDown2  );
