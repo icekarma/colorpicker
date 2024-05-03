@@ -11,6 +11,8 @@ IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_BN_CLICKED        (                 IDCLOSE,                           &CChildView::OnCloseButtonClicked   )
+    ON_EN_KILLFOCUS      (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorLostFocus    )
+    ON_EN_SETFOCUS       (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorGotFocus     )
     ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorUpdate       )
 
     ON_CONTROL_RANGE     ( BN_CLICKED,     IDC_LAB_L_LABEL, IDC_SRGB_B_LABEL, &CChildView::OnChannelRadioClicked  )
@@ -612,6 +614,17 @@ void CChildView::OnValueEditGotFocus( UINT uId ) {
     m_pCurrentEdit = MapValueControlIdToEditControl( uId );
 }
 
+void CChildView::OnHexColorGotFocus( ) {
+#if defined _DEBUG
+    if ( m_pCurrentEdit ) {
+        debug( L"CChildView::OnHexColorGotFocus: Uh oh: m_pCurrentEdit not nullptr on entry\n" );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    m_pCurrentEdit = &m_editHexColor;
+}
+
 void CChildView::OnValueEditLostFocus( UINT uId ) {
     if ( !m_pCurrentEdit ) {
         // this signifies it's not of the L*a*b* or RGB edit controls
@@ -620,10 +633,32 @@ void CChildView::OnValueEditLostFocus( UINT uId ) {
 
 #if defined _DEBUG
     if ( CEdit* pEdit { MapValueControlIdToEditControl( uId ) }; !pEdit ) {
-        debug( L"CChildView::OnValueEditGotFocus: Couldn't map control ID to edit control\n" );
+        debug( L"CChildView::OnValueEditLostFocus: Couldn't map control ID to edit control\n" );
         DebugBreak( );
     } else if ( m_pCurrentEdit != pEdit ) {
-        debug( L"CChildView::OnValueEditGotFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
+        debug( L"CChildView::OnValueEditLostFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
+        DebugBreak( );
+    }
+#endif // defined _DEBUG
+
+    if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
+        // TODO range check
+    } else {
+        // TODO complain
+    }
+
+    m_pCurrentEdit = nullptr;
+}
+
+void CChildView::OnHexColorLostFocus( ) {
+    if ( !m_pCurrentEdit ) {
+        // this signifies it's not of the L*a*b* or RGB edit controls
+        return;
+    }
+
+#if defined _DEBUG
+    if ( m_pCurrentEdit != &m_editHexColor ) {
+        debug( L"CChildView::OnHexColorLostFocus: Uh oh: m_pCurrentEdit doesn't point at m_editHexColor\n" );
         DebugBreak( );
     }
 #endif // defined _DEBUG

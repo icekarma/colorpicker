@@ -117,6 +117,8 @@ protected:
     afx_msg void OnChannelRadioClicked( UINT uId );
     afx_msg void OnValueEditUpdate( UINT uId );
     afx_msg void OnHexColorUpdate( );
+    afx_msg void OnHexColorGotFocus( );
+    afx_msg void OnHexColorLostFocus( );
     afx_msg void OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
     afx_msg void OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
 
