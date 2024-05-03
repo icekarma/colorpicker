@@ -161,19 +161,19 @@ DWORD constexpr ExtendedWindowStylesToRemove { WS_EX_CLIENTEDGE | WS_EX_DLGMODAL
 //================================================
 
 template<typename T>
-concept IsCObject = std::derived_from<T, CObject>;
+concept DerivedFromCObject = std::derived_from<T, CObject>;
 
-template<IsCObject ClassT>
+template<DerivedFromCObject ClassT>
 inline CRuntimeClass* runtime_class( ) {
     return ClassT::GetThisClass( );
 }
 
-template<IsCObject ClassT, typename InstanceT>
+template<DerivedFromCObject ClassT, DerivedFromCObject InstanceT>
 inline ClassT* dynamic_downcast( InstanceT* p ) {
     return reinterpret_cast<ClassT*>( AfxDynamicDownCast( runtime_class<ClassT>( ), p ) );
 }
 
-template<IsCObject ClassT, IsCObject InstanceT>
+template<DerivedFromCObject ClassT, DerivedFromCObject InstanceT>
 inline ClassT* static_downcast( InstanceT* p ) {
 #if defined _DEBUG
     return static_cast<ClassT*>( AfxStaticDownCast( runtime_class<ClassT>( ), p ) );
