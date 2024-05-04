@@ -134,19 +134,19 @@ namespace {
     }
 
     [[nodiscard]] CString _SafeGetWindowText( CEdit const& edit ) {
-        int cbText { edit.GetWindowTextLength( ) };
-        if ( cbText < 1 ) {
+        int cbStr { edit.GetWindowTextLength( ) };
+        if ( cbStr < 1 ) {
             debug( L"_SafeGetWindowText: no text in control\n" );
             return { };
         }
 
         CString str;
-        wchar_t* pwszStr { str.GetBufferSetLength( cbText + 1 ) };
-        if ( edit.GetWindowText( pwszStr, cbText + 1 ) < 1 ) {
+        wchar_t* pwszStr { str.GetBufferSetLength( cbStr + 1 ) };
+        if ( edit.GetWindowText( pwszStr, cbStr + 1 ) < 1 ) {
             debug( L"_SafeGetWindowText: GetWindowText failed\n" );
             return { };
         }
-        str.ReleaseBuffer( cbText );
+        str.ReleaseBuffer( cbStr );
 
         return str.Trim( );
     }
