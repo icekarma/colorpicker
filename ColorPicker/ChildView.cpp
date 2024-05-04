@@ -378,7 +378,7 @@ void CChildView::UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, S
     _UpdateEditIfValueChanged( m_editSrgbR, oldValues[+SrgbChannels::R], newValues[+SrgbChannels::R] );
     _UpdateEditIfValueChanged( m_editSrgbG, oldValues[+SrgbChannels::G], newValues[+SrgbChannels::G] );
     _UpdateEditIfValueChanged( m_editSrgbB, oldValues[+SrgbChannels::B], newValues[+SrgbChannels::B] );
-    if ( newValues != oldValues ) {
+    if ( ( m_pCurrentEdit != &m_editHexColor ) && ( newValues != oldValues ) ) {
         _PutHexColorToEdit( m_editHexColor, newValues );
     }
 }
@@ -763,7 +763,7 @@ void CChildView::OnValueEditUpdate( UINT const uId ) {
         if ( fChanged ) {
             newSrgbValues[+AllChannelsToSrgbChannels( channel )] = newValue;
             m_pDoc->SetChannelValue( channel, newValue );
-            if ( newSrgbValues != oldSrgbValues ) {
+            if ( ( m_pCurrentEdit != &m_editHexColor ) && ( newSrgbValues != oldSrgbValues ) ) {
                 _PutHexColorToEdit( m_editHexColor, newSrgbValues );
             }
 
