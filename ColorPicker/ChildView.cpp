@@ -443,25 +443,25 @@ void CChildView::AdjustUIControls( ) {
     SIZE constexpr adjustRight1 {  1L, 0L }; SIZE constexpr adjustDown1 { 0L,  1L };SIZE constexpr adjustWider1    {  1L, 0L }; SIZE constexpr adjustTaller1  { 0L,  1L };
     SIZE constexpr adjustRight2 {  2L, 0L }; SIZE constexpr adjustDown2 { 0L,  2L };SIZE constexpr adjustWider2    {  2L, 0L }; SIZE constexpr adjustTaller2  { 0L,  2L };
 
-    _AdjustSize    ( &m_groupBoxLab,   adjustUp1    );
-    _AdjustPosition( &m_radioLabL,     adjustDown1  );
-    _AdjustPosition( &m_radioLabA,     adjustUp1    );
-    _AdjustPosition( &m_radioLabB,     adjustUp2    );
-    //djustPosition( &m_editLabL,                   );
-    //djustPosition( &m_editLabA,                   );
-    _AdjustPosition( &m_editLabB,      adjustUp2    );
+    _AdjustSize    ( &m_groupBoxLab,   adjustShorter1 );
+    _AdjustPosition( &m_radioLabL,     adjustDown1    );
+    _AdjustPosition( &m_radioLabA,     adjustUp1      );
+    _AdjustPosition( &m_radioLabB,     adjustUp2      );
+    //djustPosition( &m_editLabL,                     );
+    //djustPosition( &m_editLabA,                     );
+    _AdjustPosition( &m_editLabB,      adjustUp2      );
 
-    _AdjustPosition( &m_groupBoxSrgb,  adjustDown2  );
-    _AdjustSize    ( &m_groupBoxSrgb,  adjustUp1    );
-    _AdjustPosition( &m_radioSrgbR,    adjustDown2  );
-    //djustPosition( &m_radioSrgbG,                 );
-    _AdjustPosition( &m_radioSrgbB,    adjustUp2    );
-    _AdjustPosition( &m_editSrgbR,     adjustDown2 + adjustRight1 );
-    _AdjustPosition( &m_editSrgbG,     adjustDown2 + adjustRight1 );
-    _AdjustPosition( &m_editSrgbB,     adjustUp1   + adjustRight1 );
+    _AdjustPosition( &m_groupBoxSrgb,  adjustDown2    );
+    _AdjustSize    ( &m_groupBoxSrgb,  adjustShorter1 );
+    _AdjustPosition( &m_radioSrgbR,    adjustDown2    );
+    //djustPosition( &m_radioSrgbG,                   );
+    _AdjustPosition( &m_radioSrgbB,    adjustUp2      );
+    _AdjustPosition( &m_editSrgbR,     adjustDown2     + adjustRight1   );
+    _AdjustPosition( &m_editSrgbG,     adjustDown2     + adjustRight1   );
+    _AdjustPosition( &m_editSrgbB,     adjustUp1       + adjustRight1   );
 
-    _AdjustPosition( &m_editHexColor,  adjustUp1   + adjustRight1 );
-    _AdjustSize    ( &m_editHexColor,  adjustWider1 );
+    _AdjustPosition( &m_editHexColor,  adjustUp1       + adjustRight1   );
+    _AdjustSize    ( &m_editHexColor,  adjustWider1   );
 
     _AdjustSize    ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
 
