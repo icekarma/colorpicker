@@ -1,9 +1,9 @@
-﻿* Hex color field: eat the #
-* Hex color field: Make the field one D wider
-
+﻿* Hex color value edit: eat the #
+* Hex color value edit: What's going on with pasting?
+* L*a*b* and sRGB color value edits: Is their pasting broken, too?
 
 
 * Option for 0..255 vs 0..100
 * Option for floating point with 1dp
-* Per-channel gradients, à la https://imgur.com/a/BWOAht9 ?
-* Color library
+* Per-channel gradients, à la https://imgur.com/a/BWOAht9
+* Swatch library
