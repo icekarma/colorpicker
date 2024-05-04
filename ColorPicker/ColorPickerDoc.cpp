@@ -30,34 +30,6 @@ BOOL CColorPickerDoc::OnNewDocument( ) {
     return TRUE;
 }
 
-int CColorPickerDoc::GetChannelValue( AllChannels const channel ) {
-    if ( IsLabChannel( channel ) ) {
-        return m_LabColor.GetChannelValue( channel );
-    } else if ( IsSrgbChannel( channel ) ) {
-        return m_SrgbColor.GetChannelValue( channel );
-    } else {
-        return INT_MIN;
-    }
-}
-
-void CColorPickerDoc::_SetChannelValueImpl( AllChannels const channel, int const nValue ) {
-    if ( IsLabChannel( channel ) ) {
-        m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue ) );
-    } else if ( IsSrgbChannel( channel ) ) {
-        m_SrgbColor.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
-    }
-}
-
-void CColorPickerDoc::SetChannelValue( AllChannels const channel, int const nValue ) {
-    _SetChannelValueImpl( channel, nValue );
-
-    if ( IsLabChannel( channel ) ) {
-        SetColor( m_LabColor );
-    } else if ( IsSrgbChannel( channel ) ) {
-        SetColor( m_SrgbColor );
-    }
-}
-
 void CColorPickerDoc::SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values ) {
 #if defined _DEBUG
     if ( values.size( ) == 0 ) {

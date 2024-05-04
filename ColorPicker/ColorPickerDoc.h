@@ -35,9 +35,35 @@ public:
         return m_SrgbColor;
     }
 
-    int  GetChannelValue( AllChannels const channel );
-    void SetChannelValue( AllChannels const channel, int const nValue );
+    int GetChannelValue( AllChannels const channel ) const {
+        if ( IsLabChannel( channel ) ) {
+            return m_LabColor.GetChannelValue( channel );
+        } else if ( IsSrgbChannel( channel ) ) {
+            return m_SrgbColor.GetChannelValue( channel );
+        } else {
+            return INT_MIN;
+        }
+    }
+
+    void SetChannelValue( AllChannels const channel, int const nValue ) {
+        _SetChannelValueImpl( channel, nValue );
+
+        if ( IsLabChannel( channel ) ) {
+            SetColor( m_LabColor );
+        } else if ( IsSrgbChannel( channel ) ) {
+            SetColor( m_SrgbColor );
+        }
+    }
+
     void SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values );
+
+    AllChannels GetSelectedChannel( ) const {
+        return m_SelectedChannel;
+    }
+
+    void SetSelectedChannel( AllChannels const channel ) {
+        m_SelectedChannel = channel;
+    }
 
     //
     // Inversion stuff
@@ -52,18 +78,6 @@ public:
     }
 
     //
-    // Selected channel stuff
-    //
-
-    AllChannels GetSelectedChannel( ) const {
-        return m_SelectedChannel;
-    }
-
-    void SetSelectedChannel( AllChannels const channel ) {
-        m_SelectedChannel = channel;
-    }
-
-    //
     // Registry stuff
     //
 
@@ -72,9 +86,15 @@ public:
 
 protected:
 
-    virtual BOOL OnNewDocument( ) override;
+    void _SetChannelValueImpl( AllChannels const channel, int const nValue ) {
+        if ( IsLabChannel( channel ) ) {
+            m_LabColor.SetChannelValue( channel, static_cast<LabValueT>( nValue ) );
+        } else if ( IsSrgbChannel( channel ) ) {
+            m_SrgbColor.SetChannelValue( channel, static_cast<SrgbValueT>( nValue ) );
+        }
+    }
 
-    void _SetChannelValueImpl( AllChannels const channel, int const nValue );
+    virtual BOOL OnNewDocument( ) override;
 
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
     LabColor    m_LabColor        { };
