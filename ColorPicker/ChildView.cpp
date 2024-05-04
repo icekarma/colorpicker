@@ -111,9 +111,10 @@ namespace {
         WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
         ctrl->GetWindowPlacement( &wp );
-        CRect rect { wp.rcNormalPosition };
-        rect.MoveToXY( adjust.cx, adjust.cy );
-        wp.rcNormalPosition = rect;
+        wp.rcNormalPosition.right  = wp.rcNormalPosition.right  - wp.rcNormalPosition.left + adjust.cx;
+        wp.rcNormalPosition.bottom = wp.rcNormalPosition.bottom - wp.rcNormalPosition.top  + adjust.cy;
+        wp.rcNormalPosition.left   = adjust.cx;
+        wp.rcNormalPosition.top    = adjust.cy;
         ctrl->SetWindowPlacement( &wp );
     }
 
