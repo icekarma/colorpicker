@@ -442,10 +442,10 @@ void CChildView::InitializeMemberVariables( ) {
 }
 
 void CChildView::AdjustUIControls( ) {
-    SIZE constexpr adjustUp2   { 0, -2 }; SIZE constexpr adjustLeft2  { -2, 0 };
-    SIZE constexpr adjustUp1   { 0, -1 }; SIZE constexpr adjustLeft1  { -1, 0 };
-    SIZE constexpr adjustDown1 { 0,  1 }; SIZE constexpr adjustRight1 {  1, 0 };
-    SIZE constexpr adjustDown2 { 0,  2 }; SIZE constexpr adjustRight2 {  2, 0 };
+    SIZE constexpr adjustLeft2  { -2L, 0L }; SIZE constexpr adjustUp2   { 0L, -2L };SIZE constexpr adjustNarrower2 { -2L, 0L }; SIZE constexpr adjustShorter2 { 0L, -2L };
+    SIZE constexpr adjustLeft1  { -1L, 0L }; SIZE constexpr adjustUp1   { 0L, -1L };SIZE constexpr adjustNarrower1 { -1L, 0L }; SIZE constexpr adjustShorter1 { 0L, -1L };
+    SIZE constexpr adjustRight1 {  1L, 0L }; SIZE constexpr adjustDown1 { 0L,  1L };SIZE constexpr adjustWider1    {  1L, 0L }; SIZE constexpr adjustTaller1  { 0L,  1L };
+    SIZE constexpr adjustRight2 {  2L, 0L }; SIZE constexpr adjustDown2 { 0L,  2L };SIZE constexpr adjustWider2    {  2L, 0L }; SIZE constexpr adjustTaller2  { 0L,  2L };
 
     _AdjustSize    ( &m_groupBoxLab,   adjustUp1    );
     _AdjustPosition( &m_radioLabL,     adjustDown1  );
@@ -460,21 +460,21 @@ void CChildView::AdjustUIControls( ) {
     _AdjustPosition( &m_radioSrgbR,    adjustDown2  );
     //djustPosition( &m_radioSrgbG,                 );
     _AdjustPosition( &m_radioSrgbB,    adjustUp2    );
-    _AdjustPosition( &m_editSrgbR,     adjustDown2  + adjustRight1 );
-    _AdjustPosition( &m_editSrgbG,     adjustDown2  + adjustRight1 );
-    _AdjustPosition( &m_editSrgbB,     adjustUp1    + adjustRight1 );
+    _AdjustPosition( &m_editSrgbR,     adjustDown2 + adjustRight1 );
+    _AdjustPosition( &m_editSrgbG,     adjustDown2 + adjustRight1 );
+    _AdjustPosition( &m_editSrgbB,     adjustUp1   + adjustRight1 );
 
-    _AdjustPosition( &m_editHexColor,  adjustUp1    + SIZE { -7, 0 } );
-    _AdjustSize    ( &m_editHexColor,  {   8,   0 } );
+    _AdjustPosition( &m_editHexColor,  adjustUp1   + adjustRight1 );
+    _AdjustSize    ( &m_editHexColor,  adjustWider1 );
 
-    _AdjustSize    ( &m_staticSwatch,  {  -1,  -1 } );
+    _AdjustSize    ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
 
-    _SetSize       ( &m_staticZStrip,  {  20, 256 } );
+    _SetSize       ( &m_staticZStrip,  {  20L, 256L } );
 
-    _AdjustPosition( &m_staticXyGrid,  adjustLeft1  );
-    _SetSize       ( &m_staticXyGrid,  { 256, 256 } );
+    _AdjustPosition( &m_staticXyGrid,  adjustLeft1    );
+    _SetSize       ( &m_staticXyGrid,  { 256L, 256L } );
 
-    _AdjustPosition( &m_buttonClose,   {  -1,  -2 } );
+    _AdjustPosition( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
 }
 
 void CChildView::OnInitialUpdate( ) {
