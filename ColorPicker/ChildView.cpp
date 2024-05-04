@@ -137,14 +137,12 @@ namespace {
     [[nodiscard]] CString _SafeGetWindowText( CEdit const& edit ) {
         int cbStr { edit.GetWindowTextLength( ) };
         if ( cbStr < 1 ) {
-            debug( L"_SafeGetWindowText: no text in control\n" );
             return { };
         }
 
         CString str;
         wchar_t* pwszStr { str.GetBufferSetLength( cbStr ) };
         if ( edit.GetWindowText( pwszStr, cbStr + 1 ) < 1 ) {
-            debug( L"_SafeGetWindowText: GetWindowText failed\n" );
             return { };
         }
         str.ReleaseBuffer( cbStr );
@@ -218,6 +216,7 @@ namespace {
             debug( L"_GetHexColorFromEdit: no text in edit control\n" );
             return false;
         }
+
         if ( strText[0] == '#' ) {
             strText.Delete( 0, 1 );
         }
