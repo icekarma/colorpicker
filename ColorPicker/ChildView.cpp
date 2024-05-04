@@ -141,7 +141,7 @@ namespace {
         }
 
         CString str;
-        wchar_t* pwszStr { str.GetBufferSetLength( cbStr + 1 ) };
+        wchar_t* pwszStr { str.GetBufferSetLength( cbStr ) };
         if ( edit.GetWindowText( pwszStr, cbStr + 1 ) < 1 ) {
             debug( L"_SafeGetWindowText: GetWindowText failed\n" );
             return { };
