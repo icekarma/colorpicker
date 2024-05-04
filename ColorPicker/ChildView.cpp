@@ -231,11 +231,11 @@ namespace {
             return false;
         }
 
-        int r { static_cast<int>( ( tmp >> 16L ) & 0xFFL ) };
-        int g { static_cast<int>( ( tmp >>  8L ) & 0xFFL ) };
-        int b { static_cast<int>(   tmp          & 0xFFL ) };
-
-        values = { { static_cast<SrgbValueT>( r ), static_cast<SrgbValueT>( g ), static_cast<SrgbValueT>( b ) } };
+        values = { {
+            static_cast<SrgbValueT>( ( tmp >> 16L ) & 0xFFL ),
+            static_cast<SrgbValueT>( ( tmp >>  8L ) & 0xFFL ),
+            static_cast<SrgbValueT>(   tmp          & 0xFFL ),
+        } };
         return true;
     }
 
@@ -251,12 +251,8 @@ namespace {
     }
 
     void _PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) {
-        unsigned r { values[+SrgbChannels::R] };
-        unsigned g { values[+SrgbChannels::G] };
-        unsigned b { values[+SrgbChannels::B] };
-
         CString str;
-        str.Format( L"%06.6X", static_cast<int>( ( r << 16u ) | ( g << 8u ) | b ) );
+        str.Format( L"%06.6X", static_cast<unsigned>( ( values[+SrgbChannels::R] << 16u ) | ( values[+SrgbChannels::G] << 8u ) | values[+SrgbChannels::B] ) );
         edit.SetWindowText( str );
     }
 
