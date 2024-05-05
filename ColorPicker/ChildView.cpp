@@ -87,6 +87,14 @@ namespace {
     // Private functions
     //
 
+    [[nodiscard]] CString _GetResourceString( UINT const uId ) {
+        CString str;
+        if ( !str.LoadString( AfxGetInstanceHandle( ), uId ) ) {
+            str.Format( L"<error loading string #%u>", uId );
+        }
+        return str;
+    }
+
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
         WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
