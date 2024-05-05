@@ -82,6 +82,8 @@ protected:
     void InitializeMemberVariables( );
     void AdjustUIControls( );
 
+    void CheckValue( UINT const uId );
+
     //
     // Overrides
     //

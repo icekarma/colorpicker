@@ -645,7 +645,40 @@ void CChildView::OnHexColorGotFocus( ) {
     m_pCurrentEdit = &m_editHexColor;
 }
 
+void CChildView::CheckValue( UINT const uId ) {
+    AllChannels channel { MapValueControlIdToChannel( uId ) };
+    if ( channel == AllChannels::unknown ) {
+        debug( L"CChildView::CheckValue: Uh oh: Couldn't map control ID to channel\n" );
+        return;
+    }
+
+    ++m_nBlockLostFocus;
+
+    int  value   { };
+    if ( _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
+        ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
+
+        if ( value < channelInfo.m_minimumValue ) {
+            _PutValueToEdit( *m_pCurrentEdit, channelInfo.m_minimumValue );
+            MessageBox( _FormatString( IDS_VALUE_TOO_LOW, channelInfo.m_minimumValue, channelInfo.m_maximumValue ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+        } else if ( value > channelInfo.m_maximumValue ) {
+            _PutValueToEdit( *m_pCurrentEdit, channelInfo.m_maximumValue );
+            MessageBox( _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+        }
+    } else {
+        _PutValueToEdit( *m_pCurrentEdit, 0 );
+
+        MessageBox( _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+    }
+
+    --m_nBlockLostFocus;
+}
+
 void CChildView::OnValueEditLostFocus( UINT uId ) {
+    if ( m_nBlockLostFocus ) {
+        return;
+    }
+
     if ( !m_pCurrentEdit ) {
         // this signifies it's not of the L*a*b* or RGB edit controls
         return;
@@ -661,11 +694,7 @@ void CChildView::OnValueEditLostFocus( UINT uId ) {
     }
 #endif // defined _DEBUG
 
-    if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
-        // TODO range check
-    } else {
-        // TODO complain
-    }
+    CheckValue( uId );
 
     m_pCurrentEdit = nullptr;
 }
