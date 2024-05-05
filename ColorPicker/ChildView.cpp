@@ -628,8 +628,7 @@ void CChildView::OnViewInvert( ) {
 void CChildView::OnValueEditGotFocus( UINT uId ) {
 #if defined _DEBUG
     if ( m_pCurrentEdit ) {
-        debug( L"CChildView::OnValueEditGotFocus: Uh oh: m_pCurrentEdit not nullptr on entry\n" );
-        DebugBreak( );
+        debug( L"CChildView::OnValueEditGotFocus: Uh oh: m_pCurrentEdit != nullptr on entry\n" );
     }
 #endif // defined _DEBUG
 
@@ -639,8 +638,7 @@ void CChildView::OnValueEditGotFocus( UINT uId ) {
 void CChildView::OnHexColorGotFocus( ) {
 #if defined _DEBUG
     if ( m_pCurrentEdit ) {
-        debug( L"CChildView::OnHexColorGotFocus: Uh oh: m_pCurrentEdit not nullptr on entry\n" );
-        DebugBreak( );
+        debug( L"CChildView::OnHexColorGotFocus: Uh oh: m_pCurrentEdit != nullptr on entry\n" );
     }
 #endif // defined _DEBUG
 
@@ -655,11 +653,11 @@ void CChildView::OnValueEditLostFocus( UINT uId ) {
 
 #if defined _DEBUG
     if ( CEdit* pEdit { MapValueControlIdToEditControl( uId ) }; !pEdit ) {
-        debug( L"CChildView::OnValueEditLostFocus: Couldn't map control ID to edit control\n" );
-        DebugBreak( );
+        debug( L"CChildView::OnValueEditLostFocus: Uh oh: Couldn't map control ID to edit control\n" );
+        return;
     } else if ( m_pCurrentEdit != pEdit ) {
         debug( L"CChildView::OnValueEditLostFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
-        DebugBreak( );
+        return;
     }
 #endif // defined _DEBUG
 
