@@ -27,15 +27,15 @@ public:
         m_SrgbColor = color;
     }
 
-    LabColor GetLabColor( ) const {
+    [[nodiscard]] LabColor GetLabColor( ) const {
         return m_LabColor;
     }
 
-    SrgbColor GetSrgbColor( ) const {
+    [[nodiscard]] SrgbColor GetSrgbColor( ) const {
         return m_SrgbColor;
     }
 
-    int GetChannelValue( AllChannels const channel ) const {
+    [[nodiscard]] int GetChannelValue( AllChannels const channel ) const {
         if ( IsLabChannel( channel ) ) {
             return m_LabColor.GetChannelValue( channel );
         } else if ( IsSrgbChannel( channel ) ) {
@@ -57,7 +57,7 @@ public:
 
     void SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values );
 
-    AllChannels GetSelectedChannel( ) const {
+    [[nodiscard]] AllChannels GetSelectedChannel( ) const {
         return m_SelectedChannel;
     }
 
@@ -69,7 +69,7 @@ public:
     // Inversion stuff
     //
 
-    bool IsInverted( ) const {
+    [[nodiscard]] bool IsInverted( ) const {
         return m_fInverted;
     }
 
