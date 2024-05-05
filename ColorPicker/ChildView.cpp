@@ -215,9 +215,7 @@ namespace {
     }
 
     void _PutValueToEdit( CEdit& edit, int const nValue ) {
-        CString str;
-        str.Format( L"%d", nValue );
-        edit.SetWindowText( str );
+        edit.SetWindowText( _FormatString( L"%d", nValue ) );
     }
 
     template<typename T>
@@ -281,9 +279,7 @@ namespace {
     }
 
     void _PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) {
-        CString str;
-        str.Format( L"%06.6X", static_cast<unsigned>( ( values[+SrgbChannels::R] << 16u ) | ( values[+SrgbChannels::G] << 8u ) | values[+SrgbChannels::B] ) );
-        edit.SetWindowText( str );
+        edit.SetWindowText( _FormatString( L"%06.6X", static_cast<unsigned>( ( values[+SrgbChannels::R] << 16u ) | ( values[+SrgbChannels::G] << 8u ) | values[+SrgbChannels::B] ) ) );
     }
 
     [[nodiscard]] DWORD _SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
