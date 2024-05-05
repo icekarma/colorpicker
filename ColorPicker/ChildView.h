@@ -151,6 +151,7 @@ protected:
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };
     int              m_nBlockBitmapUpdates { };
+    int              m_nBlockLostFocus     { };
 
     //
     // Controls
