@@ -4,6 +4,10 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
+#define IDS_ERROR_CAPTION               129
+#define IDS_VALUE_TOO_HIGH              130
+#define IDS_VALUE_TOO_LOW               131
+#define IDS_VALUE_INCOMPREHENSIBLE      132
 #define IDD_CHILDVIEW                   310
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
