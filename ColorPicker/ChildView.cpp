@@ -95,6 +95,28 @@ namespace {
         return str;
     }
 
+    [[nodiscard]] CString _FormatString( UINT const uFormatId ) {
+        return _GetResourceString( uFormatId );
+    }
+
+    template<typename... Args>
+    [[nodiscard]] CString _FormatString( UINT const uFormatId, Args... args ) {
+        CString str;
+        str.Format( uFormatId, args... );
+        return str;
+    }
+
+    [[nodiscard]] CString _FormatString( LPCWSTR pwszFormat ) {
+        return pwszFormat;
+    }
+
+    template<typename... Args>
+    [[nodiscard]] CString _FormatString( LPCWSTR pwszFormat, Args... args ) {
+        CString str;
+        str.Format( pwszFormat, args... );
+        return str;
+    }
+
     void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
         WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
