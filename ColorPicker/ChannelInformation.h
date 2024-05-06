@@ -6,7 +6,7 @@ public:
 
     ChannelInformation( ) = delete;
 
-    ChannelInformation( AllChannels const channel, int const minimum, int const maximum ):
+    constexpr ChannelInformation( AllChannels const channel, int const minimum, int const maximum ):
         m_channel      { channel },
         m_minimumValue { minimum },
         m_maximumValue { maximum }
@@ -20,4 +20,4 @@ public:
 
 };
 
-extern ChannelInformation const AllChannelsInformation[6];
+extern constinit ChannelInformation const AllChannelsInformation[6];

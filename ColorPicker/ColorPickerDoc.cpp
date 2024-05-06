@@ -12,8 +12,8 @@ END_MESSAGE_MAP( )
 
 namespace {
 
-    RawLabTriplet const RawLabDefaultColor { { 255, 128, 128 } };
-    SrgbTriplet   const   SrgbDefaultColor { { 255, 255, 255 } };
+    constinit RawLabTriplet RawLabDefaultColor { { 255, 128, 128 } };
+    constinit SrgbTriplet     SrgbDefaultColor { { 255, 255, 255 } };
 
 }
 

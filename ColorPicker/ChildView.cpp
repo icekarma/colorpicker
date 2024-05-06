@@ -68,7 +68,7 @@ namespace {
     // Private constants
     //
 
-    AllChannelsTriplet const _ChannelXyzTriplets[6] {
+    constinit AllChannelsTriplet const _ChannelXyzTriplets[6] {
         { AllChannels::LabA,  AllChannels::LabB,  AllChannels::LabL  },
         { AllChannels::LabB,  AllChannels::LabL,  AllChannels::LabA  },
         { AllChannels::LabA,  AllChannels::LabL,  AllChannels::LabB  },
