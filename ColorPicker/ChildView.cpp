@@ -165,18 +165,8 @@ namespace {
     }
 
     [[nodiscard]] CString _SafeGetWindowText( CEdit const& edit ) {
-        int cbStr { edit.GetWindowTextLength( ) };
-        if ( cbStr < 1 ) {
-            return { };
-        }
-
         CString str;
-        wchar_t* pwszStr { str.GetBufferSetLength( cbStr ) };
-        if ( edit.GetWindowText( pwszStr, cbStr + 1 ) < 1 ) {
-            return { };
-        }
-        str.ReleaseBuffer( cbStr );
-
+        edit.GetWindowText( str );
         return str.Trim( );
     }
 
@@ -220,11 +210,10 @@ namespace {
 
     template<typename T>
     [[nodiscard]] bool _UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
-        int n { static_cast<int>( oldValue ) };
         bool fChanged { };
 
-        if ( _GetValueAndChangedFromEdit( edit, n, fChanged ) && fChanged ) {
-            newValue = static_cast<T>( n );
+        if ( int value { static_cast<int>( oldValue ) }; _GetValueAndChangedFromEdit( edit, value, fChanged ) && fChanged ) {
+            newValue = static_cast<T>( value );
             return true;
         } else {
             return false;
