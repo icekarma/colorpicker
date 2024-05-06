@@ -268,7 +268,7 @@ namespace {
     }
 
     void _PutHexColorToEdit( CEdit& edit, SrgbTriplet const& values ) {
-        edit.SetWindowText( _FormatString( L"%06.6X", static_cast<unsigned>( ( values[+SrgbChannels::R] << 16u ) | ( values[+SrgbChannels::G] << 8u ) | values[+SrgbChannels::B] ) ) );
+        edit.SetWindowText( _FormatString( L"%06.6X", ( values[+SrgbChannels::R] << 16 ) | ( values[+SrgbChannels::G] << 8 ) | values[+SrgbChannels::B] ) );
     }
 
     [[nodiscard]] DWORD _SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
