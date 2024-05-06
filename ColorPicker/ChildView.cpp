@@ -100,7 +100,7 @@ namespace {
     }
 
     template<typename... Args>
-    [[nodiscard]] CString _FormatString( UINT const uFormatId, Args... args ) {
+    [[nodiscard]] CString _FormatString( UINT const uFormatId, const Args... args ) {
         CString str;
         str.Format( uFormatId, args... );
         return str;
@@ -111,7 +111,7 @@ namespace {
     }
 
     template<typename... Args>
-    [[nodiscard]] CString _FormatString( LPCWSTR pwszFormat, Args... args ) {
+    [[nodiscard]] CString _FormatString( LPCWSTR pwszFormat, const Args... args ) {
         CString str;
         str.Format( pwszFormat, args... );
         return str;
