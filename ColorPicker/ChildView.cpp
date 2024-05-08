@@ -622,6 +622,8 @@ void CChildView::OnValueEditGotFocus( UINT uId ) {
 #endif // defined _DEBUG
 
     m_pCurrentEdit = MapValueControlIdToEditControl( uId );
+
+    m_pCurrentEdit->SetSel( 0, -1, FALSE );
 }
 
 void CChildView::OnHexColorGotFocus( ) {
@@ -632,6 +634,8 @@ void CChildView::OnHexColorGotFocus( ) {
 #endif // defined _DEBUG
 
     m_pCurrentEdit = &m_editHexColor;
+
+    m_pCurrentEdit->SetSel( 0, -1, FALSE );
 }
 
 void CChildView::CheckValue( UINT const uId ) {
