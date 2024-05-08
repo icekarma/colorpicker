@@ -638,6 +638,12 @@ void CChildView::OnHexColorGotFocus( ) {
     m_pCurrentEdit->SetSel( 0, -1, FALSE );
 }
 
+void _ComplainAboutBadValue( CEdit* pEdit, int const nNewValue, CString const& strMessage ) {
+    _PutValueToEdit( *pEdit, nNewValue );
+    MessageBox( g_pChildView->GetSafeHwnd( ), strMessage, _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+    pEdit->SetFocus( );
+}
+
 void CChildView::CheckValue( UINT const uId ) {
     AllChannels channel { MapValueControlIdToChannel( uId ) };
     if ( channel == AllChannels::unknown ) {
@@ -647,21 +653,17 @@ void CChildView::CheckValue( UINT const uId ) {
 
     ++m_nBlockLostFocus;
 
-    int  value   { };
-    if ( _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
+    CEdit* pEdit { m_pCurrentEdit };
+    if ( int value; _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
         ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
 
         if ( value < channelInfo.m_minimumValue ) {
-            _PutValueToEdit( *m_pCurrentEdit, channelInfo.m_minimumValue );
-            MessageBox( _FormatString( IDS_VALUE_TOO_LOW, channelInfo.m_minimumValue, channelInfo.m_maximumValue ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+            _ComplainAboutBadValue( pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         } else if ( value > channelInfo.m_maximumValue ) {
-            _PutValueToEdit( *m_pCurrentEdit, channelInfo.m_maximumValue );
-            MessageBox( _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+            _ComplainAboutBadValue( pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         }
     } else {
-        _PutValueToEdit( *m_pCurrentEdit, 0 );
-
-        MessageBox( _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ), _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+        _ComplainAboutBadValue( pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
     }
 
     --m_nBlockLostFocus;
