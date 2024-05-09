@@ -3,6 +3,7 @@
 #include "MainFrame.h"
 
 #include "ColorPicker.h"
+#include "ChildView.h"
 
 #if defined _DEBUG
 #undef POSITION_RIGHT_HALF_CENTERED
@@ -16,6 +17,7 @@ BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
     ON_WM_SIZE( )
 #endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
     ON_WM_CREATE( )
+    ON_WM_CLOSE( )
 END_MESSAGE_MAP( )
 
 BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -60,6 +62,13 @@ void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
     debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
 }
 #endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
+
+void CMainFrame::OnClose( ) {
+    extern CChildView* g_pChildView;
+    g_pChildView->OnClose( );
+
+    CFrameWnd::OnClose( );
+}
 
 int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
     if ( CFrameWnd::OnCreate( lpCreateStruct ) == -1 ) {

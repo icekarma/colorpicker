@@ -19,6 +19,7 @@ protected:
 
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs ) override;
 
+    afx_msg void OnClose( );
     afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
 #if defined _DEBUG && defined DEBUG_WINDOW_SIZE
     afx_msg void OnSizing( UINT fwSide, LPRECT pRect );

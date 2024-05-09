@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
 
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                       &CChildView::OnZStripMouseMove      )
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                       &CChildView::OnXyGridMouseMove      )
+    ON_WM_CLOSE( )
 END_MESSAGE_MAP( )
 
 //
@@ -62,6 +63,12 @@ std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel {
     { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
 };
 
+//
+// Global data
+//
+
+constinit CChildView* g_pChildView { };
+
 namespace {
 
     //
@@ -76,12 +83,6 @@ namespace {
         { AllChannels::SrgbB, AllChannels::SrgbR, AllChannels::SrgbG },
         { AllChannels::SrgbR, AllChannels::SrgbG, AllChannels::SrgbB }
     };
-
-    //
-    // Private variables
-    //
-
-    constinit CChildView* g_pChildView { };
 
     //
     // Private functions
@@ -721,6 +722,10 @@ void CChildView::OnHexColorLostFocus( ) {
 }
 
 void CChildView::OnCloseButtonClicked( ) {
+    AfxGetMainWnd( )->SendMessage( WM_COMMAND, ID_APP_EXIT, 0 );
+}
+
+void CChildView::OnClose( ) {
     m_pDoc->SaveToRegistry( );
 
     UnSubclassEditControl( m_editSrgbB );
@@ -735,7 +740,7 @@ void CChildView::OnCloseButtonClicked( ) {
     theApp.WriteProfileInt( L"Settings", L"X", rect.left );
     theApp.WriteProfileInt( L"Settings", L"Y", rect.top  );
 
-    ::PostQuitMessage( 0 );
+    CFormView::OnClose( );
 }
 
 bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags ) {

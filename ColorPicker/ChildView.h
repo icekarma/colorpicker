@@ -22,6 +22,8 @@ public:
     enum { IDD = IDD_CHILDVIEW };
 #endif
 
+    afx_msg void OnClose( );
+
 protected:
 
     CChildView( );
