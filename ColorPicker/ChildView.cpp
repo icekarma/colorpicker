@@ -730,6 +730,11 @@ void CChildView::OnCloseButtonClicked( ) {
     UnSubclassEditControl( m_editLabA  );
     UnSubclassEditControl( m_editLabL  );
 
+    CRect rect;
+    AfxGetMainWnd( )->GetWindowRect( rect );
+    theApp.WriteProfileInt( L"Settings", L"X", rect.left );
+    theApp.WriteProfileInt( L"Settings", L"Y", rect.top  );
+
     ::PostQuitMessage( 0 );
 }
 
