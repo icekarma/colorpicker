@@ -282,6 +282,12 @@ namespace {
         return std::min( std::max( value, channelInfo.m_minimumValue ), channelInfo.m_maximumValue );
     }
 
+    void _ComplainAboutBadValue( CEdit* pEdit, int const nNewValue, CString const& strMessage ) {
+        _PutValueToEdit( *pEdit, nNewValue );
+        MessageBox( g_pChildView->GetSafeHwnd( ), strMessage, _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
+        pEdit->SetFocus( );
+    }
+
 }
 
 CChildView::CChildView( ):
@@ -437,6 +443,32 @@ BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.lpszClass  = AfxRegisterWndClass( CS_DROPSHADOW | CS_SAVEBITS, ::LoadCursor( nullptr, IDC_ARROW ), reinterpret_cast<HBRUSH>( COLOR_WINDOW + 1 ), nullptr );
 
     return TRUE;
+}
+
+void CChildView::CheckValue( UINT const uId ) {
+    AllChannels channel { MapValueControlIdToChannel( uId ) };
+    if ( channel == AllChannels::unknown ) {
+        debug( L"CChildView::CheckValue: Uh oh: Couldn't map control ID to channel\n" );
+        DebugBreak( );
+        return;
+    }
+
+    ++m_nBlockLostFocus;
+
+    CEdit* pEdit { m_pCurrentEdit };
+    if ( int value; _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
+        ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
+
+        if ( value < channelInfo.m_minimumValue ) {
+            _ComplainAboutBadValue( pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+        } else if ( value > channelInfo.m_maximumValue ) {
+            _ComplainAboutBadValue( pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+        }
+    } else {
+        _ComplainAboutBadValue( pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
+    }
+
+    --m_nBlockLostFocus;
 }
 
 void CChildView::InitializeMemberVariables( ) {
@@ -636,37 +668,6 @@ void CChildView::OnHexColorGotFocus( ) {
     m_pCurrentEdit = &m_editHexColor;
 
     m_pCurrentEdit->SetSel( 0, -1, FALSE );
-}
-
-void _ComplainAboutBadValue( CEdit* pEdit, int const nNewValue, CString const& strMessage ) {
-    _PutValueToEdit( *pEdit, nNewValue );
-    MessageBox( g_pChildView->GetSafeHwnd( ), strMessage, _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
-    pEdit->SetFocus( );
-}
-
-void CChildView::CheckValue( UINT const uId ) {
-    AllChannels channel { MapValueControlIdToChannel( uId ) };
-    if ( channel == AllChannels::unknown ) {
-        debug( L"CChildView::CheckValue: Uh oh: Couldn't map control ID to channel\n" );
-        return;
-    }
-
-    ++m_nBlockLostFocus;
-
-    CEdit* pEdit { m_pCurrentEdit };
-    if ( int value; _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
-        ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
-
-        if ( value < channelInfo.m_minimumValue ) {
-            _ComplainAboutBadValue( pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
-        } else if ( value > channelInfo.m_maximumValue ) {
-            _ComplainAboutBadValue( pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
-        }
-    } else {
-        _ComplainAboutBadValue( pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
-    }
-
-    --m_nBlockLostFocus;
 }
 
 void CChildView::OnValueEditLostFocus( UINT uId ) {

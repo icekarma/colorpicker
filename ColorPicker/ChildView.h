@@ -79,10 +79,10 @@ protected:
     void  UpdateLabEditsIfValuesChanged(  LabTriplet const& oldValues,  LabTriplet const& newValues );
     void UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, SrgbTriplet const& newValues );
 
+    void CheckValue( UINT const uId );
+
     void InitializeMemberVariables( );
     void AdjustUIControls( );
-
-    void CheckValue( UINT const uId );
 
     //
     // Overrides
