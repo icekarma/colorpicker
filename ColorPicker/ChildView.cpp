@@ -683,9 +683,11 @@ void CChildView::OnValueEditLostFocus( UINT uId ) {
 #if defined _DEBUG
     if ( CEdit* pEdit { MapValueControlIdToEditControl( uId ) }; !pEdit ) {
         debug( L"CChildView::OnValueEditLostFocus: Uh oh: Couldn't map control ID to edit control\n" );
+        DebugBreak( );
         return;
     } else if ( m_pCurrentEdit != pEdit ) {
         debug( L"CChildView::OnValueEditLostFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
+        DebugBreak( );
         return;
     }
 #endif // defined _DEBUG
@@ -705,6 +707,7 @@ void CChildView::OnHexColorLostFocus( ) {
     if ( m_pCurrentEdit != &m_editHexColor ) {
         debug( L"CChildView::OnHexColorLostFocus: Uh oh: m_pCurrentEdit doesn't point at m_editHexColor\n" );
         DebugBreak( );
+        return;
     }
 #endif // defined _DEBUG
 
