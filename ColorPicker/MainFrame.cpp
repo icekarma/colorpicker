@@ -4,15 +4,17 @@
 
 #include "ColorPicker.h"
 
-#define POSITION_RIGHT_HALF_CENTERED
+#if defined _DEBUG
+#undef POSITION_RIGHT_HALF_CENTERED
+#endif // defined _DEBUG
 
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 
 BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
-#if defined DEBUG_WINDOW_SIZE
+#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
     ON_WM_SIZING( )
     ON_WM_SIZE( )
-#endif // defined DEBUG_WINDOW_SIZE
+#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
     ON_WM_CREATE( )
 END_MESSAGE_MAP( )
 
@@ -27,19 +29,17 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.cx         = 432;
     cs.cy         = 396;
 
-#if defined POSITION_RIGHT_HALF_CENTERED
-    {
-        int constexpr W = 1920 / 2;
-        int constexpr H = 1080;
-        cs.x = ( W - cs.cx ) / 2 + W;
-        cs.y = ( H - cs.cy ) / 2;
-    }
-#endif // defined POSITION_RIGHT_HALF_CENTERED
+#if defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED
+    int constexpr W = 1920 / 2;
+    int constexpr H = 1080;
+    cs.x = ( W - cs.cx ) / 2 + W;
+    cs.y = ( H - cs.cy ) / 2;
+#endif // defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED
 
     return TRUE;
 }
 
-#if defined DEBUG_WINDOW_SIZE
+#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
 void CMainFrame::OnSizing( UINT fwSide, LPRECT pRect ) {
     CFrameWnd::OnSizing( fwSide, pRect );
 
@@ -52,7 +52,7 @@ void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
 
     debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
 }
-#endif // defined DEBUG_WINDOW_SIZE
+#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
 
 int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
     if ( CFrameWnd::OnCreate( lpCreateStruct ) == -1 ) {
