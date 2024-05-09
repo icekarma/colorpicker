@@ -286,7 +286,8 @@
     <None Include="res\ColorPicker.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\ColorPicker.ico" />
+    <Image Include="res\ColorPicker-BW.ico" />
+    <Image Include="res\ColorPicker-Color.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

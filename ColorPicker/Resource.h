@@ -4,10 +4,7 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
-#define IDS_ERROR_CAPTION               129
-#define IDS_VALUE_TOO_HIGH              130
-#define IDS_VALUE_TOO_LOW               131
-#define IDS_VALUE_INCOMPREHENSIBLE      132
+#define IDR_MAINFRAME_BW                129
 #define IDD_CHILDVIEW                   310
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
@@ -28,15 +25,19 @@
 #define IDC_SWATCH                      4000
 #define IDC_Z_STRIP                     4001
 #define IDC_XY_GRID                     4002
+#define IDS_ERROR_CAPTION               10000
+#define IDS_VALUE_TOO_HIGH              10001
+#define IDS_VALUE_TOO_LOW               10002
+#define IDS_VALUE_INCOMPREHENSIBLE      10003
 #define ID_VIEW_INVERT                  32774
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        311
+#define _APS_NEXT_RESOURCE_VALUE        310
 #define _APS_NEXT_COMMAND_VALUE         32775
 #define _APS_NEXT_CONTROL_VALUE         5000
-#define _APS_NEXT_SYMED_VALUE           311
+#define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

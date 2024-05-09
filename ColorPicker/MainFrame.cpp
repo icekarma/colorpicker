@@ -13,6 +13,7 @@ BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
     ON_WM_SIZING( )
     ON_WM_SIZE( )
 #endif // defined DEBUG_WINDOW_SIZE
+    ON_WM_CREATE( )
 END_MESSAGE_MAP( )
 
 BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -52,3 +53,17 @@ void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
     debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
 }
 #endif // defined DEBUG_WINDOW_SIZE
+
+int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
+    if ( CFrameWnd::OnCreate( lpCreateStruct ) == -1 ) {
+        return -1;
+    }
+
+    HICON hIcon = theApp.LoadIcon( IDR_MAINFRAME );
+    if ( hIcon ) {
+        SetIcon( hIcon, TRUE  );
+        SetIcon( hIcon, FALSE );
+    }
+
+    return 0;
+}

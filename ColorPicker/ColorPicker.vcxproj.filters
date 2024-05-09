@@ -119,7 +119,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\ColorPicker.ico">
+    <Image Include="res\ColorPicker-BW.ico">
+      <Filter>03 Resource Files</Filter>
+    </Image>
+    <Image Include="res\ColorPicker-Color.ico">
       <Filter>03 Resource Files</Filter>
     </Image>
   </ItemGroup>
