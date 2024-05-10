@@ -346,6 +346,37 @@ LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM
     return CallWindowProc( wndProc, hwnd, uMessage, wParam, lParam );
 }
 
+bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags ) {
+    debug( L"CChildView::EditControl_OnKeyDown: channel: %s, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", ToString( channel ), nChar, nRepCnt, nFlags );
+
+    int adjust { };
+    if ( nChar == VK_UP ) {
+        adjust = 1;
+    } else if ( nChar == VK_DOWN ) {
+        adjust = -1;
+    } else {
+        return false;
+    }
+
+    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    m_pDoc->SetChannelValue( channel, _ClipToChannelRange( channel, m_pDoc->GetChannelValue( channel ) + adjust ) );
+
+    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
+    SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+
+    ++m_nBlockBitmapUpdates;
+
+    UpdateLabEditsIfValuesChanged (  oldLabValues,  newLabValues );
+    UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
+
+    --m_nBlockBitmapUpdates;
+    UpdateBitmaps( );
+
+    return true;
+}
+
 void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     if ( m_nBlockBitmapUpdates ) {
         return;
@@ -403,47 +434,6 @@ void CChildView::UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, S
     if ( ( m_pCurrentEdit != &m_editHexColor ) && ( newValues != oldValues ) ) {
         _PutHexColorToEdit( m_editHexColor, newValues );
     }
-}
-
-void CChildView::DoDataExchange( CDataExchange* pDX ) {
-    CFormView::DoDataExchange( pDX );
-
-    DDX_Control( pDX, IDC_GROUPBOX_LAB,    m_groupBoxLab   );
-    DDX_Control( pDX, IDC_LAB_L_LABEL,     m_radioLabL     );
-    DDX_Control( pDX, IDC_LAB_A_LABEL,     m_radioLabA     );
-    DDX_Control( pDX, IDC_LAB_B_LABEL,     m_radioLabB     );
-    DDX_Control( pDX, IDC_LAB_L_VALUE,     m_editLabL      );
-    DDX_Control( pDX, IDC_LAB_A_VALUE,     m_editLabA      );
-    DDX_Control( pDX, IDC_LAB_B_VALUE,     m_editLabB      );
-
-    DDX_Control( pDX, IDC_GROUPBOX_SRGB,   m_groupBoxSrgb  );
-    DDX_Control( pDX, IDC_SRGB_R_LABEL,    m_radioSrgbR    );
-    DDX_Control( pDX, IDC_SRGB_G_LABEL,    m_radioSrgbG    );
-    DDX_Control( pDX, IDC_SRGB_B_LABEL,    m_radioSrgbB    );
-    DDX_Control( pDX, IDC_SRGB_R_VALUE,    m_editSrgbR     );
-    DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbG     );
-    DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbB     );
-
-    DDX_Control( pDX, IDC_HEX_COLOR_LABEL, m_labelHexColor );
-    DDX_Control( pDX, IDC_HEX_COLOR_VALUE, m_editHexColor  );
-
-    DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch  );
-    DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip  );
-    DDX_Control( pDX, IDC_XY_GRID,         m_staticXyGrid  );
-
-    DDX_Control( pDX, IDCLOSE,             m_buttonClose   );
-}
-
-BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
-    if ( !CWnd::PreCreateWindow( cs ) ) {
-        return FALSE;
-    }
-
-    cs.style     &= ~WindowStylesToRemove;
-    cs.dwExStyle &= ~ExtendedWindowStylesToRemove;
-    cs.lpszClass  = AfxRegisterWndClass( CS_DROPSHADOW | CS_SAVEBITS, ::LoadCursor( nullptr, IDC_ARROW ), reinterpret_cast<HBRUSH>( COLOR_WINDOW + 1 ), nullptr );
-
-    return TRUE;
 }
 
 void CChildView::CheckValue( UINT const uId ) {
@@ -519,6 +509,47 @@ void CChildView::AdjustUIControls( ) {
     _SetSize       ( &m_staticXyGrid,  { 256L, 256L } );
 
     _AdjustPosition( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
+}
+
+void CChildView::DoDataExchange( CDataExchange* pDX ) {
+    CFormView::DoDataExchange( pDX );
+
+    DDX_Control( pDX, IDC_GROUPBOX_LAB,    m_groupBoxLab   );
+    DDX_Control( pDX, IDC_LAB_L_LABEL,     m_radioLabL     );
+    DDX_Control( pDX, IDC_LAB_A_LABEL,     m_radioLabA     );
+    DDX_Control( pDX, IDC_LAB_B_LABEL,     m_radioLabB     );
+    DDX_Control( pDX, IDC_LAB_L_VALUE,     m_editLabL      );
+    DDX_Control( pDX, IDC_LAB_A_VALUE,     m_editLabA      );
+    DDX_Control( pDX, IDC_LAB_B_VALUE,     m_editLabB      );
+
+    DDX_Control( pDX, IDC_GROUPBOX_SRGB,   m_groupBoxSrgb  );
+    DDX_Control( pDX, IDC_SRGB_R_LABEL,    m_radioSrgbR    );
+    DDX_Control( pDX, IDC_SRGB_G_LABEL,    m_radioSrgbG    );
+    DDX_Control( pDX, IDC_SRGB_B_LABEL,    m_radioSrgbB    );
+    DDX_Control( pDX, IDC_SRGB_R_VALUE,    m_editSrgbR     );
+    DDX_Control( pDX, IDC_SRGB_G_VALUE,    m_editSrgbG     );
+    DDX_Control( pDX, IDC_SRGB_B_VALUE,    m_editSrgbB     );
+
+    DDX_Control( pDX, IDC_HEX_COLOR_LABEL, m_labelHexColor );
+    DDX_Control( pDX, IDC_HEX_COLOR_VALUE, m_editHexColor  );
+
+    DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch  );
+    DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip  );
+    DDX_Control( pDX, IDC_XY_GRID,         m_staticXyGrid  );
+
+    DDX_Control( pDX, IDCLOSE,             m_buttonClose   );
+}
+
+BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
+    if ( !CWnd::PreCreateWindow( cs ) ) {
+        return FALSE;
+    }
+
+    cs.style     &= ~WindowStylesToRemove;
+    cs.dwExStyle &= ~ExtendedWindowStylesToRemove;
+    cs.lpszClass  = AfxRegisterWndClass( CS_DROPSHADOW | CS_SAVEBITS, ::LoadCursor( nullptr, IDC_ARROW ), reinterpret_cast<HBRUSH>( COLOR_WINDOW + 1 ), nullptr );
+
+    return TRUE;
 }
 
 void CChildView::OnInitialUpdate( ) {
@@ -606,13 +637,13 @@ void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && m_pCurrentEdit->CanUndo( ) );
 }
 
+void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
+}
+
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
     pCmdUI->SetCheck( m_pDoc->IsInverted( ) ? 1 : 0 );
-}
-
-void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnEditCut( ) {
@@ -645,6 +676,48 @@ void CChildView::OnViewInvert( ) {
     m_staticZStrip.SetInverted( fInverted );
     m_staticXyGrid.SetInverted( fInverted );
     UpdateBitmaps( );
+}
+
+void CChildView::OnCloseButtonClicked( ) {
+    AfxGetMainWnd( )->SendMessage( WM_COMMAND, ID_APP_EXIT, 0 );
+}
+
+void CChildView::OnClose( ) {
+    m_pDoc->SaveToRegistry( );
+
+    UnSubclassEditControl( m_editSrgbB );
+    UnSubclassEditControl( m_editSrgbG );
+    UnSubclassEditControl( m_editSrgbR );
+    UnSubclassEditControl( m_editLabB  );
+    UnSubclassEditControl( m_editLabA  );
+    UnSubclassEditControl( m_editLabL  );
+
+    CRect rect;
+    AfxGetMainWnd( )->GetWindowRect( rect );
+    theApp.WriteProfileInt( L"Settings", L"X", rect.left );
+    theApp.WriteProfileInt( L"Settings", L"Y", rect.top  );
+
+    CFormView::OnClose( );
+}
+
+void CChildView::OnChannelRadioClicked( UINT const uId ) {
+    AllChannels channel { MapLabelControlIdToChannel( uId ) };
+    if ( channel == AllChannels::unknown ) {
+        return;
+    }
+
+    if ( AllChannelsTriplet const& channels { _ChannelXyzTriplets[+channel] }; channels != AllChannelsTriplet { { m_channelX, m_channelY, m_channelZ } } ) {
+        m_channelX = channels[0];
+        m_channelY = channels[1];
+        m_channelZ = channels[2];
+
+        m_pDoc->SetSelectedChannel( m_channelZ );
+
+        m_staticZStrip.SetChannel( m_channelZ );
+        m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
+
+        UpdateBitmaps( );
+    }
 }
 
 void CChildView::OnValueEditGotFocus( UINT uId ) {
@@ -719,79 +792,6 @@ void CChildView::OnHexColorLostFocus( ) {
     }
 
     m_pCurrentEdit = nullptr;
-}
-
-void CChildView::OnCloseButtonClicked( ) {
-    AfxGetMainWnd( )->SendMessage( WM_COMMAND, ID_APP_EXIT, 0 );
-}
-
-void CChildView::OnClose( ) {
-    m_pDoc->SaveToRegistry( );
-
-    UnSubclassEditControl( m_editSrgbB );
-    UnSubclassEditControl( m_editSrgbG );
-    UnSubclassEditControl( m_editSrgbR );
-    UnSubclassEditControl( m_editLabB  );
-    UnSubclassEditControl( m_editLabA  );
-    UnSubclassEditControl( m_editLabL  );
-
-    CRect rect;
-    AfxGetMainWnd( )->GetWindowRect( rect );
-    theApp.WriteProfileInt( L"Settings", L"X", rect.left );
-    theApp.WriteProfileInt( L"Settings", L"Y", rect.top  );
-
-    CFormView::OnClose( );
-}
-
-bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags ) {
-    debug( L"CChildView::EditControl_OnKeyDown: channel: %s, nChar: %u, nRepCnt: %u, nFlags: 0x%08X\n", ToString( channel ), nChar, nRepCnt, nFlags );
-
-    int adjust { };
-    if ( nChar == VK_UP ) {
-        adjust = 1;
-    } else if ( nChar == VK_DOWN ) {
-        adjust = -1;
-    } else {
-        return false;
-    }
-
-    LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-
-    m_pDoc->SetChannelValue( channel, _ClipToChannelRange( channel, m_pDoc->GetChannelValue( channel ) + adjust ) );
-
-    LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
-    SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-
-    ++m_nBlockBitmapUpdates;
-
-    UpdateLabEditsIfValuesChanged (  oldLabValues,  newLabValues );
-    UpdateSrgbEditsIfValuesChanged( oldSrgbValues, newSrgbValues );
-
-    --m_nBlockBitmapUpdates;
-    UpdateBitmaps( );
-
-    return true;
-}
-
-void CChildView::OnChannelRadioClicked( UINT const uId ) {
-    AllChannels channel { MapLabelControlIdToChannel( uId ) };
-    if ( channel == AllChannels::unknown ) {
-        return;
-    }
-
-    if ( AllChannelsTriplet const& channels { _ChannelXyzTriplets[+channel] }; channels != AllChannelsTriplet { { m_channelX, m_channelY, m_channelZ } } ) {
-        m_channelX = channels[0];
-        m_channelY = channels[1];
-        m_channelZ = channels[2];
-
-        m_pDoc->SetSelectedChannel( m_channelZ );
-
-        m_staticZStrip.SetChannel( m_channelZ );
-        m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-
-        UpdateBitmaps( );
-    }
 }
 
 void CChildView::OnValueEditUpdate( UINT const uId ) {

@@ -36,16 +36,17 @@ protected:
     //============================================
 
     //
-    // Static methods
+    // Edit control subclassing methods
     //
 
     LRESULT static CALLBACK _EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
+    LRESULT                  EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
+
+    afx_msg bool EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags );
 
     //
     // Own methods
     //
-
-    LRESULT EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
 
     CButton* MapChannelToButtonControl( AllChannels const channel ) const {
         return ( channel <= AllChannels::Max ) ? m_mapChannelToButtonControl[+channel] : nullptr;
@@ -116,16 +117,15 @@ protected:
     afx_msg void OnEditSelectAll( );
     afx_msg void OnViewInvert( );
 
-    afx_msg void OnValueEditGotFocus( UINT uId );
-    afx_msg void OnValueEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
     afx_msg void OnClose( );
-    afx_msg bool EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags );
     afx_msg void OnChannelRadioClicked( UINT uId );
+    afx_msg void OnValueEditGotFocus( UINT uId );
+    afx_msg void OnHexColorGotFocus( );
+    afx_msg void OnValueEditLostFocus( UINT uId );
+    afx_msg void OnHexColorLostFocus( );
     afx_msg void OnValueEditUpdate( UINT uId );
     afx_msg void OnHexColorUpdate( );
-    afx_msg void OnHexColorGotFocus( );
-    afx_msg void OnHexColorLostFocus( );
     afx_msg void OnZStripMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
     afx_msg void OnXyGridMouseMove( NMHDR* pNotifyStruct, LRESULT* result );
 
