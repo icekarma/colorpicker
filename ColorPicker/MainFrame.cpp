@@ -50,7 +50,7 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
 
 void CMainFrame::OnClose( ) {
     extern CChildView* g_pChildView;
-    g_pChildView->OnClose( );
+    g_pChildView->Close( );
 
     CFrameWnd::OnClose( );
 }

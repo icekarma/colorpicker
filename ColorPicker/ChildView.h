@@ -22,7 +22,9 @@ public:
     enum { IDD = IDD_CHILDVIEW };
 #endif
 
-    afx_msg void OnClose( );
+    void Close( ) {
+        OnClose( );
+    }
 
 protected:
 
@@ -117,6 +119,7 @@ protected:
     afx_msg void OnValueEditGotFocus( UINT uId );
     afx_msg void OnValueEditLostFocus( UINT uId );
     afx_msg void OnCloseButtonClicked( );
+    afx_msg void OnClose( );
     afx_msg bool EditControl_OnKeyDown( AllChannels const channel, UINT const nChar, UINT const nRepCnt, UINT const nFlags );
     afx_msg void OnChannelRadioClicked( UINT uId );
     afx_msg void OnValueEditUpdate( UINT uId );
