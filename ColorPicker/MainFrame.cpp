@@ -12,12 +12,12 @@
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 
 BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
-#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
-    ON_WM_SIZING( )
-    ON_WM_SIZE( )
-#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
-    ON_WM_CREATE( )
     ON_WM_CLOSE( )
+    ON_WM_CREATE( )
+#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
+    ON_WM_SIZE( )
+    ON_WM_SIZING( )
+#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
 END_MESSAGE_MAP( )
 
 BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -48,21 +48,6 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     return TRUE;
 }
 
-#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
-void CMainFrame::OnSizing( UINT fwSide, LPRECT pRect ) {
-    CFrameWnd::OnSizing( fwSide, pRect );
-
-    CRect rect( pRect );
-    debug( L"CMainFrame::OnSizing: %dx%d (%d,%d)-(%d,%d)\n", rect.Width( ), rect.Height( ), rect.left, rect.top, rect.right, rect.bottom );
-}
-
-void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
-    CFrameWnd::OnSize( nType, cx, cy );
-
-    debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
-}
-#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
-
 void CMainFrame::OnClose( ) {
     extern CChildView* g_pChildView;
     g_pChildView->OnClose( );
@@ -83,3 +68,18 @@ int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
 
     return 0;
 }
+
+#if defined _DEBUG && defined DEBUG_WINDOW_SIZE
+void CMainFrame::OnSize( UINT nType, int cx, int cy ) {
+    CFrameWnd::OnSize( nType, cx, cy );
+
+    debug( L"CMainFrame::OnSize: %dx%d\n", cx, cy );
+}
+
+void CMainFrame::OnSizing( UINT fwSide, LPRECT pRect ) {
+    CFrameWnd::OnSizing( fwSide, pRect );
+
+    CRect rect( pRect );
+    debug( L"CMainFrame::OnSizing: %dx%d (%d,%d)-(%d,%d)\n", rect.Width( ), rect.Height( ), rect.left, rect.top, rect.right, rect.bottom );
+}
+#endif // defined _DEBUG && defined DEBUG_WINDOW_SIZE
