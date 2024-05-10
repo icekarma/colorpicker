@@ -37,8 +37,8 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.x = ( W - cs.cx ) / 2 + W;
     cs.y = ( H - cs.cy ) / 2;
 #else // !( defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED )
-    int x { static_cast<int>( theApp.GetProfileInt( L"Settings", L"X", -1'000'000 ) ) };
-    int y { static_cast<int>( theApp.GetProfileInt( L"Settings", L"Y", -1'000'000 ) ) };
+    int const x { static_cast<int>( theApp.GetProfileInt( L"Settings", L"X", -1'000'000 ) ) };
+    int const y { static_cast<int>( theApp.GetProfileInt( L"Settings", L"Y", -1'000'000 ) ) };
     if ( ( x != -1'000'000 ) && ( y != -1'000'000 ) ) {
         cs.x = x;
         cs.y = y;
