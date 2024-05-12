@@ -1,7 +1,13 @@
-﻿* Hex color value edit: eat the #
-* Hex color value edit: What's going on with pasting?
-* L*a*b* and sRGB color value edits: Is their pasting broken, too?
+﻿==================================================
+== Outstanding issues                           ==
+==================================================
 
+* Verify the operation of channel limits.
+* Edit menu item: Copy L*a*b*/sRGB as CSV
+
+==================================================
+== Feature suggestions                          ==
+==================================================
 
 * Option for 0..255 vs 0..100
 * Option for floating point with 1dp
