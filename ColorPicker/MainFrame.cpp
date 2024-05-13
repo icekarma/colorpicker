@@ -6,10 +6,6 @@
 #include "ChildView.h"
 #include "Settings.h"
 
-#if defined _DEBUG
-#undef POSITION_RIGHT_HALF_CENTERED
-#endif // defined _DEBUG
-
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 
 BEGIN_MESSAGE_MAP( CMainFrame, CFrameWnd )
@@ -32,18 +28,11 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.cx         = 432;
     cs.cy         = 396;
 
-#if defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED
-    int constexpr W = 1920 / 2;
-    int constexpr H = 1080;
-    cs.x = ( W - cs.cx ) / 2 + W;
-    cs.y = ( H - cs.cy ) / 2;
-#else // !( defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED )
     CPoint topLeft { g_settings.GetWindowPosition( ) };
     if ( ( topLeft.x != -1'000'000 ) && ( topLeft.y != -1'000'000 ) ) {
         cs.x = topLeft.x;
         cs.y = topLeft.y;
     }
-#endif // defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED
 
     return TRUE;
 }
