@@ -275,7 +275,7 @@ namespace {
     [[nodiscard]] DWORD _SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
         SetLastError( ERROR_SUCCESS );
         oldWndProc = reinterpret_cast<WNDPROC>( SetWindowLongPtr( hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( newWndProc ) ) );
-        return GetLastError( );
+        return ::GetLastError( );
     }
 
     [[nodiscard]] int _ClipToChannelRange( AllChannels const channel, int const value ) {
@@ -391,33 +391,35 @@ void CChildView::UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy ) {
     }
 }
 
-void CChildView::SubclassEditControl( CEdit& pEdit, WNDPROC const newWndProc ) {
-    HWND    hwndEdit { pEdit.GetSafeHwnd( ) };
-    WNDPROC wndProc;
+void CChildView::SubclassEditControl( WNDPROC const newWndProc, std::initializer_list<CEdit*> edits ) {
+    for ( CEdit* pEdit : edits ) {
+        HWND hwnd { pEdit->GetSafeHwnd( ) };
+        WNDPROC oldWndProc;
 
-    if ( DWORD dwError { _SetWindowProcedure( hwndEdit, newWndProc, wndProc ) }; !dwError ) {
-        m_mapHwndToWndProc[hwndEdit] = wndProc;
-    } else {
-        debug( L"CChildView::SubclassEditControl: pEdit 0x%p, hwnd 0x%p: SetWindowLongPtr failed: error %lu\n", &pEdit, hwndEdit, dwError );
-        DebugBreak( );
+        if ( DWORD dwError { _SetWindowProcedure( hwnd, newWndProc, oldWndProc ) }; !dwError ) {
+            m_mapHwndToWndProc[hwnd] = oldWndProc;
+        } else {
+            debug( L"CChildView::_SubclassEditControl: HWND 0x%p: CChildView::_SetWindowProcedure failed: %lu\n", hwnd, dwError );
+            DebugBreak( );
+        }
     }
 }
 
-void CChildView::UnSubclassEditControl( CEdit& pEdit ) {
-    HWND hwndEdit { pEdit.GetSafeHwnd( ) };
-    if ( !m_mapHwndToWndProc.contains( hwndEdit ) ) {
-        debug( L"CChildView::UnSubclassEditControl: pEdit 0x%p, hwnd 0x%p: Control isn't subclassed\n", &pEdit, hwndEdit );
-        DebugBreak( );
-        return;
-    }
+void CChildView::UnsubclassEditControl( std::initializer_list<CEdit*> edits ) {
+    for ( CEdit* pEdit : edits ) {
+        HWND hwnd { pEdit->GetSafeHwnd( ) };
+        if ( !m_mapHwndToWndProc.contains( hwnd ) ) {
+            return;
+        }
 
-    WNDPROC wndProc { m_mapHwndToWndProc.at( hwndEdit ) };
-    WNDPROC oldWndProc;
-    if ( DWORD dwError { _SetWindowProcedure( hwndEdit, wndProc, oldWndProc ) }; !dwError ) {
-        m_mapHwndToWndProc.erase( hwndEdit );
-    } else {
-        debug( L"CChildView::UnSubclassEditControl: pEdit 0x%p, hwnd 0x%p: SetWindowLongPtr failed: error %lu\n", &pEdit, hwndEdit, dwError );
-        DebugBreak( );
+        WNDPROC wndProc { m_mapHwndToWndProc.at( hwnd ) };
+        WNDPROC oldWndProc;
+        if ( DWORD dwError { _SetWindowProcedure( hwnd, wndProc, oldWndProc ) }; !dwError ) {
+            m_mapHwndToWndProc.erase( hwnd );
+        } else {
+            debug( L"CChildView::UnsubclassEditControl: HWND 0x%p: _SetWindowProcedure failed: %lu\n", hwnd, dwError );
+            DebugBreak( );
+        }
     }
 }
 
@@ -609,12 +611,7 @@ void CChildView::OnInitialUpdate( ) {
     // Subclass edit controls
     //
 
-    SubclassEditControl( m_editLabL,  _EditWndProc );
-    SubclassEditControl( m_editLabA,  _EditWndProc );
-    SubclassEditControl( m_editLabB,  _EditWndProc );
-    SubclassEditControl( m_editSrgbR, _EditWndProc );
-    SubclassEditControl( m_editSrgbG, _EditWndProc );
-    SubclassEditControl( m_editSrgbB, _EditWndProc );
+    SubclassEditControl( _EditWndProc, { &m_editLabL, &m_editLabA, &m_editLabB, &m_editSrgbR, &m_editSrgbG, &m_editSrgbB } );
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
@@ -685,12 +682,7 @@ void CChildView::OnCloseButtonClicked( ) {
 void CChildView::OnClose( ) {
     m_pDoc->SaveToRegistry( );
 
-    UnSubclassEditControl( m_editSrgbB );
-    UnSubclassEditControl( m_editSrgbG );
-    UnSubclassEditControl( m_editSrgbR );
-    UnSubclassEditControl( m_editLabB  );
-    UnSubclassEditControl( m_editLabA  );
-    UnSubclassEditControl( m_editLabL  );
+    UnsubclassEditControl( { &m_editSrgbB, &m_editSrgbG, &m_editSrgbR, &m_editLabB, &m_editLabA, &m_editLabL } );
 
     CRect rect;
     AfxGetMainWnd( )->GetWindowRect( rect );

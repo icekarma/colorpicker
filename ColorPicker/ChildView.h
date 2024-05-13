@@ -78,8 +78,8 @@ protected:
 
     void UpdateBitmaps( bool const fUpdateZ, bool const fUpdateXy );
 
-    void SubclassEditControl( CEdit& pEdit, WNDPROC const newWndProc );
-    void UnSubclassEditControl( CEdit& pEdit );
+    void SubclassEditControl( WNDPROC const newWndProc, std::initializer_list<CEdit*> edits );
+    void UnsubclassEditControl( std::initializer_list<CEdit*> edits );
 
     void  UpdateLabEditsIfValuesChanged(  LabTriplet const& oldValues,  LabTriplet const& newValues );
     void UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, SrgbTriplet const& newValues );
