@@ -841,7 +841,7 @@ void CChildView::OnViewInvert( ) {
 }
 
 void CChildView::OnCloseButtonClicked( ) {
-    AfxGetMainWnd( )->SendMessage( WM_COMMAND, ID_APP_EXIT, 0 );
+    theApp.CloseAllDocuments( FALSE );
 }
 
 void CChildView::OnClose( ) {
