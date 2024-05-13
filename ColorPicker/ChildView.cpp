@@ -289,6 +289,10 @@ namespace {
         pEdit->SetFocus( );
     }
 
+    [[nodiscard]] int _BoolToChecked( bool const fValue ) {
+        return fValue ? BST_CHECKED : BST_UNCHECKED;
+    }
+
 }
 
 CChildView::CChildView( ):
@@ -578,7 +582,7 @@ void CChildView::OnInitialUpdate( ) {
     m_channelZ = channels[2];
 
     for ( AllChannels channel { }; channel <= AllChannels::Max; ++channel ) {
-        m_mapChannelToButtonControl[+channel]->SetCheck( ( channel == selectedChannel ) ? BST_CHECKED : BST_UNCHECKED );
+        m_mapChannelToButtonControl[+channel]->SetCheck( _BoolToChecked( channel == selectedChannel ) );
     }
 
     bool const fInverted { m_pDoc->IsInverted( ) };
@@ -640,7 +644,7 @@ void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
 
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( m_pDoc->IsInverted( ) ? 1 : 0 );
+    pCmdUI->SetCheck( _BoolToChecked( m_pDoc->IsInverted( ) ) );
 }
 
 void CChildView::OnEditCut( ) {
