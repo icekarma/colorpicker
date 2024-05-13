@@ -88,8 +88,6 @@ void CColorPickerDoc::LoadFromRegistry( ) {
         srgbValues = triplet_cast<UINT>(   SrgbDefaultColor );
     }
 
-    bool fInverted = theApp.GetProfileInt( L"Settings", L"Inverted", 0 ) ? true : false;
-
     AllChannels selectedChannel { static_cast<AllChannels>( theApp.GetProfileInt( L"Settings", L"Selected channel", static_cast<int>( AllChannels::LabL ) ) ) };
     if ( selectedChannel > AllChannels::Max ) {
         selectedChannel = AllChannels::LabL;
@@ -101,7 +99,6 @@ void CColorPickerDoc::LoadFromRegistry( ) {
 
     m_LabColor        = triplet_cast<RawLabValueT>(  labValues );
     m_SrgbColor       = triplet_cast<  SrgbValueT>( srgbValues );
-    m_fInverted       = fInverted;
     m_SelectedChannel = selectedChannel;
 }
 
@@ -116,6 +113,5 @@ void CColorPickerDoc::SaveToRegistry( ) {
     theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbG",            srgbValues[+SrgbChannels::G] );
     theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbB",            srgbValues[+SrgbChannels::B] );
 
-    theApp.WriteProfileInt( L"Settings",               L"Inverted",         m_fInverted ? 1 : 0 );
     theApp.WriteProfileInt( L"Settings",               L"Selected channel", static_cast<int>( m_SelectedChannel ) );
 }

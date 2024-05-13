@@ -570,6 +570,8 @@ void CChildView::OnInitialUpdate( ) {
 
     m_pDoc->LoadFromRegistry( );
 
+    m_fInverted = theApp.GetProfileInt( L"Settings", L"Inverted", 0 ) ? true : false;
+
     //
     // Apply them to the controls
     //
@@ -585,15 +587,13 @@ void CChildView::OnInitialUpdate( ) {
         m_mapChannelToButtonControl[+channel]->SetCheck( _BoolToChecked( channel == selectedChannel ) );
     }
 
-    bool const fInverted { m_pDoc->IsInverted( ) };
-
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
-    m_staticZStrip.SetInverted( fInverted );
+    m_staticZStrip.SetInverted( m_fInverted );
 
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-    m_staticXyGrid.SetInverted( fInverted );
+    m_staticXyGrid.SetInverted( m_fInverted );
 
     LabTriplet  const  labValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet const srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -644,7 +644,7 @@ void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
 
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( m_pDoc->IsInverted( ) ) );
+    pCmdUI->SetCheck( _BoolToChecked( m_fInverted ) );
 }
 
 void CChildView::OnEditCut( ) {
@@ -672,10 +672,11 @@ void CChildView::OnEditSelectAll( ) {
 }
 
 void CChildView::OnViewInvert( ) {
-    bool const fInverted { !m_pDoc->IsInverted( ) };
-    m_pDoc       ->SetInverted( fInverted );
-    m_staticZStrip.SetInverted( fInverted );
-    m_staticXyGrid.SetInverted( fInverted );
+    m_fInverted = !m_fInverted;
+    theApp.WriteProfileInt( L"Settings", L"Inverted", m_fInverted ? 1 : 0 );
+
+    m_staticZStrip.SetInverted( m_fInverted );
+    m_staticXyGrid.SetInverted( m_fInverted );
     UpdateBitmaps( );
 }
 

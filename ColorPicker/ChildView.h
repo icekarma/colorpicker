@@ -161,6 +161,12 @@ protected:
     int              m_nBlockLostFocus     { };
 
     //
+    // Settings
+    //
+
+    bool    m_fInverted    { };
+
+    //
     // Controls
     //
 

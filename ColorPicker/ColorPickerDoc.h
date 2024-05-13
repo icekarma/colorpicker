@@ -66,18 +66,6 @@ public:
     }
 
     //
-    // Inversion stuff
-    //
-
-    [[nodiscard]] bool IsInverted( ) const {
-        return m_fInverted;
-    }
-
-    void SetInverted( bool const fInverted ) {
-        m_fInverted = fInverted;
-    }
-
-    //
     // Registry stuff
     //
 
@@ -99,8 +87,6 @@ protected:
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
     LabColor    m_LabColor        { };
     SrgbColor   m_SrgbColor       { };
-
-    bool        m_fInverted       { };
 
     AllChannels m_SelectedChannel { AllChannels::unknown };
 
