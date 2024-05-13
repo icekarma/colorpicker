@@ -9,6 +9,9 @@
 extern std::unordered_map<UINT, AllChannels> const g_mapLabelControlIdToChannel;
 extern std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel;
 
+template<typename T>
+concept IsEditControl = std::same_as<T, CEdit>;
+
 class CChildView:
     public CFormView
 {
@@ -107,6 +110,14 @@ protected:
     afx_msg void OnUpdateEditClear( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditUndo( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditSelectAll( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvLab( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvSrgb( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvQuotingNone( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvQuotingSingle( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvQuotingDouble( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvSeparatorComma( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvSeparatorSpace( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditCopyAsCsvSeparatorTab( CCmdUI* pCmdUI );
     afx_msg void OnUpdateViewInvert( CCmdUI* pCmdUI );
 
     afx_msg void OnEditCut( );
@@ -115,6 +126,14 @@ protected:
     afx_msg void OnEditClear( );
     afx_msg void OnEditUndo( );
     afx_msg void OnEditSelectAll( );
+    afx_msg void OnEditCopyAsCsvLab( );
+    afx_msg void OnEditCopyAsCsvSrgb( );
+    afx_msg void OnEditCopyAsCsvQuotingNone( );
+    afx_msg void OnEditCopyAsCsvQuotingSingle( );
+    afx_msg void OnEditCopyAsCsvQuotingDouble( );
+    afx_msg void OnEditCopyAsCsvSeparatorComma( );
+    afx_msg void OnEditCopyAsCsvSeparatorSpace( );
+    afx_msg void OnEditCopyAsCsvSeparatorTab( );
     afx_msg void OnViewInvert( );
 
     afx_msg void OnCloseButtonClicked( );
@@ -132,6 +151,10 @@ protected:
     //============================================
     // Member variables
     //============================================
+
+    //
+    // Mappings
+    //
 
     CButton* const m_mapChannelToButtonControl[6] {
         &m_radioLabL,
@@ -155,6 +178,10 @@ protected:
     std::unordered_map<HWND, AllChannels> m_mapHwndToChannel;
     std::unordered_map<HWND, WNDPROC>     m_mapHwndToWndProc;
 
+    //
+    // Miscellaneous
+    //
+
     CColorPickerDoc* m_pDoc                { };
     CEdit*           m_pCurrentEdit        { };
     int              m_nBlockBitmapUpdates { };
@@ -165,6 +192,8 @@ protected:
     //
 
     bool    m_fInverted    { };
+    wchar_t m_wchSeparator { };
+    CString m_strQuoting   { };
 
     //
     // Controls

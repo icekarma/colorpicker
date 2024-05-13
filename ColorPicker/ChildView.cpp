@@ -10,34 +10,50 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
-    ON_BN_CLICKED        (                 IDCLOSE,                           &CChildView::OnCloseButtonClicked   )
-    ON_EN_KILLFOCUS      (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorLostFocus    )
-    ON_EN_SETFOCUS       (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorGotFocus     )
-    ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,               &CChildView::OnHexColorUpdate       )
+    ON_BN_CLICKED        (                 IDCLOSE,                             &CChildView::OnCloseButtonClicked                )
+    ON_EN_KILLFOCUS      (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorLostFocus                 )
+    ON_EN_SETFOCUS       (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorGotFocus                  )
+    ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorUpdate                    )
 
-    ON_CONTROL_RANGE     ( BN_CLICKED,     IDC_LAB_L_LABEL, IDC_SRGB_B_LABEL, &CChildView::OnChannelRadioClicked  )
-    ON_CONTROL_RANGE     ( EN_KILLFOCUS,   IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE, &CChildView::OnValueEditLostFocus   )
-    ON_CONTROL_RANGE     ( EN_SETFOCUS,    IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE, &CChildView::OnValueEditGotFocus    )
-    ON_CONTROL_RANGE     ( EN_UPDATE,      IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE, &CChildView::OnValueEditUpdate      )
+    ON_CONTROL_RANGE     ( BN_CLICKED,     IDC_LAB_L_LABEL, IDC_SRGB_B_LABEL,   &CChildView::OnChannelRadioClicked               )
+    ON_CONTROL_RANGE     ( EN_KILLFOCUS,   IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE,   &CChildView::OnValueEditLostFocus                )
+    ON_CONTROL_RANGE     ( EN_SETFOCUS,    IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE,   &CChildView::OnValueEditGotFocus                 )
+    ON_CONTROL_RANGE     ( EN_UPDATE,      IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE,   &CChildView::OnValueEditUpdate                   )
 
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CUT,                       &CChildView::OnUpdateEditCut        )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                      &CChildView::OnUpdateEditCopy       )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                     &CChildView::OnUpdateEditPaste      )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                     &CChildView::OnUpdateEditClear      )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                      &CChildView::OnUpdateEditUndo       )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                &CChildView::OnUpdateEditSelectAll  )
-    ON_UPDATE_COMMAND_UI (                 ID_VIEW_INVERT,                    &CChildView::OnUpdateViewInvert     )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CUT,                         &CChildView::OnUpdateEditCut                     )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                        &CChildView::OnUpdateEditCopy                    )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                       &CChildView::OnUpdateEditPaste                   )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                       &CChildView::OnUpdateEditClear                   )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                        &CChildView::OnUpdateEditUndo                    )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnUpdateEditSelectAll               )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnUpdateEditCopyAsCsvLab            )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnUpdateEditCopyAsCsvSrgb           )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_QUOTING_NONE,    &CChildView::OnUpdateEditCopyAsCsvQuotingNone    )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_QUOTING_SINGLE,  &CChildView::OnUpdateEditCopyAsCsvQuotingSingle  )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_QUOTING_DOUBLE,  &CChildView::OnUpdateEditCopyAsCsvQuotingDouble  )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_COMMA, &CChildView::OnUpdateEditCopyAsCsvSeparatorComma )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_SPACE, &CChildView::OnUpdateEditCopyAsCsvSeparatorSpace )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_TAB,   &CChildView::OnUpdateEditCopyAsCsvSeparatorTab   )
+    ON_UPDATE_COMMAND_UI (                 ID_VIEW_INVERT,                      &CChildView::OnUpdateViewInvert                  )
 
-    ON_COMMAND           (                 ID_EDIT_CUT,                       &CChildView::OnEditCut              )
-    ON_COMMAND           (                 ID_EDIT_COPY,                      &CChildView::OnEditCopy             )
-    ON_COMMAND           (                 ID_EDIT_PASTE,                     &CChildView::OnEditPaste            )
-    ON_COMMAND           (                 ID_EDIT_CLEAR,                     &CChildView::OnEditClear            )
-    ON_COMMAND           (                 ID_EDIT_UNDO,                      &CChildView::OnEditUndo             )
-    ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                &CChildView::OnEditSelectAll        )
-    ON_COMMAND           (                 ID_VIEW_INVERT,                    &CChildView::OnViewInvert           )
+    ON_COMMAND           (                 ID_EDIT_CUT,                         &CChildView::OnEditCut                           )
+    ON_COMMAND           (                 ID_EDIT_COPY,                        &CChildView::OnEditCopy                          )
+    ON_COMMAND           (                 ID_EDIT_PASTE,                       &CChildView::OnEditPaste                         )
+    ON_COMMAND           (                 ID_EDIT_CLEAR,                       &CChildView::OnEditClear                         )
+    ON_COMMAND           (                 ID_EDIT_UNDO,                        &CChildView::OnEditUndo                          )
+    ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnEditSelectAll                     )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnEditCopyAsCsvLab                  )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnEditCopyAsCsvSrgb                 )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_QUOTING_NONE,    &CChildView::OnEditCopyAsCsvQuotingNone          )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_QUOTING_SINGLE,  &CChildView::OnEditCopyAsCsvQuotingSingle        )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_QUOTING_DOUBLE,  &CChildView::OnEditCopyAsCsvQuotingDouble        )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_COMMA, &CChildView::OnEditCopyAsCsvSeparatorComma       )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_SPACE, &CChildView::OnEditCopyAsCsvSeparatorSpace       )
+    ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_TAB,   &CChildView::OnEditCopyAsCsvSeparatorTab         )
+    ON_COMMAND           (                 ID_VIEW_INVERT,                      &CChildView::OnViewInvert                        )
 
-    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                       &CChildView::OnZStripMouseMove      )
-    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                       &CChildView::OnXyGridMouseMove      )
+    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                         &CChildView::OnZStripMouseMove                   )
+    ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                         &CChildView::OnXyGridMouseMove                   )
     ON_WM_CLOSE( )
 END_MESSAGE_MAP( )
 
@@ -291,6 +307,68 @@ namespace {
 
     [[nodiscard]] int _BoolToChecked( bool const fValue ) {
         return fValue ? BST_CHECKED : BST_UNCHECKED;
+    }
+
+    bool _PutTextOnClipboard( const CString& str ) {
+        SetLastError( ERROR_SUCCESS );
+
+        if ( !::OpenClipboard( AfxGetMainWnd( )->GetSafeHwnd( ) ) ) {
+            DWORD dwError { ::GetLastError( ) };
+            debug( L"_PutTextOnClipboard: OpenClipboard failed: %lu\n", dwError );
+
+            return false;
+        }
+
+        size_t cbStr { ( static_cast<size_t>( str.GetLength( ) ) + 1 ) * sizeof( wchar_t ) };
+        HGLOBAL hMem { ::GlobalAlloc( GMEM_DDESHARE, cbStr ) };
+        if ( !hMem ) {
+            DWORD dwError { ::GetLastError( ) };
+            debug( L"_PutTextOnClipboard: GlobalAlloc failed: %lu\n", dwError );
+
+            ::CloseClipboard( );
+            return false;
+        }
+
+        wchar_t* pBuf { static_cast<wchar_t*>( ::GlobalLock( hMem ) ) };
+        if ( !pBuf ) {
+            DWORD dwError { ::GetLastError( ) };
+            debug( L"_PutTextOnClipboard: GlobalLock failed: %lu\n", dwError );
+
+            ::GlobalFree( hMem );
+            ::CloseClipboard( );
+            return false;
+        }
+
+        memcpy( pBuf, static_cast<LPCWSTR>( str ), cbStr );
+        ::GlobalUnlock( hMem );
+
+        HANDLE hClipboardData { ::SetClipboardData( CF_UNICODETEXT, hMem ) };
+        if ( !hClipboardData ) {
+            DWORD dwError { ::GetLastError( ) };
+            debug( L"_PutTextOnClipboard: SetClipboardData failed: %lu\n", dwError );
+
+            ::GlobalFree( hMem );
+            ::CloseClipboard( );
+            return false;
+        }
+
+        ::CloseClipboard( );
+        return true;
+    }
+
+    template<std::signed_integral T>
+    CString ToString( T const value ) {
+        return _FormatString( L"%d", value );
+    }
+
+    template<std::unsigned_integral T>
+    CString ToString( T const value ) {
+        return _FormatString( L"%u", value );
+    }
+
+    template<std::floating_point T>
+    CString ToString( T const value ) {
+        return _FormatString( L"%f", value );
     }
 
 }
@@ -572,6 +650,10 @@ void CChildView::OnInitialUpdate( ) {
 
     m_fInverted = theApp.GetProfileInt( L"Settings", L"Inverted", 0 ) ? true : false;
 
+    CString strSeparator { theApp.GetProfileString( L"Settings", L"Separator", L"," ) };
+    m_wchSeparator = strSeparator.IsEmpty( ) ? L',' : strSeparator[0];
+    m_strQuoting   = theApp.GetProfileString( L"Settings", L"Quoting", L"" );
+
     //
     // Apply them to the controls
     //
@@ -642,6 +724,44 @@ void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
 }
 
+void CChildView::OnUpdateEditCopyAsCsvLab( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvSrgb( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvQuotingNone( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_strQuoting.IsEmpty( ) ) );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvQuotingSingle( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_strQuoting == L"'" ) );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvQuotingDouble( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_strQuoting == L"\"" ) );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvSeparatorComma( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_wchSeparator == L',' ) );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvSeparatorSpace( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_wchSeparator == L' ' ) );
+}
+
+void CChildView::OnUpdateEditCopyAsCsvSeparatorTab( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
+    pCmdUI->SetCheck( _BoolToChecked( m_wchSeparator == L'\t' ) );
+}
+
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
     pCmdUI->SetCheck( _BoolToChecked( m_fInverted ) );
@@ -669,6 +789,58 @@ void CChildView::OnEditUndo( ) {
 
 void CChildView::OnEditSelectAll( ) {
     m_pCurrentEdit->SetSel( 0, -1 );
+}
+
+void CChildView::OnEditCopyAsCsvLab( ) {
+    LabTriplet color { m_pDoc->GetLabColor( ).GetChannelValues( ) };
+    _PutTextOnClipboard(
+        m_strQuoting + ToString( color[+LabChannels::L] ) + m_strQuoting +
+        m_wchSeparator +
+        m_strQuoting + ToString( color[+LabChannels::a] ) + m_strQuoting +
+        m_wchSeparator +
+        m_strQuoting + ToString( color[+LabChannels::b] ) + m_strQuoting
+    );
+}
+
+void CChildView::OnEditCopyAsCsvSrgb( ) {
+    SrgbTriplet color { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
+    _PutTextOnClipboard(
+        m_strQuoting + ToString( color[+SrgbChannels::R] ) + m_strQuoting +
+        m_wchSeparator +
+        m_strQuoting + ToString( color[+SrgbChannels::G] ) + m_strQuoting +
+        m_wchSeparator +
+        m_strQuoting + ToString( color[+SrgbChannels::B] ) + m_strQuoting
+    );
+}
+
+void CChildView::OnEditCopyAsCsvQuotingNone( ) {
+    m_strQuoting.Empty( );
+    theApp.WriteProfileString( L"Settings", L"Quoting", m_strQuoting );
+}
+
+void CChildView::OnEditCopyAsCsvQuotingSingle( ) {
+    m_strQuoting    = L"'";
+    theApp.WriteProfileString( L"Settings", L"Quoting", m_strQuoting );
+}
+
+void CChildView::OnEditCopyAsCsvQuotingDouble( ) {
+    m_strQuoting    = L"\"";
+    theApp.WriteProfileString( L"Settings", L"Quoting", m_strQuoting );
+}
+
+void CChildView::OnEditCopyAsCsvSeparatorComma( ) {
+    m_wchSeparator = L',';
+    theApp.WriteProfileString( L"Settings", L"Separator", CString { m_wchSeparator } );
+}
+
+void CChildView::OnEditCopyAsCsvSeparatorSpace( ) {
+    m_wchSeparator = L' ';
+    theApp.WriteProfileString( L"Settings", L"Separator", CString { m_wchSeparator } );
+}
+
+void CChildView::OnEditCopyAsCsvSeparatorTab( ) {
+    m_wchSeparator = L'\t';
+    theApp.WriteProfileString( L"Settings", L"Separator", CString { m_wchSeparator } );
 }
 
 void CChildView::OnViewInvert( ) {
