@@ -4,6 +4,7 @@
 
 #include "ColorPicker.h"
 #include "ChildView.h"
+#include "Settings.h"
 
 #if defined _DEBUG
 #undef POSITION_RIGHT_HALF_CENTERED
@@ -37,11 +38,10 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.x = ( W - cs.cx ) / 2 + W;
     cs.y = ( H - cs.cy ) / 2;
 #else // !( defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED )
-    int const x { static_cast<int>( theApp.GetProfileInt( L"Settings", L"X", -1'000'000 ) ) };
-    int const y { static_cast<int>( theApp.GetProfileInt( L"Settings", L"Y", -1'000'000 ) ) };
-    if ( ( x != -1'000'000 ) && ( y != -1'000'000 ) ) {
-        cs.x = x;
-        cs.y = y;
+    CPoint topLeft { g_settings.GetWindowPosition( ) };
+    if ( ( topLeft.x != -1'000'000 ) && ( topLeft.y != -1'000'000 ) ) {
+        cs.x = topLeft.x;
+        cs.y = topLeft.y;
     }
 #endif // defined _DEBUG && defined POSITION_RIGHT_HALF_CENTERED
 

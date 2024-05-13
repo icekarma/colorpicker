@@ -57,14 +57,6 @@ public:
 
     void SetChannelValues( std::initializer_list<std::pair<AllChannels, int>> const values );
 
-    [[nodiscard]] AllChannels GetSelectedChannel( ) const {
-        return m_SelectedChannel;
-    }
-
-    void SetSelectedChannel( AllChannels const channel ) {
-        m_SelectedChannel = channel;
-    }
-
     //
     // Registry stuff
     //
@@ -85,9 +77,7 @@ protected:
     virtual BOOL OnNewDocument( ) override;
 
     // Use SetColor or SetChannelValue to change these, because it keeps their values synchronized!
-    LabColor    m_LabColor        { };
-    SrgbColor   m_SrgbColor       { };
-
-    AllChannels m_SelectedChannel { AllChannels::unknown };
+    LabColor  m_LabColor  { };
+    SrgbColor m_SrgbColor { };
 
 };

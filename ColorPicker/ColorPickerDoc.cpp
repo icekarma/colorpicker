@@ -88,30 +88,22 @@ void CColorPickerDoc::LoadFromRegistry( ) {
         srgbValues = triplet_cast<UINT>(   SrgbDefaultColor );
     }
 
-    AllChannels selectedChannel { static_cast<AllChannels>( theApp.GetProfileInt( L"Settings", L"Selected channel", static_cast<int>( AllChannels::LabL ) ) ) };
-    if ( selectedChannel > AllChannels::Max ) {
-        selectedChannel = AllChannels::LabL;
-    }
-
     //
     // Store the possibly-corrected values in our member variables.
     //
 
-    m_LabColor        = triplet_cast<RawLabValueT>(  labValues );
-    m_SrgbColor       = triplet_cast<  SrgbValueT>( srgbValues );
-    m_SelectedChannel = selectedChannel;
+    m_LabColor  = triplet_cast<RawLabValueT>(  labValues );
+    m_SrgbColor = triplet_cast<  SrgbValueT>( srgbValues );
 }
 
 void CColorPickerDoc::SaveToRegistry( ) {
     RawLabTriplet labValues { ScaleLabColor( m_LabColor.GetChannelValues( ) ) };
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabL",             labValues[+LabChannels::L] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabA",             labValues[+LabChannels::a] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabB",             labValues[+LabChannels::b] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabL",  labValues[+LabChannels::L] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabA",  labValues[+LabChannels::a] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"LabB",  labValues[+LabChannels::b] );
 
     SrgbTriplet srgbValues { m_SrgbColor.GetChannelValues( ) };
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbR",            srgbValues[+SrgbChannels::R] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbG",            srgbValues[+SrgbChannels::G] );
-    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbB",            srgbValues[+SrgbChannels::B] );
-
-    theApp.WriteProfileInt( L"Settings",               L"Selected channel", static_cast<int>( m_SelectedChannel ) );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbR", srgbValues[+SrgbChannels::R] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbG", srgbValues[+SrgbChannels::G] );
+    theApp.WriteProfileInt( L"Settings\\Saved Values", L"SrgbB", srgbValues[+SrgbChannels::B] );
 }

@@ -247,6 +247,7 @@
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDoc.h" />
     <ClInclude Include="Early.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="StaticBitmap.h" />
     <ClInclude Include="StaticBrush.h" />
     <ClInclude Include="Timing.h" />
@@ -266,6 +267,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDoc.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
     <ClCompile Include="StaticBrush.cpp" />
     <ClCompile Include="Utils.cpp" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ColorPickerDoc.h"
+#include "Settings.h"
 #include "StaticBitmap.h"
 #include "StaticBrush.h"
 #include "XyGrid.h"
@@ -186,14 +187,6 @@ protected:
     CEdit*           m_pCurrentEdit        { };
     int              m_nBlockBitmapUpdates { };
     int              m_nBlockLostFocus     { };
-
-    //
-    // Settings
-    //
-
-    bool    m_fInverted    { };
-    wchar_t m_wchSeparator { };
-    CString m_strQuoting   { };
 
     //
     // Controls
