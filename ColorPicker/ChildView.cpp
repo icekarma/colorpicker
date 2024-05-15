@@ -105,7 +105,7 @@ namespace {
     //
 
     [[nodiscard]] bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
-        CString strText { _SafeGetWindowText( edit ) };
+        CString strText { SafeGetWindowText( edit ) };
         if ( strText.IsEmpty( ) ) {
             debug( L"_GetHexColorFromEdit: no text in edit control\n" );
             return false;
@@ -220,7 +220,7 @@ bool CChildView::EditControl_OnKeyDown( AllChannels const channel, UINT const nC
     LabTriplet  oldLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet oldSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
 
-    m_pDoc->SetChannelValue( channel, _ClipToChannelRange( channel, m_pDoc->GetChannelValue( channel ) + adjust ) );
+    m_pDoc->SetChannelValue( channel, ClipToChannelRange( channel, m_pDoc->GetChannelValue( channel ) + adjust ) );
 
     LabTriplet  newLabValues  { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet newSrgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -255,10 +255,10 @@ void CChildView::SubclassEditControl( WNDPROC const newWndProc, std::initializer
         HWND hwnd { pEdit->GetSafeHwnd( ) };
         WNDPROC oldWndProc;
 
-        if ( DWORD dwError { _SetWindowProcedure( hwnd, newWndProc, oldWndProc ) }; !dwError ) {
+        if ( DWORD dwError { SetWindowProcedure( hwnd, newWndProc, oldWndProc ) }; !dwError ) {
             m_mapHwndToWndProc[hwnd] = oldWndProc;
         } else {
-            debug( L"CChildView::_SubclassEditControl: HWND 0x%p: CChildView::_SetWindowProcedure failed: %lu\n", hwnd, dwError );
+            debug( L"CChildView::_SubclassEditControl: HWND 0x%p: CChildView::SetWindowProcedure failed: %lu\n", hwnd, dwError );
             DebugBreak( );
         }
     }
@@ -273,10 +273,10 @@ void CChildView::UnsubclassEditControl( std::initializer_list<CEdit*> edits ) {
 
         WNDPROC wndProc { m_mapHwndToWndProc.at( hwnd ) };
         WNDPROC oldWndProc;
-        if ( DWORD dwError { _SetWindowProcedure( hwnd, wndProc, oldWndProc ) }; !dwError ) {
+        if ( DWORD dwError { SetWindowProcedure( hwnd, wndProc, oldWndProc ) }; !dwError ) {
             m_mapHwndToWndProc.erase( hwnd );
         } else {
-            debug( L"CChildView::UnsubclassEditControl: HWND 0x%p: _SetWindowProcedure failed: %lu\n", hwnd, dwError );
+            debug( L"CChildView::UnsubclassEditControl: HWND 0x%p: SetWindowProcedure failed: %lu\n", hwnd, dwError );
             DebugBreak( );
         }
     }
@@ -308,16 +308,16 @@ void CChildView::CheckValue( UINT const uId ) {
     ++m_nBlockLostFocus;
 
     CEdit* pEdit { m_pCurrentEdit };
-    if ( int value; _GetValueFromEdit( *m_pCurrentEdit, value ) ) {
+    if ( int value; GetValueFromEdit( *m_pCurrentEdit, value ) ) {
         ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
 
         if ( value < channelInfo.m_minimumValue ) {
-            _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         } else if ( value > channelInfo.m_maximumValue ) {
-            _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         }
     } else {
-        _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
+        ComplainAboutBadValue( GetSafeHwnd( ), pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
     }
 
     --m_nBlockLostFocus;
@@ -342,34 +342,34 @@ void CChildView::AdjustUIControls( ) {
     SIZE constexpr adjustRight1 {  1L, 0L }; SIZE constexpr adjustDown1 { 0L,  1L };SIZE constexpr adjustWider1    {  1L, 0L }; SIZE constexpr adjustTaller1  { 0L,  1L };
     SIZE constexpr adjustRight2 {  2L, 0L }; SIZE constexpr adjustDown2 { 0L,  2L };SIZE constexpr adjustWider2    {  2L, 0L }; SIZE constexpr adjustTaller2  { 0L,  2L };
 
-    _AdjustSize    ( &m_groupBoxLab,   adjustShorter1 );
-    _AdjustPosition( &m_radioLabL,     adjustDown1    );
-    _AdjustPosition( &m_radioLabA,     adjustUp1      );
-    _AdjustPosition( &m_radioLabB,     adjustUp2      );
-    //djustPosition( &m_editLabL,                     );
-    //djustPosition( &m_editLabA,                     );
-    _AdjustPosition( &m_editLabB,      adjustUp2      );
+    AdjustSize    ( &m_groupBoxLab,   adjustShorter1 );
+    AdjustPosition( &m_radioLabL,     adjustDown1    );
+    AdjustPosition( &m_radioLabA,     adjustUp1      );
+    AdjustPosition( &m_radioLabB,     adjustUp2      );
+    //justPosition( &m_editLabL,                     );
+    //justPosition( &m_editLabA,                     );
+    AdjustPosition( &m_editLabB,      adjustUp2      );
 
-    _AdjustPosition( &m_groupBoxSrgb,  adjustDown2    );
-    _AdjustSize    ( &m_groupBoxSrgb,  adjustShorter1 );
-    _AdjustPosition( &m_radioSrgbR,    adjustDown2    );
-    //djustPosition( &m_radioSrgbG,                   );
-    _AdjustPosition( &m_radioSrgbB,    adjustUp2      );
-    _AdjustPosition( &m_editSrgbR,     adjustDown2     + adjustRight1   );
-    _AdjustPosition( &m_editSrgbG,     adjustDown2     + adjustRight1   );
-    _AdjustPosition( &m_editSrgbB,     adjustUp1       + adjustRight1   );
+    AdjustPosition( &m_groupBoxSrgb,  adjustDown2    );
+    AdjustSize    ( &m_groupBoxSrgb,  adjustShorter1 );
+    AdjustPosition( &m_radioSrgbR,    adjustDown2    );
+    //justPosition( &m_radioSrgbG,                   );
+    AdjustPosition( &m_radioSrgbB,    adjustUp2      );
+    AdjustPosition( &m_editSrgbR,     adjustDown2     + adjustRight1   );
+    AdjustPosition( &m_editSrgbG,     adjustDown2     + adjustRight1   );
+    AdjustPosition( &m_editSrgbB,     adjustUp1       + adjustRight1   );
 
-    _AdjustPosition( &m_editHexColor,  adjustUp1       + adjustRight1   );
-    _AdjustSize    ( &m_editHexColor,  adjustWider1   );
+    AdjustPosition( &m_editHexColor,  adjustUp1       + adjustRight1   );
+    AdjustSize    ( &m_editHexColor,  adjustWider1   );
 
-    _AdjustSize    ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
+    AdjustSize    ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
 
-    _SetSize       ( &m_staticZStrip,  {  20L, 256L } );
+    SetSize       ( &m_staticZStrip,  {  20L, 256L } );
 
-    _AdjustPosition( &m_staticXyGrid,  adjustLeft1    );
-    _SetSize       ( &m_staticXyGrid,  { 256L, 256L } );
+    AdjustPosition( &m_staticXyGrid,  adjustLeft1    );
+    SetSize       ( &m_staticXyGrid,  { 256L, 256L } );
 
-    _AdjustPosition( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
+    AdjustPosition( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
@@ -437,7 +437,7 @@ void CChildView::OnInitialUpdate( ) {
     m_channelZ = channels[2];
 
     for ( AllChannels channel { }; channel <= AllChannels::Max; ++channel ) {
-        m_mapChannelToButtonControl[+channel]->SetCheck( _BoolToChecked( channel == selectedChannel ) );
+        m_mapChannelToButtonControl[+channel]->SetCheck( BoolToChecked( channel == selectedChannel ) );
     }
 
     m_staticZStrip.SetDocument( m_pDoc );
@@ -453,12 +453,12 @@ void CChildView::OnInitialUpdate( ) {
 
     ++m_nBlockBitmapUpdates;
 
-    _PutValueToEdit   ( m_editLabL,      labValues[ +LabChannels::L] );
-    _PutValueToEdit   ( m_editLabA,      labValues[ +LabChannels::a] );
-    _PutValueToEdit   ( m_editLabB,      labValues[ +LabChannels::b] );
-    _PutValueToEdit   ( m_editSrgbR,    srgbValues[+SrgbChannels::R] );
-    _PutValueToEdit   ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
-    _PutValueToEdit   ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
+    PutValueToEdit    ( m_editLabL,      labValues[ +LabChannels::L] );
+    PutValueToEdit    ( m_editLabA,      labValues[ +LabChannels::a] );
+    PutValueToEdit    ( m_editLabB,      labValues[ +LabChannels::b] );
+    PutValueToEdit    ( m_editSrgbR,    srgbValues[+SrgbChannels::R] );
+    PutValueToEdit    ( m_editSrgbG,    srgbValues[+SrgbChannels::G] );
+    PutValueToEdit    ( m_editSrgbB,    srgbValues[+SrgbChannels::B] );
     _PutHexColorToEdit( m_editHexColor, srgbValues );
 
     --m_nBlockBitmapUpdates;
@@ -472,11 +472,11 @@ void CChildView::OnInitialUpdate( ) {
 }
 
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditCopy( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
@@ -484,7 +484,7 @@ void CChildView::OnUpdateEditPaste( CCmdUI* pCmdUI ) {
 }
 
 void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
@@ -492,7 +492,7 @@ void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && _IsTextSelected( m_pCurrentEdit ) );
+    pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvLab( CCmdUI* pCmdUI ) {
@@ -505,37 +505,37 @@ void CChildView::OnUpdateEditCopyAsCsvSrgb( CCmdUI* pCmdUI ) {
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingNone( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ).IsEmpty( ) ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetQuoting( ).IsEmpty( ) ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingSingle( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ) == L"'" ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetQuoting( ) == L"'" ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingDouble( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ) == L"\"" ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetQuoting( ) == L"\"" ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorComma( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L"," ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetSeparator( ) == L"," ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorSpace( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L" " ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetSeparator( ) == L" " ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorTab( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L"\t" ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->GetSeparator( ) == L"\t" ) );
 }
 
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->IsInverted( ) ) );
+    pCmdUI->SetCheck( BoolToChecked( g_pSettings->IsInverted( ) ) );
 }
 
 void CChildView::OnEditCut( ) {
@@ -567,7 +567,7 @@ void CChildView::OnEditCopyAsCsvLab( ) {
     CString    quote { g_pSettings->GetQuoting( ) };
     CString    sep   { g_pSettings->GetSeparator( ) };
 
-    _PutTextOnClipboard(
+    PutTextOnClipboard(
         quote + ToString( color[+LabChannels::L] ) + quote + sep +
         quote + ToString( color[+LabChannels::a] ) + quote + sep +
         quote + ToString( color[+LabChannels::b] ) + quote
@@ -579,7 +579,7 @@ void CChildView::OnEditCopyAsCsvSrgb( ) {
     CString     quote { g_pSettings->GetQuoting( ) };
     CString     sep   { g_pSettings->GetSeparator( ) };
 
-    _PutTextOnClipboard(
+    PutTextOnClipboard(
         quote + ToString( color[+SrgbChannels::R] ) + quote + sep +
         quote + ToString( color[+SrgbChannels::G] ) + quote + sep +
         quote + ToString( color[+SrgbChannels::B] ) + quote
@@ -717,7 +717,7 @@ void CChildView::OnHexColorLostFocus( ) {
     }
 #endif // defined _DEBUG
 
-    if ( int n; _GetValueFromEdit( *m_pCurrentEdit, n ) ) {
+    if ( int value; GetValueFromEdit( *m_pCurrentEdit, value ) ) {
         // TODO range check
     } else {
         // TODO complain

@@ -414,7 +414,7 @@ CString GetWindowsMessageName( UINT const uMessage ) {
     return result;
 }
 
-void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
+void AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
     ctrl->GetWindowPlacement( &wp );
@@ -425,7 +425,7 @@ void _AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
-void _AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
+void AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
     ctrl->GetWindowPlacement( &wp );
@@ -434,11 +434,11 @@ void _AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
-void _SetPosition( CWnd* ctrl, POINT const& position ) {
-    _SetPosition( ctrl, SIZE { position.x, position.y } );
+void SetPosition( CWnd* ctrl, POINT const& position ) {
+    SetPosition( ctrl, SIZE { position.x, position.y } );
 }
 
-void _SetPosition( CWnd* ctrl, SIZE const& adjust ) {
+void SetPosition( CWnd* ctrl, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
     ctrl->GetWindowPlacement( &wp );
@@ -449,7 +449,7 @@ void _SetPosition( CWnd* ctrl, SIZE const& adjust ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
-void _SetSize( CWnd* ctrl, SIZE const& size ) {
+void SetSize( CWnd* ctrl, SIZE const& size ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
     ctrl->GetWindowPlacement( &wp );
@@ -458,21 +458,21 @@ void _SetSize( CWnd* ctrl, SIZE const& size ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
-[[nodiscard]] bool _IsTextSelected( CEdit const* pEdit ) {
+[[nodiscard]] bool IsTextSelected( CEdit const* pEdit ) {
     int nStartIndex, nEndIndex;
 
     pEdit->GetSel( nStartIndex, nEndIndex );
     return nStartIndex != nEndIndex;
 }
 
-[[nodiscard]] CString _SafeGetWindowText( CEdit const& edit ) {
+[[nodiscard]] CString SafeGetWindowText( CEdit const& edit ) {
     CString str;
     edit.GetWindowText( str );
     return str.Trim( );
 }
 
-[[nodiscard]] bool _GetValueFromEdit( CEdit const& edit, int& nValue ) {
-    CString strText { _SafeGetWindowText( edit ) };
+[[nodiscard]] bool GetValueFromEdit( CEdit const& edit, int& nValue ) {
+    CString strText { SafeGetWindowText( edit ) };
     if ( strText.IsEmpty( ) ) {
         return false;
     }
@@ -480,12 +480,12 @@ void _SetSize( CWnd* ctrl, SIZE const& size ) {
     wchar_t* pwszEnd { };
     long tmp { wcstol( strText, &pwszEnd, 10 ) };
     if ( !pwszEnd || *pwszEnd ) {
-        debug( L"_GetValueFromEdit: garbage in number: '%s'\n", pwszEnd );
+        debug( L"GetValueFromEdit: garbage in number: '%s'\n", pwszEnd );
         return false;
     }
     if constexpr ( sizeof( long ) > sizeof( int ) ) {
         if ( ( tmp < static_cast<long>( INT_MIN ) ) || ( tmp > static_cast<long>( INT_MAX ) ) ) {
-            debug( L"_GetValueFromEdit: number out of range: %ld\n", tmp );
+            debug( L"GetValueFromEdit: number out of range: %ld\n", tmp );
             return false;
         }
     }
@@ -494,10 +494,10 @@ void _SetSize( CWnd* ctrl, SIZE const& size ) {
     return true;
 }
 
-[[nodiscard]] bool _GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
+[[nodiscard]] bool GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged ) {
     int nOldValue { nValue };
 
-    if ( _GetValueFromEdit( edit, nValue ) ) {
+    if ( GetValueFromEdit( edit, nValue ) ) {
         fChanged = nOldValue != nValue;
         return true;
     } else {
@@ -505,37 +505,37 @@ void _SetSize( CWnd* ctrl, SIZE const& size ) {
     }
 }
 
-void _PutValueToEdit( CEdit& edit, int const nValue ) {
+void PutValueToEdit( CEdit& edit, int const nValue ) {
     edit.SetWindowText( _FormatString( L"%d", nValue ) );
 }
 
-[[nodiscard]] DWORD _SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
+[[nodiscard]] DWORD SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc ) {
     SetLastError( ERROR_SUCCESS );
     oldWndProc = reinterpret_cast<WNDPROC>( SetWindowLongPtr( hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( newWndProc ) ) );
     return ::GetLastError( );
 }
 
-[[nodiscard]] int _ClipToChannelRange( AllChannels const channel, int const value ) {
+[[nodiscard]] int ClipToChannelRange( AllChannels const channel, int const value ) {
     ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
     return std::min( std::max( value, channelInfo.m_minimumValue ), channelInfo.m_maximumValue );
 }
 
-void _ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CString const& strMessage ) {
-    _PutValueToEdit( *pEdit, nNewValue );
+void ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CString const& strMessage ) {
+    PutValueToEdit( *pEdit, nNewValue );
     MessageBox( hwnd, strMessage, _GetResourceString( IDS_ERROR_CAPTION ), MB_OK | MB_ICONERROR );
     pEdit->SetFocus( );
 }
 
-[[nodiscard]] int _BoolToChecked( bool const fValue ) {
+[[nodiscard]] int BoolToChecked( bool const fValue ) {
     return fValue ? BST_CHECKED : BST_UNCHECKED;
 }
 
-bool _PutTextOnClipboard( const CString& str ) {
+bool PutTextOnClipboard( const CString& str ) {
     SetLastError( ERROR_SUCCESS );
 
     if ( !::OpenClipboard( AfxGetMainWnd( )->GetSafeHwnd( ) ) ) {
         DWORD dwError { ::GetLastError( ) };
-        debug( L"_PutTextOnClipboard: OpenClipboard failed: %lu\n", dwError );
+        debug( L"PutTextOnClipboard: OpenClipboard failed: %lu\n", dwError );
 
         return false;
     }
@@ -544,7 +544,7 @@ bool _PutTextOnClipboard( const CString& str ) {
     HGLOBAL hMem { ::GlobalAlloc( GMEM_DDESHARE, cbStr ) };
     if ( !hMem ) {
         DWORD dwError { ::GetLastError( ) };
-        debug( L"_PutTextOnClipboard: GlobalAlloc failed: %lu\n", dwError );
+        debug( L"PutTextOnClipboard: GlobalAlloc failed: %lu\n", dwError );
 
         ::CloseClipboard( );
         return false;
@@ -553,7 +553,7 @@ bool _PutTextOnClipboard( const CString& str ) {
     wchar_t* pBuf { static_cast<wchar_t*>( ::GlobalLock( hMem ) ) };
     if ( !pBuf ) {
         DWORD dwError { ::GetLastError( ) };
-        debug( L"_PutTextOnClipboard: GlobalLock failed: %lu\n", dwError );
+        debug( L"PutTextOnClipboard: GlobalLock failed: %lu\n", dwError );
 
         ::GlobalFree( hMem );
         ::CloseClipboard( );
@@ -566,7 +566,7 @@ bool _PutTextOnClipboard( const CString& str ) {
     HANDLE hClipboardData { ::SetClipboardData( CF_UNICODETEXT, hMem ) };
     if ( !hClipboardData ) {
         DWORD dwError { ::GetLastError( ) };
-        debug( L"_PutTextOnClipboard: SetClipboardData failed: %lu\n", dwError );
+        debug( L"PutTextOnClipboard: SetClipboardData failed: %lu\n", dwError );
 
         ::GlobalFree( hMem );
         ::CloseClipboard( );
