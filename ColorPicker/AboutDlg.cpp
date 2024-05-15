@@ -5,18 +5,7 @@
 #include "Utils.h"
 
 BEGIN_MESSAGE_MAP( CAboutDlg, CDialogEx )
-    ON_WM_CLOSE( )
 END_MESSAGE_MAP( )
-
-void CAboutDlg::OnClose( ) {
-    if ( m_pOkButton ) {
-        m_pOkButton->Detach( );
-        delete m_pOkButton;
-        m_pOkButton = nullptr;
-    }
-
-    CDialogEx::OnClose( );
-}
 
 BOOL CAboutDlg::OnInitDialog( ) {
     CDialogEx::OnInitDialog( );

@@ -34,6 +34,4 @@ protected:
 
     virtual BOOL OnInitDialog( );
 
-    afx_msg void OnClose( );
-
 };
