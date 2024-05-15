@@ -19,11 +19,11 @@ public:
 
     void SetColor( LabColor const& color ) {
         m_LabColor  = color;
-        m_SrgbColor = Transforms.ConvertColor( color );
+        m_SrgbColor = g_Transforms.ConvertColor( color );
     }
 
     void SetColor( SrgbColor const& color ) {
-        m_LabColor  = Transforms.ConvertColor( color );
+        m_LabColor  = g_Transforms.ConvertColor( color );
         m_SrgbColor = color;
     }
 

@@ -64,7 +64,7 @@ void CZStrip::_UpdateLab( ) {
         }
     }
 
-    Transforms.TransformLabToSrgb( m_RawLabImage, m_SrgbImage, ImageWidth * ImageHeight );
+    g_Transforms.TransformLabToSrgb( m_RawLabImage, m_SrgbImage, ImageWidth * ImageHeight );
 }
 
 void CZStrip::_UpdateSrgb( ) {

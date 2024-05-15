@@ -39,10 +39,10 @@ BOOL CColorPickerApp::InitInstance( ) {
 
     CWinApp::InitInstance( );
 
-    EnableTaskbarInteraction( FALSE );
+    EnableTaskbarInteraction( TRUE );
 
     SetRegistryKey( L"Zive Technology Research" );
-    LoadStdProfileSettings( 4 );
+    LoadStdProfileSettings( );
 
     CSingleDocTemplate* pDocTemplate {
         new CSingleDocTemplate(

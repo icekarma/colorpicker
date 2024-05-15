@@ -186,7 +186,7 @@ LRESULT CChildView::_EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARA
 }
 
 LRESULT CChildView::EditWndProc( HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam ) {
-    //debug( L"CChildView::EditWndProc: hwnd: 0x%p, uMessage: 0x%04X, wParam: 0x%08lX, lParam: 0x%08lX; %s\n", hwnd, uMessage, wParam, lParam, static_cast<LPCWSTR>( GetNameForWindowsMessage( uMessage ) ) );
+    //debug( L"CChildView::EditWndProc: hwnd: 0x%p, uMessage: 0x%04X, wParam: 0x%08lX, lParam: 0x%08lX; %s\n", hwnd, uMessage, wParam, lParam, static_cast<LPCWSTR>( GetWindowsMessageName( uMessage ) ) );
 
     WNDPROC wndProc { MapHwndToWndProc( hwnd ) };
     if ( !wndProc ) {
@@ -312,12 +312,12 @@ void CChildView::CheckValue( UINT const uId ) {
         ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
 
         if ( value < channelInfo.m_minimumValue ) {
-            _ComplainAboutBadValue( pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         } else if ( value > channelInfo.m_maximumValue ) {
-            _ComplainAboutBadValue( pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         }
     } else {
-        _ComplainAboutBadValue( pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
+        _ComplainAboutBadValue( GetSafeHwnd( ), pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
     }
 
     --m_nBlockLostFocus;
@@ -429,7 +429,7 @@ void CChildView::OnInitialUpdate( ) {
     // Apply them to the controls
     //
 
-    AllChannels        const  selectedChannel { g_settings.GetSelectedChannel( )      };
+    AllChannels        const  selectedChannel { g_pSettings->GetSelectedChannel( )    };
     AllChannelsTriplet const& channels        { _ChannelXyzTriplets[+selectedChannel] };
 
     m_channelX = channels[0];
@@ -442,11 +442,11 @@ void CChildView::OnInitialUpdate( ) {
 
     m_staticZStrip.SetDocument( m_pDoc );
     m_staticZStrip.SetChannel( m_channelZ );
-    m_staticZStrip.SetInverted( g_settings.IsInverted( ) );
+    m_staticZStrip.SetInverted( g_pSettings->IsInverted( ) );
 
     m_staticXyGrid.SetDocument( m_pDoc );
     m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
-    m_staticXyGrid.SetInverted( g_settings.IsInverted( ) );
+    m_staticXyGrid.SetInverted( g_pSettings->IsInverted( ) );
 
     LabTriplet  const  labValues { m_pDoc-> GetLabColor( ).GetChannelValues( ) };
     SrgbTriplet const srgbValues { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
@@ -505,37 +505,37 @@ void CChildView::OnUpdateEditCopyAsCsvSrgb( CCmdUI* pCmdUI ) {
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingNone( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetQuoting( ).IsEmpty( ) ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ).IsEmpty( ) ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingSingle( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetQuoting( ) == L"'" ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ) == L"'" ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvQuotingDouble( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetQuoting( ) == L"\"" ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetQuoting( ) == L"\"" ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorComma( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetSeparator( ) == L"," ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L"," ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorSpace( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetSeparator( ) == L" " ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L" " ) );
 }
 
 void CChildView::OnUpdateEditCopyAsCsvSeparatorTab( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.GetSeparator( ) == L"\t" ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->GetSeparator( ) == L"\t" ) );
 }
 
 void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( TRUE );
-    pCmdUI->SetCheck( _BoolToChecked( g_settings.IsInverted( ) ) );
+    pCmdUI->SetCheck( _BoolToChecked( g_pSettings->IsInverted( ) ) );
 }
 
 void CChildView::OnEditCut( ) {
@@ -564,8 +564,8 @@ void CChildView::OnEditSelectAll( ) {
 
 void CChildView::OnEditCopyAsCsvLab( ) {
     LabTriplet color { m_pDoc->GetLabColor( ).GetChannelValues( ) };
-    CString    quote { g_settings.GetQuoting( ) };
-    CString    sep   { g_settings.GetSeparator( ) };
+    CString    quote { g_pSettings->GetQuoting( ) };
+    CString    sep   { g_pSettings->GetSeparator( ) };
 
     _PutTextOnClipboard(
         quote + ToString( color[+LabChannels::L] ) + quote + sep +
@@ -576,8 +576,8 @@ void CChildView::OnEditCopyAsCsvLab( ) {
 
 void CChildView::OnEditCopyAsCsvSrgb( ) {
     SrgbTriplet color { m_pDoc->GetSrgbColor( ).GetChannelValues( ) };
-    CString     quote { g_settings.GetQuoting( ) };
-    CString     sep   { g_settings.GetSeparator( ) };
+    CString     quote { g_pSettings->GetQuoting( ) };
+    CString     sep   { g_pSettings->GetSeparator( ) };
 
     _PutTextOnClipboard(
         quote + ToString( color[+SrgbChannels::R] ) + quote + sep +
@@ -587,33 +587,33 @@ void CChildView::OnEditCopyAsCsvSrgb( ) {
 }
 
 void CChildView::OnEditCopyAsCsvQuotingNone( ) {
-    g_settings.SetQuoting( L"" );
+    g_pSettings->SetQuoting( L"" );
 }
 
 void CChildView::OnEditCopyAsCsvQuotingSingle( ) {
-    g_settings.SetQuoting( L"'" );
+    g_pSettings->SetQuoting( L"'" );
 }
 
 void CChildView::OnEditCopyAsCsvQuotingDouble( ) {
-    g_settings.SetQuoting( L"\"" );
+    g_pSettings->SetQuoting( L"\"" );
 }
 
 void CChildView::OnEditCopyAsCsvSeparatorComma( ) {
-    g_settings.SetSeparator( L"," );
+    g_pSettings->SetSeparator( L"," );
 }
 
 void CChildView::OnEditCopyAsCsvSeparatorSpace( ) {
-    g_settings.SetSeparator( L" " );
+    g_pSettings->SetSeparator( L" " );
 }
 
 void CChildView::OnEditCopyAsCsvSeparatorTab( ) {
-    g_settings.SetSeparator( L"\t" );
+    g_pSettings->SetSeparator( L"\t" );
 }
 
 void CChildView::OnViewInvert( ) {
-    g_settings    .SetInverted( !g_settings.IsInverted( ) );
-    m_staticZStrip.SetInverted(  g_settings.IsInverted( ) );
-    m_staticXyGrid.SetInverted(  g_settings.IsInverted( ) );
+    g_pSettings  ->SetInverted( !g_pSettings->IsInverted( ) );
+    m_staticZStrip.SetInverted(  g_pSettings->IsInverted( ) );
+    m_staticXyGrid.SetInverted(  g_pSettings->IsInverted( ) );
     UpdateBitmaps( );
 }
 
@@ -628,7 +628,7 @@ void CChildView::OnClose( ) {
 
     CRect rect;
     AfxGetMainWnd( )->GetWindowRect( rect );
-    g_settings.SetWindowPosition( rect );
+    g_pSettings->SetWindowPosition( rect );
 
     CFormView::OnClose( );
 }
@@ -644,7 +644,7 @@ void CChildView::OnChannelRadioClicked( UINT const uId ) {
         m_channelY = channels[1];
         m_channelZ = channels[2];
 
-        g_settings.SetSelectedChannel( m_channelZ );
+        g_pSettings->SetSelectedChannel( m_channelZ );
         m_staticZStrip.SetChannel( m_channelZ );
         m_staticXyGrid.SetChannels( m_channelX, m_channelY, m_channelZ );
 

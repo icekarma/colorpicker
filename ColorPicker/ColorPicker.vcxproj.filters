@@ -125,5 +125,8 @@
     <Image Include="res\ColorPicker-Color.ico">
       <Filter>03 Resource Files</Filter>
     </Image>
+    <Image Include="res\About.png">
+      <Filter>03 Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

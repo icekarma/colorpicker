@@ -5,6 +5,7 @@
 #include "ColorPicker.h"
 #include "ChildView.h"
 #include "Settings.h"
+#include "Utils.h"
 
 IMPLEMENT_DYNCREATE( CMainFrame, CFrameWnd )
 
@@ -28,7 +29,7 @@ BOOL CMainFrame::PreCreateWindow( CREATESTRUCT& cs ) {
     cs.cx         = 432;
     cs.cy         = 396;
 
-    CPoint topLeft { g_settings.GetWindowPosition( ) };
+    CPoint topLeft { g_pSettings->GetWindowPosition( ) };
     if ( ( topLeft.x != -1'000'000 ) && ( topLeft.y != -1'000'000 ) ) {
         cs.x = topLeft.x;
         cs.y = topLeft.y;
@@ -54,6 +55,8 @@ int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
         SetIcon( hIcon, TRUE  );
         SetIcon( hIcon, FALSE );
     }
+
+    debug( L"CMainFrame::OnCreate: GetExecutablePath(): \"%s\"\n", (LPCWSTR) GetExecutablePath( ) );
 
     return 0;
 }

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #if defined _UNICODE
 #   if defined _M_IX86
@@ -12,9 +12,10 @@
 
 #define _AFX_ALL_WARNINGS
 #define _AFX_NO_AFXCMN_SUPPORT
-#define _AFX_NO_OLE_SUPPORT
 #define  AFX_NO_CTLBARS_SUPPORT
+#define _AFX_NO_OLE_SUPPORT
 #define  AFX_NO_SOCKET_SUPPORT
+#define _AFXWIN_INLINE
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define  NOMINMAX
 #define  VC_EXTRALEAN
@@ -98,6 +99,8 @@ using std::min;
 #include <afxwinappex.h>
 #include <afxdialogex.h>
 
+#include <atlimage.h>
+
 #pragma warning( pop )
 
 //
@@ -174,17 +177,17 @@ template<typename T>
 concept DerivedFromCObject = std::derived_from<T, CObject>;
 
 template<DerivedFromCObject ClassT>
-inline CRuntimeClass* runtime_class( ) {
+[[nodiscard]] inline CRuntimeClass* runtime_class( ) {
     return ClassT::GetThisClass( );
 }
 
 template<DerivedFromCObject ClassT, DerivedFromCObject InstanceT>
-inline ClassT* dynamic_downcast( InstanceT* p ) {
+[[nodiscard]] inline ClassT* dynamic_downcast( InstanceT* p ) {
     return reinterpret_cast<ClassT*>( AfxDynamicDownCast( runtime_class<ClassT>( ), p ) );
 }
 
 template<DerivedFromCObject ClassT, DerivedFromCObject InstanceT>
-inline ClassT* static_downcast( InstanceT* p ) {
+[[nodiscard]] inline ClassT* static_downcast( InstanceT* p ) {
 #if defined _DEBUG
     return static_cast<ClassT*>( AfxStaticDownCast( runtime_class<ClassT>( ), p ) );
 #else // !defined _DEBUG
@@ -193,7 +196,7 @@ inline ClassT* static_downcast( InstanceT* p ) {
 }
 
 template<typename DestinationT, typename SourceT>
-std::array<DestinationT, 3> triplet_cast( std::array<SourceT, 3> rhs ) {
+[[nodiscard]] std::array<DestinationT, 3> triplet_cast( std::array<SourceT, 3> rhs ) {
     return { {
         static_cast<DestinationT>( rhs[0] ),
         static_cast<DestinationT>( rhs[1] ),
@@ -205,7 +208,7 @@ std::array<DestinationT, 3> triplet_cast( std::array<SourceT, 3> rhs ) {
 // Global overloaded operators
 //================================================
 
-SIZE constexpr operator+( SIZE const& lhs, SIZE const& rhs ) {
+[[nodiscard]] SIZE constexpr operator+( SIZE const& lhs, SIZE const& rhs ) {
     return SIZE { lhs.cx + rhs.cx, lhs.cy + rhs.cy };
 }
 
@@ -214,15 +217,72 @@ SIZE constexpr operator+( SIZE const& lhs, SIZE const& rhs ) {
 //================================================
 
 template<typename T>
-inline T constexpr typed_nullptr( ) {
+[[nodiscard]] T constexpr typed_nullptr( ) {
     return static_cast<T>( nullptr );
 }
 
 template<typename KeyT, typename ValueT, typename HasherT, typename KeyEqT, typename AllocT>
-ValueT _MapImpl( std::unordered_map<KeyT, ValueT, HasherT, KeyEqT, AllocT> const& map, KeyT const& key, ValueT const defaultValue = { } ) {
+[[nodiscard]] ValueT _MapImpl( std::unordered_map<KeyT, ValueT, HasherT, KeyEqT, AllocT> const& map, KeyT const& key, ValueT const defaultValue = { } ) {
     if ( map.contains( key ) ) {
         return map.at( key );
     } else {
         return defaultValue;
     }
+}
+
+[[nodiscard]] inline CString _GetResourceString( UINT const uId ) {
+    CString str;
+    if ( !str.LoadString( AfxGetInstanceHandle( ), uId ) ) {
+        str.Format( L"<error loading string #%u>", uId );
+    }
+    return str;
+}
+
+[[nodiscard]] inline CString _FormatString( UINT const uFormatId ) {
+    return _GetResourceString( uFormatId );
+}
+
+template<typename... Args>
+[[nodiscard]] CString _FormatString( UINT const uFormatId, const Args... args ) {
+    CString str;
+    str.Format( uFormatId, args... );
+    return str;
+}
+
+[[nodiscard]] inline CString _FormatString( LPCWSTR pwszFormat ) {
+    return pwszFormat;
+}
+
+template<typename... Args>
+[[nodiscard]] CString _FormatString( LPCWSTR pwszFormat, const Args... args ) {
+    CString str;
+    str.Format( pwszFormat, args... );
+    return str;
+}
+
+template<std::signed_integral T>
+[[nodiscard]] CString ToString( T const value ) {
+    return _FormatString( L"%d", value );
+}
+
+template<std::unsigned_integral T>
+[[nodiscard]] CString ToString( T const value ) {
+    return _FormatString( L"%u", value );
+}
+
+template<std::floating_point T>
+[[nodiscard]] CString ToString( T const value ) {
+    return _FormatString( L"%f", value );
+}
+
+[[nodiscard]] inline CString ToString( CPoint const& value ) {
+    return _FormatString( L"(%d,%d)", value.x, value.y );
+}
+
+[[nodiscard]] inline CString ToString( CSize const& value ) {
+    return _FormatString( L"%d×%d", value.cx, value.cy );
+}
+
+[[nodiscard]] inline CString ToString( CRect const& value ) {
+    return ToString( value.Size( ) ) + L" " + ToString( value.TopLeft( ) ) + L"-" + ToString( value.BottomRight( ) );
 }

@@ -6,6 +6,7 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MAINFRAME_BW                129
 #define IDD_CHILDVIEW                   310
+#define IDB_ABOUT                       311
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
 #define IDC_LAB_L_LABEL                 2000
@@ -43,9 +44,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
+#define _APS_NEXT_RESOURCE_VALUE        312
 #define _APS_NEXT_COMMAND_VALUE         32783
 #define _APS_NEXT_CONTROL_VALUE         5000
-#define _APS_NEXT_SYMED_VALUE           310
+#define _APS_NEXT_SYMED_VALUE           312
 #endif
 #endif
