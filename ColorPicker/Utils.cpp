@@ -425,6 +425,17 @@ void AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
     ctrl->SetWindowPlacement( &wp );
 }
 
+void AdjustPositionAndSize( CWnd* ctrl, SIZE const& adjustPosition, SIZE const& adjustSize ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    ctrl->GetWindowPlacement( &wp );
+    wp.rcNormalPosition.left   += adjustPosition.cx;
+    wp.rcNormalPosition.top    += adjustPosition.cy;
+    wp.rcNormalPosition.right  += adjustPosition.cx + adjustSize.cx;
+    wp.rcNormalPosition.bottom += adjustPosition.cy + adjustSize.cy;
+    ctrl->SetWindowPlacement( &wp );
+}
+
 void AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 

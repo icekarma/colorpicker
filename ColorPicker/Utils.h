@@ -8,6 +8,7 @@ CString GetExecutablePath( );
 CString GetWindowsMessageName( UINT const uMessage );
 
 void    AdjustPosition( CWnd* ctrl, SIZE const& adjust );
+void    AdjustPositionAndSize( CWnd* ctrl, SIZE const& adjustPosition, SIZE const& adjustSize );
 void    AdjustSize( CWnd* ctrl, SIZE const& adjust );
 int     BoolToChecked( bool const fValue );
 int     ClipToChannelRange( AllChannels const channel, int const value );

@@ -342,34 +342,32 @@ void CChildView::AdjustUIControls( ) {
     SIZE constexpr adjustRight1 {  1L, 0L }; SIZE constexpr adjustDown1 { 0L,  1L };SIZE constexpr adjustWider1    {  1L, 0L }; SIZE constexpr adjustTaller1  { 0L,  1L };
     SIZE constexpr adjustRight2 {  2L, 0L }; SIZE constexpr adjustDown2 { 0L,  2L };SIZE constexpr adjustWider2    {  2L, 0L }; SIZE constexpr adjustTaller2  { 0L,  2L };
 
-    AdjustSize    ( &m_groupBoxLab,   adjustShorter1 );
-    AdjustPosition( &m_radioLabL,     adjustDown1    );
-    AdjustPosition( &m_radioLabA,     adjustUp1      );
-    AdjustPosition( &m_radioLabB,     adjustUp2      );
-    //justPosition( &m_editLabL,                     );
-    //justPosition( &m_editLabA,                     );
-    AdjustPosition( &m_editLabB,      adjustUp2      );
+    AdjustSize           ( &m_groupBoxLab,   adjustShorter1 );
+    AdjustPosition       ( &m_radioLabL,     adjustDown1    );
+    AdjustPosition       ( &m_radioLabA,     adjustUp1      );
+    AdjustPosition       ( &m_radioLabB,     adjustUp2      );
+    //justPosition       ( &m_editLabL,                     );
+    //justPosition       ( &m_editLabA,                     );
+    AdjustPosition       ( &m_editLabB,      adjustUp2      );
 
-    AdjustPosition( &m_groupBoxSrgb,  adjustDown2    );
-    AdjustSize    ( &m_groupBoxSrgb,  adjustShorter1 );
-    AdjustPosition( &m_radioSrgbR,    adjustDown2    );
-    //justPosition( &m_radioSrgbG,                   );
-    AdjustPosition( &m_radioSrgbB,    adjustUp2      );
-    AdjustPosition( &m_editSrgbR,     adjustDown2     + adjustRight1   );
-    AdjustPosition( &m_editSrgbG,     adjustDown2     + adjustRight1   );
-    AdjustPosition( &m_editSrgbB,     adjustUp1       + adjustRight1   );
+    AdjustPositionAndSize( &m_groupBoxSrgb,  adjustDown2,                     adjustShorter1 );
+    AdjustPosition       ( &m_radioSrgbR,    adjustDown2    );
+    //justPosition       ( &m_radioSrgbG,                   );
+    AdjustPosition       ( &m_radioSrgbB,    adjustUp2      );
+    AdjustPosition       ( &m_editSrgbR,     adjustDown2     + adjustRight1   );
+    AdjustPosition       ( &m_editSrgbG,     adjustDown2     + adjustRight1   );
+    AdjustPosition       ( &m_editSrgbB,     adjustUp1       + adjustRight1   );
 
-    AdjustPosition( &m_editHexColor,  adjustUp1       + adjustRight1   );
-    AdjustSize    ( &m_editHexColor,  adjustWider1   );
+    AdjustPositionAndSize( &m_editHexColor,  adjustUp1       + adjustRight1,  adjustWider1   );
 
-    AdjustSize    ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
+    AdjustSize           ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
 
-    SetSize       ( &m_staticZStrip,  {  20L, 256L } );
+    SetSize              ( &m_staticZStrip,  {  20L, 256L } );
 
-    AdjustPosition( &m_staticXyGrid,  adjustLeft1    );
-    SetSize       ( &m_staticXyGrid,  { 256L, 256L } );
+    AdjustPosition       ( &m_staticXyGrid,  adjustLeft1    );
+    SetSize              ( &m_staticXyGrid,  { 256L, 256L } );
 
-    AdjustPosition( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
+    AdjustPosition       ( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
