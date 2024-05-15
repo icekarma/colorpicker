@@ -28,7 +28,20 @@ BOOL CAboutDlg::OnInitDialog( ) {
     if ( !m_pImage ) {
         m_pImage = new CImage( );
 
-        HRESULT hr { m_pImage->Load( L"F:\\IceKarma\\Projects\\ColorPicker\\ColorPicker\\res\\About.png" ) };
+        CString strFileName { GetExecutablePath( ) };
+        if ( strFileName.IsEmpty( ) ) {
+            debug( L"CAboutDlg::OnInitDialog: Executable path is empty\n" );
+            return TRUE;
+        }
+
+        int index { strFileName.ReverseFind( L'\\' ) };
+        if ( index < 0 ) {
+            debug( L"CAboutDlg::OnInitDialog: Bad executable path\n" );
+            return TRUE;
+        }
+        strFileName = strFileName.Left( index ) + L"\\About.png";
+
+        HRESULT hr { m_pImage->Load( strFileName ) };
         if ( FAILED( hr ) ) {
             debug( L"CAboutDlg::OnInitDialog: Loading image failed\n" );
             return TRUE;
