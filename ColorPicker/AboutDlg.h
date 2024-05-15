@@ -14,23 +14,13 @@ public:
 
     CAboutDlg( ): CDialogEx { IDD_ABOUTBOX } { /*empty*/ }
 
-    virtual ~CAboutDlg( ) override {
-        if ( m_pBitmap ) {
-            delete m_pBitmap;
-            m_pBitmap = nullptr;
-        }
-
-        if ( m_pImage ) {
-            delete m_pImage;
-            m_pImage = nullptr;
-        }
-    }
+    virtual ~CAboutDlg( ) override;
 
 protected:
 
-    CImage*  m_pImage       { };
-    CStatic* m_pBitmap      { };
-    CButton* m_pOkButton    { };
+    CImage*  m_pImage    { };
+    CStatic* m_pBitmap   { };
+    CButton* m_pButtonOK { };
 
     virtual BOOL OnInitDialog( );
 

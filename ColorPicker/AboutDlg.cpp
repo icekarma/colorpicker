@@ -7,6 +7,29 @@
 BEGIN_MESSAGE_MAP( CAboutDlg, CDialogEx )
 END_MESSAGE_MAP( )
 
+namespace {
+
+    constinit SIZE const ButtonDefaultSize { 75, 23 };
+
+}
+
+CAboutDlg::~CAboutDlg( ) {
+    if ( m_pBitmap ) {
+        delete m_pBitmap;
+        m_pBitmap = nullptr;
+    }
+
+    if ( m_pImage ) {
+        delete m_pImage;
+        m_pImage = nullptr;
+    }
+
+    if ( m_pButtonOK ) {
+        delete m_pButtonOK;
+        m_pButtonOK = nullptr;
+    }
+}
+
 BOOL CAboutDlg::OnInitDialog( ) {
     CDialogEx::OnInitDialog( );
 
@@ -61,22 +84,20 @@ BOOL CAboutDlg::OnInitDialog( ) {
     m_pBitmap->ShowWindow( SW_SHOW );
 
     //
-    // Attach our own object to the OK button
+    // Create the OK button
     //
 
-    SetLastError( ERROR_SUCCESS );
-    HWND hwndButton { ::GetDlgItem( GetSafeHwnd( ), IDOK ) };
-    DWORD dwError { GetLastError( ) };
-    if ( dwError ) {
-        debug( L"CAboutDlg::OnInitDialog: GetDlgItem failed: %lu\n", dwError );
-    } else {
-        m_pOkButton = new CButton( );
-        m_pOkButton->Attach( hwndButton );
+    CRect rectClient { ::GetClientRect( this ) };
+    CRect rectButton { ::GetWindowRect( m_pButtonOK ) };
 
-        CRect rectClient { ::GetClientRect( this ) };
-        CRect rectButton { ::GetWindowRect( m_pOkButton ) };
-        SetPosition( m_pOkButton, SIZE { 16, rectClient.Height( ) - 16 - rectButton.Height( ) } );
+    m_pButtonOK = new CButton( );
+    SetLastError( ERROR_SUCCESS );
+    if ( !m_pButtonOK->Create( L"OK", BS_DEFPUSHBUTTON | WS_VISIBLE | WS_GROUP | WS_TABSTOP, CRect { { 16, rectClient.Height( ) - 16 - ButtonDefaultSize.cy }, ButtonDefaultSize }, this, IDOK ) ) {
+        DWORD dwError { GetLastError( ) };
+        debug( L"CAboutDlg::OnInitDialog: m_pButtonOK->Create failed: %lu\n", dwError );
     }
+    m_pButtonOK->SetFont( GetFont( ) );
+    m_pButtonOK->ShowWindow( SW_SHOW );
 
     // return TRUE unless you set the focus to a control
     return TRUE;
