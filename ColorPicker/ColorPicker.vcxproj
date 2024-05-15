@@ -264,10 +264,8 @@
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="ChannelInformation.cpp" />
     <ClCompile Include="ChildView.cpp" />
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDoc.cpp" />
-    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="StaticBitmap.cpp" />
     <ClCompile Include="StaticBrush.cpp" />
     <ClCompile Include="Utils.cpp" />

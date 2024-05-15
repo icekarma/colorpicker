@@ -596,4 +596,4 @@ protected:
 // External data
 //================================================
 
-extern TransformsManager Transforms;
+extern TransformsManager g_Transforms;

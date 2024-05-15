@@ -98,9 +98,6 @@
     <ClCompile Include="StaticBitmap.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>01 Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StaticBrush.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
       <Filter>01 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
-      <Filter>01 Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Settings.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
   </ItemGroup>

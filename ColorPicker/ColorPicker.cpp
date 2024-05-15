@@ -3,6 +3,7 @@
 #include "ColorPicker.h"
 
 #include "ColorPickerDoc.h"
+#include "Settings.h"
 #include "MainFrame.h"
 #include "ChildView.h"
 #include "AboutDlg.h"
@@ -23,7 +24,16 @@ CColorPickerApp::CColorPickerApp( ) noexcept {
     // Place all significant initialization in InitInstance
 }
 
+CColorPickerApp::~CColorPickerApp( ) {
+    if ( g_pSettings ) {
+        delete g_pSettings;
+        g_pSettings = nullptr;
+    }
+}
+
 BOOL CColorPickerApp::InitInstance( ) {
+    g_pSettings = new CSettings;
+
     INITCOMMONCONTROLSEX InitCtrls { sizeof InitCtrls, 0xFFFF };
     InitCommonControlsEx( &InitCtrls );
 

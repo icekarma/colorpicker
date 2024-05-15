@@ -10,7 +10,7 @@ public:
 
     CColorPickerApp( ) noexcept;
 
-    virtual ~CColorPickerApp( ) override = default;
+    virtual ~CColorPickerApp( ) override;
 
     virtual BOOL InitInstance( ) override;
 

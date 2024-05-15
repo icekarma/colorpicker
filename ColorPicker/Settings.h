@@ -95,4 +95,4 @@ protected:
 
 };
 
-extern CSettings g_settings;
+extern CSettings* g_pSettings;
