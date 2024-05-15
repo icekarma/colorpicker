@@ -84,12 +84,9 @@ BOOL CAboutDlg::OnInitDialog( ) {
         m_pOkButton = new CButton( );
         m_pOkButton->Attach( hwndButton );
 
-        CRect rectClient    { ::GetClientRect( this ) };
-        CRect rectButton    { ::GetWindowRect( m_pOkButton ) };
-        POINT ptNewPosition { 16, rectClient.Height( ) - 16 - rectButton.Height( ) };
-        SetPosition( m_pOkButton, ptNewPosition );
-        m_pOkButton->BringWindowToTop( );
-        m_pOkButton->SetActiveWindow( );
+        CRect rectClient { ::GetClientRect( this ) };
+        CRect rectButton { ::GetWindowRect( m_pOkButton ) };
+        SetPosition( m_pOkButton, SIZE { 16, rectClient.Height( ) - 16 - rectButton.Height( ) } );
     }
 
     // return TRUE unless you set the focus to a control
