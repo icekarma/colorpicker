@@ -56,8 +56,6 @@ int CMainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
         SetIcon( hIcon, FALSE );
     }
 
-    debug( L"CMainFrame::OnCreate: GetExecutablePath(): \"%s\"\n", (LPCWSTR) GetExecutablePath( ) );
-
     return 0;
 }
 
