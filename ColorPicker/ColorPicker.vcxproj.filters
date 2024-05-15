@@ -101,9 +101,6 @@
     <ClCompile Include="StaticBrush.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChannelInformation.cpp">
-      <Filter>01 Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>01 Source Files</Filter>
     </ClCompile>

@@ -274,7 +274,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="ChannelInformation.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDoc.cpp" />
