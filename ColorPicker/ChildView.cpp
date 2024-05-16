@@ -283,15 +283,15 @@ void CChildView::UnsubclassEditControl( std::initializer_list<CEdit*> edits ) {
 }
 
 void CChildView::UpdateLabEditsIfValuesChanged( LabTriplet const& oldValues, LabTriplet const& newValues ) {
-    _UpdateEditIfValueChanged( m_editLabL, oldValues[+LabChannels::L], newValues[+LabChannels::L] );
-    _UpdateEditIfValueChanged( m_editLabA, oldValues[+LabChannels::a], newValues[+LabChannels::a] );
-    _UpdateEditIfValueChanged( m_editLabB, oldValues[+LabChannels::b], newValues[+LabChannels::b] );
+    UpdateEditIfValueChanged( m_editLabL, oldValues[+LabChannels::L], newValues[+LabChannels::L] );
+    UpdateEditIfValueChanged( m_editLabA, oldValues[+LabChannels::a], newValues[+LabChannels::a] );
+    UpdateEditIfValueChanged( m_editLabB, oldValues[+LabChannels::b], newValues[+LabChannels::b] );
 }
 
 void CChildView::UpdateSrgbEditsIfValuesChanged( SrgbTriplet const& oldValues, SrgbTriplet const& newValues ) {
-    _UpdateEditIfValueChanged( m_editSrgbR, oldValues[+SrgbChannels::R], newValues[+SrgbChannels::R] );
-    _UpdateEditIfValueChanged( m_editSrgbG, oldValues[+SrgbChannels::G], newValues[+SrgbChannels::G] );
-    _UpdateEditIfValueChanged( m_editSrgbB, oldValues[+SrgbChannels::B], newValues[+SrgbChannels::B] );
+    UpdateEditIfValueChanged( m_editSrgbR, oldValues[+SrgbChannels::R], newValues[+SrgbChannels::R] );
+    UpdateEditIfValueChanged( m_editSrgbG, oldValues[+SrgbChannels::G], newValues[+SrgbChannels::G] );
+    UpdateEditIfValueChanged( m_editSrgbB, oldValues[+SrgbChannels::B], newValues[+SrgbChannels::B] );
     if ( ( m_pCurrentEdit != &m_editHexColor ) && ( newValues != oldValues ) ) {
         _PutHexColorToEdit( m_editHexColor, newValues );
     }
@@ -739,7 +739,7 @@ void CChildView::OnValueEditUpdate( UINT const uId ) {
         LabValueT oldValue { static_cast<LabValueT>( m_pDoc->GetChannelValue( channel ) ) };
         LabValueT newValue { oldValue };
 
-        fChanged = _UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
+        fChanged = UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
         if ( fChanged ) {
             newLabValues[+AllChannelsToLabChannels( channel )] = newValue;
             m_pDoc->SetChannelValue( channel, newValue );
@@ -751,7 +751,7 @@ void CChildView::OnValueEditUpdate( UINT const uId ) {
         SrgbValueT oldValue { static_cast<SrgbValueT>( m_pDoc->GetChannelValue( channel ) ) };
         SrgbValueT newValue { oldValue };
 
-        fChanged = _UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
+        fChanged = UpdateValueIfEditChanged( *pEdit, oldValue, newValue );
         if ( fChanged ) {
             newSrgbValues[+AllChannelsToSrgbChannels( channel )] = newValue;
             m_pDoc->SetChannelValue( channel, newValue );

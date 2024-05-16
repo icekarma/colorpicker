@@ -414,59 +414,59 @@ CString GetWindowsMessageName( UINT const uMessage ) {
     return result;
 }
 
-void AdjustPosition( CWnd* ctrl, SIZE const& adjust ) {
+void AdjustPosition( CWnd* pWnd, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
-    ctrl->GetWindowPlacement( &wp );
+    pWnd->GetWindowPlacement( &wp );
     wp.rcNormalPosition.left   += adjust.cx;
     wp.rcNormalPosition.top    += adjust.cy;
     wp.rcNormalPosition.right  += adjust.cx;
     wp.rcNormalPosition.bottom += adjust.cy;
-    ctrl->SetWindowPlacement( &wp );
+    pWnd->SetWindowPlacement( &wp );
 }
 
-void AdjustPositionAndSize( CWnd* ctrl, SIZE const& adjustPosition, SIZE const& adjustSize ) {
+void AdjustPositionAndSize( CWnd* pWnd, SIZE const& adjustPosition, SIZE const& adjustSize ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
-    ctrl->GetWindowPlacement( &wp );
+    pWnd->GetWindowPlacement( &wp );
     wp.rcNormalPosition.left   += adjustPosition.cx;
     wp.rcNormalPosition.top    += adjustPosition.cy;
     wp.rcNormalPosition.right  += adjustPosition.cx + adjustSize.cx;
     wp.rcNormalPosition.bottom += adjustPosition.cy + adjustSize.cy;
-    ctrl->SetWindowPlacement( &wp );
+    pWnd->SetWindowPlacement( &wp );
 }
 
-void AdjustSize( CWnd* ctrl, SIZE const& adjust ) {
+void AdjustSize( CWnd* pWnd, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
-    ctrl->GetWindowPlacement( &wp );
+    pWnd->GetWindowPlacement( &wp );
     wp.rcNormalPosition.right  += adjust.cx;
     wp.rcNormalPosition.bottom += adjust.cy;
-    ctrl->SetWindowPlacement( &wp );
+    pWnd->SetWindowPlacement( &wp );
 }
 
-void SetPosition( CWnd* ctrl, POINT const& position ) {
-    SetPosition( ctrl, SIZE { position.x, position.y } );
+void SetPosition( CWnd* pWnd, POINT const& position ) {
+    SetPosition( pWnd, SIZE { position.x, position.y } );
 }
 
-void SetPosition( CWnd* ctrl, SIZE const& adjust ) {
+void SetPosition( CWnd* pWnd, SIZE const& adjust ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
-    ctrl->GetWindowPlacement( &wp );
+    pWnd->GetWindowPlacement( &wp );
     wp.rcNormalPosition.right  = wp.rcNormalPosition.right  - wp.rcNormalPosition.left + adjust.cx;
     wp.rcNormalPosition.bottom = wp.rcNormalPosition.bottom - wp.rcNormalPosition.top  + adjust.cy;
     wp.rcNormalPosition.left   = adjust.cx;
     wp.rcNormalPosition.top    = adjust.cy;
-    ctrl->SetWindowPlacement( &wp );
+    pWnd->SetWindowPlacement( &wp );
 }
 
-void SetSize( CWnd* ctrl, SIZE const& size ) {
+void SetSize( CWnd* pWnd, SIZE const& size ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
-    ctrl->GetWindowPlacement( &wp );
+    pWnd->GetWindowPlacement( &wp );
     wp.rcNormalPosition.right  = wp.rcNormalPosition.left + size.cx;
     wp.rcNormalPosition.bottom = wp.rcNormalPosition.top  + size.cy;
-    ctrl->SetWindowPlacement( &wp );
+    pWnd->SetWindowPlacement( &wp );
 }
 
 [[nodiscard]] bool IsTextSelected( CEdit const* pEdit ) {
@@ -541,14 +541,14 @@ void ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CStrin
     return fValue ? BST_CHECKED : BST_UNCHECKED;
 }
 
-bool PutTextOnClipboard( const CString& str ) {
+void PutTextOnClipboard( const CString& str ) {
     SetLastError( ERROR_SUCCESS );
 
     if ( !::OpenClipboard( AfxGetMainWnd( )->GetSafeHwnd( ) ) ) {
         DWORD dwError { ::GetLastError( ) };
         debug( L"PutTextOnClipboard: OpenClipboard failed: %lu\n", dwError );
 
-        return false;
+        return;
     }
 
     size_t cbStr { ( static_cast<size_t>( str.GetLength( ) ) + 1 ) * sizeof( wchar_t ) };
@@ -558,7 +558,7 @@ bool PutTextOnClipboard( const CString& str ) {
         debug( L"PutTextOnClipboard: GlobalAlloc failed: %lu\n", dwError );
 
         ::CloseClipboard( );
-        return false;
+        return;
     }
 
     wchar_t* pBuf { static_cast<wchar_t*>( ::GlobalLock( hMem ) ) };
@@ -568,7 +568,7 @@ bool PutTextOnClipboard( const CString& str ) {
 
         ::GlobalFree( hMem );
         ::CloseClipboard( );
-        return false;
+        return;
     }
 
     memcpy( pBuf, static_cast<LPCWSTR>( str ), cbStr );
@@ -581,9 +581,26 @@ bool PutTextOnClipboard( const CString& str ) {
 
         ::GlobalFree( hMem );
         ::CloseClipboard( );
-        return false;
+        return;
     }
 
     ::CloseClipboard( );
-    return true;
+}
+
+[[nodiscard]] CRect GetClientRect( HWND const hwnd ) {
+    CRect rect;
+    return ::GetClientRect( hwnd, rect ) ? rect : CRect { { -65536, -65536 }, SIZE { -1, -1 } };
+}
+
+[[nodiscard]] CRect GetClientRect( CWnd* const pWnd ) {
+    return GetClientRect( pWnd->GetSafeHwnd( ) );
+}
+
+[[nodiscard]] CRect GetWindowRect( HWND const hwnd ) {
+    CRect rect;
+    return ::GetWindowRect( hwnd, rect ) ? rect : CRect { { -65536, -65536 }, SIZE { -1, -1 } };
+}
+
+[[nodiscard]] CRect GetWindowRect( CWnd* const pWnd ) {
+    return GetWindowRect( pWnd->GetSafeHwnd( ) );
 }
