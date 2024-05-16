@@ -92,12 +92,11 @@ BOOL CAboutDlg::OnInitDialog( ) {
 
     m_pButtonOK = new CButton( );
     SetLastError( ERROR_SUCCESS );
-    if ( !m_pButtonOK->Create( L"OK", BS_DEFPUSHBUTTON | WS_VISIBLE | WS_GROUP | WS_TABSTOP, CRect { { 16, rectClient.Height( ) - 16 - ButtonDefaultSize.cy }, ButtonDefaultSize }, this, IDOK ) ) {
+    if ( !m_pButtonOK->Create( L"OK", BS_DEFPUSHBUTTON | WS_VISIBLE | WS_GROUP | WS_TABSTOP, CRect { { 16, rectClient.Height( ) - ButtonDefaultSize.cy - 16 }, ButtonDefaultSize }, this, IDOK ) ) {
         DWORD dwError { GetLastError( ) };
         debug( L"CAboutDlg::OnInitDialog: m_pButtonOK->Create failed: %lu\n", dwError );
     }
     m_pButtonOK->SetFont( GetFont( ) );
-    m_pButtonOK->ShowWindow( SW_SHOW );
 
     // return TRUE unless you set the focus to a control
     return TRUE;
