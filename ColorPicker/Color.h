@@ -560,14 +560,16 @@ protected:
 }
 
 [[nodiscard]] inline constexpr int ScaleLabColor( AllChannels const channel, int const value ) {
-    if ( IsLabChannel( channel ) ) {
-        if ( channel == AllChannels::LabL ) {
+    switch ( channel ) {
+        case AllChannels::LabL:
             return value * 100 / 255;
-        } else {
+
+        case AllChannels::LabA:
+        case AllChannels::LabB:
             return value - 128;
-        }
-    } else {
-        return value;
+
+        default:
+            return value;
     }
 }
 
