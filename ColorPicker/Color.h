@@ -528,7 +528,7 @@ protected:
 }
 
 [[nodiscard]] inline constexpr AllChannels LabChannelsToAllChannels( LabChannels const channel ) {
-    return IsLabChannel(channel) ? static_cast<AllChannels>( +channel /*+ +AllChannels::LabMin*/ ) : AllChannels::unknown;
+    return IsLabChannel( channel ) ? static_cast<AllChannels>( +channel /*+ +AllChannels::LabMin*/ ) : AllChannels::unknown;
 }
 
 [[nodiscard]] inline constexpr AllChannels SrgbChannelsToAllChannels( SrgbChannels const channel ) {
