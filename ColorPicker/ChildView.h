@@ -7,9 +7,6 @@
 #include "XyGrid.h"
 #include "ZStrip.h"
 
-extern std::unordered_map<UINT, AllChannels> const g_mapLabelControlIdToChannel;
-extern std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel;
-
 template<typename T>
 concept IsEditControl = std::same_as<T, CEdit>;
 
@@ -65,11 +62,11 @@ protected:
     }
 
     AllChannels MapLabelControlIdToChannel( UINT const uId ) const {
-        return _MapImpl( g_mapLabelControlIdToChannel, uId, AllChannels::unknown );
+        return _MapImpl( m_mapLabelControlIdToChannel, uId, AllChannels::unknown );
     }
 
     AllChannels MapValueControlIdToChannel( UINT const uId ) const {
-        return _MapImpl( g_mapValueControlIdToChannel, uId, AllChannels::unknown );
+        return _MapImpl( m_mapValueControlIdToChannel, uId, AllChannels::unknown );
     }
 
     CEdit* MapValueControlIdToEditControl( UINT const uId ) const {
@@ -164,6 +161,24 @@ protected:
         &m_radioSrgbR,
         &m_radioSrgbG,
         &m_radioSrgbB,
+    };
+
+    std::unordered_map<UINT, AllChannels> const m_mapLabelControlIdToChannel {
+        { IDC_LAB_L_LABEL,  AllChannels::LabL  },
+        { IDC_LAB_A_LABEL,  AllChannels::LabA  },
+        { IDC_LAB_B_LABEL,  AllChannels::LabB  },
+        { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
+        { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
+        { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
+    };
+
+    std::unordered_map<UINT, AllChannels> const m_mapValueControlIdToChannel {
+        { IDC_LAB_L_VALUE,  AllChannels::LabL  },
+        { IDC_LAB_A_VALUE,  AllChannels::LabA  },
+        { IDC_LAB_B_VALUE,  AllChannels::LabB  },
+        { IDC_SRGB_R_VALUE, AllChannels::SrgbR },
+        { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
+        { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
     };
 
     std::unordered_map<UINT, CEdit*> const m_mapValueControlIdToEditControl {

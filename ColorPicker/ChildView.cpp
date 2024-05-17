@@ -58,28 +58,6 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
 END_MESSAGE_MAP( )
 
 //
-// Global constants
-//
-
-std::unordered_map<UINT, AllChannels> const g_mapLabelControlIdToChannel {
-    { IDC_LAB_L_LABEL,  AllChannels::LabL  },
-    { IDC_LAB_A_LABEL,  AllChannels::LabA  },
-    { IDC_LAB_B_LABEL,  AllChannels::LabB  },
-    { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
-    { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
-    { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
-};
-
-std::unordered_map<UINT, AllChannels> const g_mapValueControlIdToChannel {
-    { IDC_LAB_L_VALUE,  AllChannels::LabL  },
-    { IDC_LAB_A_VALUE,  AllChannels::LabA  },
-    { IDC_LAB_B_VALUE,  AllChannels::LabB  },
-    { IDC_SRGB_R_VALUE, AllChannels::SrgbR },
-    { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
-    { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
-};
-
-//
 // Global data
 //
 
