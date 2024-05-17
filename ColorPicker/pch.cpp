@@ -4,12 +4,8 @@
 #include "Settings.h"
 
 //================================================
-// Global variables
+// Global constants
 //================================================
-
-TransformsManager g_Transforms;
-
-CSettings*        g_pSettings { };
 
 constinit ChannelInformation const AllChannelsInformation[6] {
     { AllChannels::LabL,     0, 100 },
@@ -19,3 +15,11 @@ constinit ChannelInformation const AllChannelsInformation[6] {
     { AllChannels::SrgbG,    0, 255 },
     { AllChannels::SrgbB,    0, 255 }
 };
+
+//================================================
+// Global variables
+//================================================
+
+TransformsManager g_Transforms;
+
+CSettings*        g_pSettings { };
