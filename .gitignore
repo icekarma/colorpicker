@@ -6,24 +6,21 @@
 ## Ice Karma's additions
 BlackPointCompensationTests.pdf
 CIC18_UnboundedCMM.pdf
-ColorPicker/PsPicker1L.png
-ColorPicker/PsPicker2a.png
-ColorPicker/PsPicker3b.png
+ColorPicker/res/About\ stretched.psd
+ColorPicker/StackTracer.cpp
+ColorPicker/StackTracer.h
 ConsoleKlondike
 ConversionTest/TestSet?/
+do-release
 eyedropper-icon/
 jglauche-screenshot1.png
-lcms2-2.16/
 lcms2-2.16.zip
+lcms2-2.16/
 LittleCMS2.16\ API.pdf
 LittleCMS2.16\ Plugin\ API.pdf
 LittleCMS2.16\ tutorial.pdf
 pscolorpicker.png
-
-ColorPicker/StackTracer.cpp
-ColorPicker/StackTracer.h
-ColorPicker/moreraw.txt
-ColorPicker/objdump-info.txt
+Release/
 
 # User-specific files
 *.rsuser
