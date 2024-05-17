@@ -3,13 +3,13 @@
 ==================================================
 
 * Verify the operation of channel limits.
-* Edit menu item: Copy L*a*b*/sRGB as CSV
 
 ==================================================
 == Feature suggestions                          ==
 ==================================================
 
+* Swatch library
+
 * Option for 0..255 vs 0..100
 * Option for floating point with 1dp
 * Per-channel gradients, à la https://imgur.com/a/BWOAht9
-* Swatch library
