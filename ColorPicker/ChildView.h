@@ -199,6 +199,7 @@ protected:
     //
 
     CColorPickerDoc* m_pDoc                { };
+    UINT             m_uCurrentControlId   { };
     CEdit*           m_pCurrentEdit        { };
     int              m_nBlockBitmapUpdates { };
     int              m_nBlockLostFocus     { };

@@ -523,6 +523,7 @@ void CChildView::OnEditCopy( ) {
 
 void CChildView::OnEditPaste( ) {
     m_pCurrentEdit->Paste( );
+    CheckValue( m_uCurrentControlId );
 }
 
 void CChildView::OnEditClear( ) {
@@ -630,13 +631,18 @@ void CChildView::OnChannelRadioClicked( UINT const uId ) {
 void CChildView::OnValueEditGotFocus( UINT uId ) {
 #if defined _DEBUG
     if ( m_pCurrentEdit ) {
-        debug( L"CChildView::OnValueEditGotFocus: Uh oh: m_pCurrentEdit != nullptr on entry\n" );
+        debug( L"CChildView::OnValueEditGotFocus(%u): Uh oh: m_pCurrentEdit != nullptr on entry\n", uId );
+    }
+    if ( m_uCurrentControlId ) {
+        debug( L"CChildView::OnValueEditGotFocus(%u): Uh oh: m_uCurrentControlId != 0 on entry\n", uId );
     }
 #endif // defined _DEBUG
 
-    m_pCurrentEdit = MapValueControlIdToEditControl( uId );
-
-    m_pCurrentEdit->SetSel( 0, -1, FALSE );
+    m_uCurrentControlId = uId;
+    m_pCurrentEdit      = MapValueControlIdToEditControl( uId );
+    if ( m_pCurrentEdit ) {
+        m_pCurrentEdit->SetSel( 0, -1, FALSE );
+    }
 }
 
 void CChildView::OnHexColorGotFocus( ) {
@@ -644,38 +650,51 @@ void CChildView::OnHexColorGotFocus( ) {
     if ( m_pCurrentEdit ) {
         debug( L"CChildView::OnHexColorGotFocus: Uh oh: m_pCurrentEdit != nullptr on entry\n" );
     }
+    if ( m_uCurrentControlId ) {
+        debug( L"CChildView::OnHexColorGotFocus: Uh oh: m_uCurrentControlId != 0 on entry\n" );
+    }
 #endif // defined _DEBUG
 
-    m_pCurrentEdit = &m_editHexColor;
-
+    m_uCurrentControlId = IDC_HEX_COLOR_VALUE;
+    m_pCurrentEdit      = &m_editHexColor;
     m_pCurrentEdit->SetSel( 0, -1, FALSE );
 }
 
 void CChildView::OnValueEditLostFocus( UINT uId ) {
     if ( m_nBlockLostFocus ) {
-        return;
+        debug( L"CChildView::OnValueEditLostFocus(%u): m_nBlockLostFocus is set\n", uId );
+        goto done;
     }
 
     if ( !m_pCurrentEdit ) {
         // this signifies it's not of the L*a*b* or RGB edit controls
-        return;
+        debug( L"CChildView::OnValueEditLostFocus(%u): m_pCurrentEdit is not set\n", uId );
+        goto done;
     }
 
 #if defined _DEBUG
     if ( CEdit* pEdit { MapValueControlIdToEditControl( uId ) }; !pEdit ) {
-        debug( L"CChildView::OnValueEditLostFocus: Uh oh: Couldn't map control ID to edit control\n" );
+        debug( L"CChildView::OnValueEditLostFocus(%u): Uh oh: Couldn't map control ID to edit control\n", uId );
         DebugBreak( );
-        return;
+        goto done;
     } else if ( m_pCurrentEdit != pEdit ) {
-        debug( L"CChildView::OnValueEditLostFocus: Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", pEdit, m_pCurrentEdit );
+        debug( L"CChildView::OnValueEditLostFocus(%u): Uh oh: Control ID doesn't map to same object as m_pCurrentEdit: pEdit 0x%p vs. m_pCurrentEdit 0x%p\n", uId, pEdit, m_pCurrentEdit );
         DebugBreak( );
-        return;
+        goto done;
+    }
+
+    if ( m_uCurrentControlId != uId ) {
+        debug( L"CChildView::OnValueEditLostFocus(%u): Uh oh: Current control ID doesn't map to control ID losing focus: %u vs. %u\n", uId, m_uCurrentControlId, uId );
+        DebugBreak( );
+        goto done;
     }
 #endif // defined _DEBUG
 
     CheckValue( uId );
 
-    m_pCurrentEdit = nullptr;
+done:
+    m_uCurrentControlId = 0;
+    m_pCurrentEdit      = nullptr;
 }
 
 void CChildView::OnHexColorLostFocus( ) {
