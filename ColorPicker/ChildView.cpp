@@ -285,17 +285,16 @@ void CChildView::CheckValue( UINT const uId ) {
 
     ++m_nBlockLostFocus;
 
-    CEdit* pEdit { m_pCurrentEdit };
     if ( int value; GetValueFromEdit( *m_pCurrentEdit, value ) ) {
         ChannelInformation const& channelInfo { AllChannelsInformation[+channel] };
 
         if ( value < channelInfo.m_minimumValue ) {
-            ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            ComplainAboutBadValue( GetSafeHwnd( ), m_pCurrentEdit, channelInfo.m_minimumValue, _FormatString( IDS_VALUE_TOO_LOW,  channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         } else if ( value > channelInfo.m_maximumValue ) {
-            ComplainAboutBadValue( GetSafeHwnd( ), pEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
+            ComplainAboutBadValue( GetSafeHwnd( ), m_pCurrentEdit, channelInfo.m_maximumValue, _FormatString( IDS_VALUE_TOO_HIGH, channelInfo.m_minimumValue, channelInfo.m_maximumValue ) );
         }
     } else {
-        ComplainAboutBadValue( GetSafeHwnd( ), pEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
+        ComplainAboutBadValue( GetSafeHwnd( ), m_pCurrentEdit, 0, _GetResourceString( IDS_VALUE_INCOMPREHENSIBLE ) );
     }
 
     --m_nBlockLostFocus;
