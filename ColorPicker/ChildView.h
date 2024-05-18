@@ -164,18 +164,18 @@ protected:
     };
 
     std::unordered_map<UINT, AllChannels> const m_mapLabelControlIdToChannel {
-        { IDC_LAB_L_LABEL,  AllChannels::LabL  },
-        { IDC_LAB_A_LABEL,  AllChannels::LabA  },
-        { IDC_LAB_B_LABEL,  AllChannels::LabB  },
+        {  IDC_LAB_L_LABEL, AllChannels::LabL  },
+        {  IDC_LAB_A_LABEL, AllChannels::LabA  },
+        {  IDC_LAB_B_LABEL, AllChannels::LabB  },
         { IDC_SRGB_R_LABEL, AllChannels::SrgbR },
         { IDC_SRGB_G_LABEL, AllChannels::SrgbG },
         { IDC_SRGB_B_LABEL, AllChannels::SrgbB }
     };
 
     std::unordered_map<UINT, AllChannels> const m_mapValueControlIdToChannel {
-        { IDC_LAB_L_VALUE,  AllChannels::LabL  },
-        { IDC_LAB_A_VALUE,  AllChannels::LabA  },
-        { IDC_LAB_B_VALUE,  AllChannels::LabB  },
+        {  IDC_LAB_L_VALUE, AllChannels::LabL  },
+        {  IDC_LAB_A_VALUE, AllChannels::LabA  },
+        {  IDC_LAB_B_VALUE, AllChannels::LabB  },
         { IDC_SRGB_R_VALUE, AllChannels::SrgbR },
         { IDC_SRGB_G_VALUE, AllChannels::SrgbG },
         { IDC_SRGB_B_VALUE, AllChannels::SrgbB }
@@ -191,8 +191,8 @@ protected:
         { IDC_HEX_COLOR_VALUE, &m_editHexColor },
     };
 
-    std::unordered_map<HWND, AllChannels> m_mapHwndToChannel;
     std::unordered_map<HWND, WNDPROC>     m_mapHwndToWndProc;
+    std::unordered_map<HWND, AllChannels> m_mapHwndToChannel;
 
     //
     // Miscellaneous
