@@ -4,31 +4,31 @@
 // Function prototypes
 //
 
-void                  AdjustPosition( CWnd* pWnd, SIZE const& adjust );
-void                  AdjustPositionAndSize( CWnd* pWnd, SIZE const& adjustPosition, SIZE const& adjustSize );
-void                  AdjustSize( CWnd* pWnd, SIZE const& adjust );
-[[nodiscard]] int     BoolToChecked( bool const fValue );
-[[nodiscard]] int     ClipToChannelRange( AllChannels const channel, int const value );
-void                  ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CString const& strMessage );
-[[nodiscard]] CRect   GetClientRect( CWnd* const pWnd );
-[[nodiscard]] CRect   GetClientRect( HWND const hwnd );
+void                  AdjustPosition( _In_ CWnd* pWnd, _In_ SIZE const& adjust );
+void                  AdjustPositionAndSize( _In_ CWnd* pWnd, _In_ SIZE const& adjustPosition, _In_ SIZE const& adjustSize );
+void                  AdjustSize( _In_ CWnd* pWnd, _In_ SIZE const& adjust );
+[[nodiscard]] int     BoolToChecked( _In_ bool const fValue );
+[[nodiscard]] int     ClipToChannelRange( _In_ AllChannels const channel, _In_ int const value );
+void                  ComplainAboutBadValue( _In_ HWND hwnd, _In_ CEdit* pEdit, _In_ int const nNewValue, _In_ CString const& strMessage );
+[[nodiscard]] CRect   GetClientRect( _In_ CWnd* const pWnd );
+[[nodiscard]] CRect   GetClientRect( _In_ HWND const hwnd );
 [[nodiscard]] CString GetExecutablePath( );
-[[nodiscard]] bool    GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
-[[nodiscard]] bool    GetValueFromEdit( CEdit const& edit, int& nValue );
-[[nodiscard]] CRect   GetWindowRect( CWnd* const pWnd );
-[[nodiscard]] CRect   GetWindowRect( HWND const hwnd );
-[[nodiscard]] CString GetWindowsMessageName( UINT const uMessage );
-[[nodiscard]] bool    IsTextSelected( CEdit const* pEdit );
-void                  PutTextOnClipboard( const CString& str );
-void                  PutValueToEdit( CEdit& edit, int const nValue );
-[[nodiscard]] CString SafeGetWindowText( CEdit const& edit );
-void                  SetPosition( CWnd* pWnd, POINT const& position );
-void                  SetPosition( CWnd* pWnd, SIZE const& adjust );
-void                  SetSize( CWnd* pWnd, SIZE const& size );
-[[nodiscard]] DWORD   SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc );
+[[nodiscard]] bool    GetValueAndChangedFromEdit( _In_ CEdit const& edit, _Out_ int& nValue, _Out_ bool& fChanged );
+[[nodiscard]] bool    GetValueFromEdit( _In_ CEdit const& edit, _Out_ int& nValue );
+[[nodiscard]] CRect   GetWindowRect( _In_ CWnd* const pWnd );
+[[nodiscard]] CRect   GetWindowRect( _In_ HWND const hwnd );
+[[nodiscard]] CString GetWindowsMessageName( _In_ UINT const uMessage );
+[[nodiscard]] bool    IsTextSelected( _In_ CEdit const* pEdit );
+void                  PutTextOnClipboard( _In_ CString const& str );
+void                  PutValueToEdit( _In_ CEdit& edit, _In_ int const nValue );
+[[nodiscard]] CString SafeGetWindowText( _In_ CEdit const& edit );
+void                  SetPosition( _In_ CWnd* pWnd, _In_ POINT const& position );
+void                  SetPosition( _In_ CWnd* pWnd, _In_ SIZE const& adjust );
+void                  SetSize( _In_ CWnd* pWnd, _In_ SIZE const& size );
+[[nodiscard]] DWORD   SetWindowProcedure( _In_ HWND const hWnd, _In_ WNDPROC const newWndProc, _Out_ WNDPROC& oldWndProc );
 
 template<typename T>
-[[nodiscard]] bool UpdateValueIfEditChanged( CEdit const& edit, T const oldValue, T& newValue ) {
+[[nodiscard]] bool UpdateValueIfEditChanged( _In_ CEdit const& edit, _In_ T const oldValue, _Out_ T& newValue ) {
     bool fChanged { };
 
     if ( int value { static_cast<int>( oldValue ) }; GetValueAndChangedFromEdit( edit, value, fChanged ) && fChanged ) {
@@ -40,7 +40,7 @@ template<typename T>
 }
 
 template<typename T>
-void UpdateEditIfValueChanged( CEdit& edit, T const oldValue, T const newValue ) {
+void UpdateEditIfValueChanged( _In_ CEdit& edit, _In_ T const oldValue, _In_ T const newValue ) {
     if ( newValue != oldValue ) {
         PutValueToEdit( edit, static_cast<int>( newValue ) );
     }

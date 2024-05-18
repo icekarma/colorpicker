@@ -541,7 +541,7 @@ void ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CStrin
     return fValue ? BST_CHECKED : BST_UNCHECKED;
 }
 
-void PutTextOnClipboard( const CString& str ) {
+void PutTextOnClipboard( CString const& str ) {
     SetLastError( ERROR_SUCCESS );
 
     if ( !::OpenClipboard( AfxGetMainWnd( )->GetSafeHwnd( ) ) ) {
