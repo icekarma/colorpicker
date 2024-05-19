@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                        &CChildView::OnUpdateEditCopy                    )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                       &CChildView::OnUpdateEditPaste                   )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                       &CChildView::OnUpdateEditClear                   )
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_RESET,                       &CChildView::OnUpdateEditReset                   )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnUpdateEditSelectAll               )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnUpdateEditCopyAsCsvLab            )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnUpdateEditCopyAsCsvSrgb           )
@@ -43,6 +44,7 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_COMMAND           (                 ID_EDIT_COPY,                        &CChildView::OnEditCopy                          )
     ON_COMMAND           (                 ID_EDIT_PASTE,                       &CChildView::OnEditPaste                         )
     ON_COMMAND           (                 ID_EDIT_CLEAR,                       &CChildView::OnEditClear                         )
+    ON_COMMAND           (                 ID_EDIT_RESET,                       &CChildView::OnEditReset                         )
     ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnEditSelectAll                     )
     ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnEditCopyAsCsvLab                  )
     ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnEditCopyAsCsvSrgb                 )
@@ -467,6 +469,8 @@ void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
+void CChildView::OnUpdateEditReset( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( TRUE );
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
@@ -537,6 +541,26 @@ void CChildView::OnEditClear( ) {
     m_pCurrentEdit->Clear( );
 }
 
+void CChildView::OnEditReset( ) {
+    m_pDoc->SetColor( SrgbColor { 255, 255, 255 } );
+
+    m_editLabL.SetWindowText( L"100" );
+    m_editLabA.SetWindowText(   L"0" );
+    m_editLabB.SetWindowText(   L"0" );
+
+    m_editSrgbR.SetWindowText( L"255" );
+    m_editSrgbG.SetWindowText( L"255" );
+    m_editSrgbB.SetWindowText( L"255" );
+
+    m_editHexColor.SetWindowText( L"FFFFFF" );
+
+    if ( m_uCurrentControlId == IDC_LAB_L_VALUE ) {
+        m_editLabL.SetSel( 0, -1, FALSE );
+    } else {
+        m_uCurrentControlId = 0;
+        m_pCurrentEdit      = nullptr;
+        m_editLabL.SetFocus( );
+    }
 }
 
 void CChildView::OnEditSelectAll( ) {

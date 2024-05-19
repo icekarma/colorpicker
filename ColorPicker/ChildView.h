@@ -107,6 +107,7 @@ protected:
     afx_msg void OnUpdateEditCopy( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditPaste( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditClear( CCmdUI* pCmdUI );
+    afx_msg void OnUpdateEditReset( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditSelectAll( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditCopyAsCsvLab( CCmdUI* pCmdUI );
     afx_msg void OnUpdateEditCopyAsCsvSrgb( CCmdUI* pCmdUI );
@@ -123,6 +124,7 @@ protected:
     afx_msg void OnEditCopy( );
     afx_msg void OnEditPaste( );
     afx_msg void OnEditClear( );
+    afx_msg void OnEditReset( );
     afx_msg void OnEditSelectAll( );
     afx_msg void OnEditCopyAsCsvLab( );
     afx_msg void OnEditCopyAsCsvSrgb( );
