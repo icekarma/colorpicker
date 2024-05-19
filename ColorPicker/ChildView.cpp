@@ -10,6 +10,8 @@
 IMPLEMENT_DYNCREATE( CChildView, CFormView )
 
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
+    ON_WM_CLOSE( )
+
     ON_BN_CLICKED        (                 IDCLOSE,                             &CChildView::OnCloseButtonClicked                )
     ON_EN_KILLFOCUS      (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorLostFocus                 )
     ON_EN_SETFOCUS       (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorGotFocus                  )
@@ -20,11 +22,11 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_CONTROL_RANGE     ( EN_SETFOCUS,    IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE,   &CChildView::OnValueEditGotFocus                 )
     ON_CONTROL_RANGE     ( EN_UPDATE,      IDC_LAB_L_VALUE, IDC_SRGB_B_VALUE,   &CChildView::OnValueEditUpdate                   )
 
+    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                        &CChildView::OnUpdateEditUndo                    )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_CUT,                         &CChildView::OnUpdateEditCut                     )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY,                        &CChildView::OnUpdateEditCopy                    )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_PASTE,                       &CChildView::OnUpdateEditPaste                   )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_CLEAR,                       &CChildView::OnUpdateEditClear                   )
-    ON_UPDATE_COMMAND_UI (                 ID_EDIT_UNDO,                        &CChildView::OnUpdateEditUndo                    )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnUpdateEditSelectAll               )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnUpdateEditCopyAsCsvLab            )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnUpdateEditCopyAsCsvSrgb           )
@@ -36,11 +38,11 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_UPDATE_COMMAND_UI (                 ID_EDIT_COPY_AS_CSV_SEPARATOR_TAB,   &CChildView::OnUpdateEditCopyAsCsvSeparatorTab   )
     ON_UPDATE_COMMAND_UI (                 ID_VIEW_INVERT,                      &CChildView::OnUpdateViewInvert                  )
 
+    ON_COMMAND           (                 ID_EDIT_UNDO,                        &CChildView::OnEditUndo                          )
     ON_COMMAND           (                 ID_EDIT_CUT,                         &CChildView::OnEditCut                           )
     ON_COMMAND           (                 ID_EDIT_COPY,                        &CChildView::OnEditCopy                          )
     ON_COMMAND           (                 ID_EDIT_PASTE,                       &CChildView::OnEditPaste                         )
     ON_COMMAND           (                 ID_EDIT_CLEAR,                       &CChildView::OnEditClear                         )
-    ON_COMMAND           (                 ID_EDIT_UNDO,                        &CChildView::OnEditUndo                          )
     ON_COMMAND           (                 ID_EDIT_SELECT_ALL,                  &CChildView::OnEditSelectAll                     )
     ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_LAB,             &CChildView::OnEditCopyAsCsvLab                  )
     ON_COMMAND           (                 ID_EDIT_COPY_AS_CSV_SRGB,            &CChildView::OnEditCopyAsCsvSrgb                 )
@@ -54,7 +56,6 @@ BEGIN_MESSAGE_MAP( CChildView, CFormView )
 
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_Z_STRIP,                         &CChildView::OnZStripMouseMove                   )
     ON_NOTIFY            ( ZSBN_MOUSEMOVE, IDC_XY_GRID,                         &CChildView::OnXyGridMouseMove                   )
-    ON_WM_CLOSE( )
 END_MESSAGE_MAP( )
 
 //
@@ -446,6 +447,10 @@ void CChildView::OnInitialUpdate( ) {
     SubclassEditControl( _EditWndProc, { &m_editLabL, &m_editLabA, &m_editLabB, &m_editSrgbR, &m_editSrgbG, &m_editSrgbB } );
 }
 
+void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
+    pCmdUI->Enable( m_pCurrentEdit && m_pCurrentEdit->CanUndo( ) );
+}
+
 void CChildView::OnUpdateEditCut( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
@@ -462,8 +467,6 @@ void CChildView::OnUpdateEditClear( CCmdUI* pCmdUI ) {
     pCmdUI->Enable( m_pCurrentEdit && IsTextSelected( m_pCurrentEdit ) );
 }
 
-void CChildView::OnUpdateEditUndo( CCmdUI* pCmdUI ) {
-    pCmdUI->Enable( m_pCurrentEdit && m_pCurrentEdit->CanUndo( ) );
 }
 
 void CChildView::OnUpdateEditSelectAll( CCmdUI* pCmdUI ) {
@@ -513,6 +516,10 @@ void CChildView::OnUpdateViewInvert( CCmdUI* pCmdUI ) {
     pCmdUI->SetCheck( BoolToChecked( g_pSettings->IsInverted( ) ) );
 }
 
+void CChildView::OnEditUndo( ) {
+    m_pCurrentEdit->Undo( );
+}
+
 void CChildView::OnEditCut( ) {
     m_pCurrentEdit->Cut( );
 }
@@ -530,8 +537,6 @@ void CChildView::OnEditClear( ) {
     m_pCurrentEdit->Clear( );
 }
 
-void CChildView::OnEditUndo( ) {
-    m_pCurrentEdit->Undo( );
 }
 
 void CChildView::OnEditSelectAll( ) {
