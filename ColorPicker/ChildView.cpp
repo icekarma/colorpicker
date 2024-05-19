@@ -564,7 +564,7 @@ void CChildView::OnEditReset( ) {
 }
 
 void CChildView::OnEditSelectAll( ) {
-    m_pCurrentEdit->SetSel( 0, -1 );
+    m_pCurrentEdit->SetSel( 0, -1, FALSE );
 }
 
 void CChildView::OnEditCopyAsCsvLab( ) {
