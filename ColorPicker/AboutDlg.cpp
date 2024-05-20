@@ -9,7 +9,7 @@ END_MESSAGE_MAP( )
 
 namespace {
 
-    constinit SIZE const ButtonDefaultSize { 75, 23 };
+    SIZE constexpr ButtonDefaultSize { 75, 23 };
 
 }
 
