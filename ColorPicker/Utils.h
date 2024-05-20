@@ -28,6 +28,14 @@ void                  SetSize( _In_ CWnd* pWnd, _In_ SIZE const& size );
 [[nodiscard]] DWORD   SetWindowProcedure( _In_ HWND const hWnd, _In_ WNDPROC const newWndProc, _Out_ WNDPROC& oldWndProc );
 
 template<typename T>
+void DeleteIfSet( T*& ptr ) {
+    if ( ptr ) {
+        delete ptr;
+        ptr = nullptr;
+    }
+}
+
+template<typename T>
 [[nodiscard]] bool UpdateValueIfEditChanged( _In_ CEdit const& edit, _In_ T const oldValue, _Out_ T& newValue ) {
     bool fChanged { };
 
