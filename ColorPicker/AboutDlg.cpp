@@ -11,6 +11,30 @@ namespace {
 
     SIZE constexpr ButtonDefaultSize { 75, 23 };
 
+    std::unique_ptr<CImage> LoadAboutPng( ) {
+        CString strFileName { GetExecutablePath( ) };
+        if ( strFileName.IsEmpty( ) ) {
+            debug( L"LoadAboutPng: Executable path is empty\n" );
+            return nullptr;
+        }
+
+        int index { strFileName.ReverseFind( L'\\' ) };
+        if ( index < 0 ) {
+            debug( L"LoadAboutPng: Executable path contains no backslashes\n" );
+            return nullptr;
+        }
+        strFileName = strFileName.Left( index ) + L"\\About.png";
+
+        CImage* pImage { new CImage };
+        if ( HRESULT hr { pImage->Load( strFileName ) }; FAILED( hr ) ) {
+            debug( L"LoadAboutPng: Loading image failed: hr: 0x%08lX\n", hr );
+            delete pImage;
+            return nullptr;
+        }
+
+        return std::unique_ptr<CImage> { pImage };
+    }
+
 }
 
 CAboutDlg::~CAboutDlg( ) {
@@ -26,27 +50,8 @@ BOOL CAboutDlg::OnInitDialog( ) {
     // Load our image
     //
 
-    if ( !m_pImage ) {
-        m_pImage = new CImage( );
-
-        CString strFileName { GetExecutablePath( ) };
-        if ( strFileName.IsEmpty( ) ) {
-            debug( L"CAboutDlg::OnInitDialog: Executable path is empty\n" );
-            return TRUE;
-        }
-
-        int index { strFileName.ReverseFind( L'\\' ) };
-        if ( index < 0 ) {
-            debug( L"CAboutDlg::OnInitDialog: Bad executable path\n" );
-            return TRUE;
-        }
-        strFileName = strFileName.Left( index ) + L"\\About.png";
-
-        HRESULT hr { m_pImage->Load( strFileName ) };
-        if ( FAILED( hr ) ) {
-            debug( L"CAboutDlg::OnInitDialog: Loading image failed\n" );
-            return TRUE;
-        }
+    if ( !g_pImage ) {
+        g_pImage = LoadAboutPng( );
     }
 
     //
