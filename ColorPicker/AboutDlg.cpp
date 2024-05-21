@@ -14,20 +14,9 @@ namespace {
 }
 
 CAboutDlg::~CAboutDlg( ) {
-    if ( m_pBitmap ) {
-        delete m_pBitmap;
-        m_pBitmap = nullptr;
-    }
-
-    if ( m_pImage ) {
-        delete m_pImage;
-        m_pImage = nullptr;
-    }
-
-    if ( m_pButtonOK ) {
-        delete m_pButtonOK;
-        m_pButtonOK = nullptr;
-    }
+    DeleteIfSet( m_pBitmap     );
+    DeleteIfSet( m_pButtonOK   );
+    DeleteIfSet( m_pStaticText );
 }
 
 BOOL CAboutDlg::OnInitDialog( ) {
