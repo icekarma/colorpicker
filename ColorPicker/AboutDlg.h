@@ -18,9 +18,9 @@ public:
 
 protected:
 
-    CImage*  m_pImage    { };
-    CStatic* m_pBitmap   { };
-    CButton* m_pButtonOK { };
+    CStatic* m_pBitmap     { };
+    CButton* m_pButtonOK   { };
+    CStatic* m_pStaticText { };
 
     virtual BOOL OnInitDialog( );
 
