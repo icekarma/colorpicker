@@ -136,7 +136,6 @@ protected:
     afx_msg void OnEditCopyAsCsvSeparatorTab( );
     afx_msg void OnViewInvert( );
 
-    afx_msg void OnCloseButtonClicked( );
     afx_msg void OnClose( );
     afx_msg void OnChannelRadioClicked( UINT uId );
     afx_msg void OnValueEditGotFocus( UINT uId );

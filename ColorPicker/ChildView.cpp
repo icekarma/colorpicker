@@ -12,7 +12,6 @@ IMPLEMENT_DYNCREATE( CChildView, CFormView )
 BEGIN_MESSAGE_MAP( CChildView, CFormView )
     ON_WM_CLOSE( )
 
-    ON_BN_CLICKED        (                 IDCLOSE,                             &CChildView::OnCloseButtonClicked                )
     ON_EN_KILLFOCUS      (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorLostFocus                 )
     ON_EN_SETFOCUS       (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorGotFocus                  )
     ON_EN_UPDATE         (                 IDC_HEX_COLOR_VALUE,                 &CChildView::OnHexColorUpdate                    )
@@ -347,7 +346,6 @@ void CChildView::AdjustUIControls( ) {
     AdjustPosition       ( &m_staticXyGrid,  adjustLeft1    );
     SetSize              ( &m_staticXyGrid,  { 256L, 256L } );
 
-    AdjustPosition       ( &m_buttonClose,   adjustNarrower1 + adjustShorter2 );
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
@@ -375,8 +373,6 @@ void CChildView::DoDataExchange( CDataExchange* pDX ) {
     DDX_Control( pDX, IDC_SWATCH,          m_staticSwatch  );
     DDX_Control( pDX, IDC_Z_STRIP,         m_staticZStrip  );
     DDX_Control( pDX, IDC_XY_GRID,         m_staticXyGrid  );
-
-    DDX_Control( pDX, IDCLOSE,             m_buttonClose   );
 }
 
 BOOL CChildView::PreCreateWindow( CREATESTRUCT& cs ) {
@@ -620,10 +616,6 @@ void CChildView::OnViewInvert( ) {
     m_staticZStrip.SetInverted(  g_pSettings->IsInverted( ) );
     m_staticXyGrid.SetInverted(  g_pSettings->IsInverted( ) );
     UpdateBitmaps( );
-}
-
-void CChildView::OnCloseButtonClicked( ) {
-    AfxGetMainWnd( )->SendMessage( WM_COMMAND, ID_APP_EXIT, 0 );
 }
 
 void CChildView::OnClose( ) {
