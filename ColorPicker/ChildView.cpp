@@ -85,7 +85,7 @@ namespace {
     //
 
     [[nodiscard]] bool _GetHexColorFromEdit( CEdit const& edit, SrgbTriplet& values ) {
-        CString strText { SafeGetWindowText( edit ) };
+        CString strText { GetWindowText( &edit ).Trim( ) };
         if ( strText.IsEmpty( ) ) {
             debug( L"_GetHexColorFromEdit: no text in edit control\n" );
             return false;
@@ -339,13 +339,18 @@ void CChildView::AdjustUIControls( ) {
 
     AdjustPositionAndSize( &m_editHexColor,  adjustUp1       + adjustRight1,  adjustWider1   );
 
-    AdjustSize           ( &m_staticSwatch,  adjustNarrower1 + adjustShorter1 );
-
     SetSize              ( &m_staticZStrip,  {  20L, 256L } );
 
     AdjustPosition       ( &m_staticXyGrid,  adjustLeft1    );
     SetSize              ( &m_staticXyGrid,  { 256L, 256L } );
 
+    CRect rectWindow     { ::GetWindowRect( *this )         };
+    CRect rectSwatch     {
+        POINT { 11, ::GetScreenRect( *this, m_staticXyGrid ).bottom + 11 },
+        POINT { rectWindow.Width( ) - 11, rectWindow.Height( ) - 11      }
+    };
+
+    SetPositionAndSize   ( &m_staticSwatch,  rectSwatch     );
 }
 
 void CChildView::DoDataExchange( CDataExchange* pDX ) {
