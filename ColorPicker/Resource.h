@@ -7,6 +7,7 @@
 #define IDR_MAINFRAME_BW                129
 #define IDD_CHILDVIEW                   310
 #define IDB_ABOUT                       311
+#define IDC_ABOUT_COPYRIGHT             500
 #define IDC_GROUPBOX_LAB                1000
 #define IDC_GROUPBOX_SRGB               1001
 #define IDC_LAB_L_LABEL                 2000
@@ -30,6 +31,8 @@
 #define IDS_VALUE_TOO_HIGH              10001
 #define IDS_VALUE_TOO_LOW               10002
 #define IDS_VALUE_INCOMPREHENSIBLE      10003
+#define IDS_ABOUT_COPYRIGHT             10010
+#define IDS_ABOUT_ICON_ATTRIBUTION      10011
 #define ID_EDIT_RESET                   32774
 #define ID_EDIT_COPY_AS_CSV_LAB         32775
 #define ID_EDIT_COPY_AS_CSV_SRGB        32776
