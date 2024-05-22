@@ -13,6 +13,12 @@ void                  ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const 
 [[nodiscard]] CRect   GetClientRect( CWnd* const pWnd );
 [[nodiscard]] CRect   GetClientRect( HWND const hwnd );
 [[nodiscard]] CString GetExecutablePath( );
+[[nodiscard]] CRect   GetScreenRect( CWnd* const pWnd );
+[[nodiscard]] CRect   GetScreenRect( HWND const hwnd );
+[[nodiscard]] CRect   GetScreenRect( CWnd* const pParent,    CWnd* const pWnd );
+[[nodiscard]] CRect   GetScreenRect( CWnd* const pParent,    HWND  const hwnd );
+[[nodiscard]] CRect   GetScreenRect( HWND  const hwndParent, CWnd* const pWnd );
+[[nodiscard]] CRect   GetScreenRect( HWND  const hwndParent, HWND  const hwnd );
 [[nodiscard]] bool    GetValueAndChangedFromEdit( CEdit const& edit, int& nValue, bool& fChanged );
 [[nodiscard]] bool    GetValueFromEdit( CEdit const& edit, int& nValue );
 [[nodiscard]] CRect   GetWindowRect( CWnd* const pWnd );
@@ -21,9 +27,10 @@ void                  ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const 
 [[nodiscard]] bool    IsTextSelected( CEdit const* pEdit );
 void                  PutTextOnClipboard( CString const& str );
 void                  PutValueToEdit( CEdit& edit, int const nValue );
-[[nodiscard]] CString SafeGetWindowText( CEdit const& edit );
+[[nodiscard]] CString GetWindowText( CEdit const* pEdit );
 void                  SetPosition( CWnd* pWnd, POINT const& position );
 void                  SetPosition( CWnd* pWnd, SIZE const& adjust );
+void                  SetPositionAndSize( CWnd* pWnd, RECT const& rect );
 void                  SetSize( CWnd* pWnd, SIZE const& size );
 [[nodiscard]] DWORD   SetWindowProcedure( HWND const hWnd, WNDPROC const newWndProc, WNDPROC& oldWndProc );
 

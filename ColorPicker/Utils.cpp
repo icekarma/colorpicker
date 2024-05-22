@@ -9,6 +9,8 @@ namespace {
     // Private constants
     //
 
+    CRect const BadRect { { -65536, -65536 }, SIZE { -1, -1 } };
+
     std::unordered_map<UINT, wchar_t const*> const WindowsMessageNames {
         { WM_NULL,                           L"WM_NULL"                           },
         { WM_CREATE,                         L"WM_CREATE"                         },
@@ -460,6 +462,14 @@ void SetPosition( CWnd* pWnd, SIZE const& adjust ) {
     pWnd->SetWindowPlacement( &wp );
 }
 
+void SetPositionAndSize( CWnd* pWnd, RECT const& rect ) {
+    WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
+
+    pWnd->GetWindowPlacement( &wp );
+    wp.rcNormalPosition = rect;
+    pWnd->SetWindowPlacement( &wp );
+}
+
 void SetSize( CWnd* pWnd, SIZE const& size ) {
     WINDOWPLACEMENT wp { sizeof WINDOWPLACEMENT, };
 
@@ -476,14 +486,16 @@ void SetSize( CWnd* pWnd, SIZE const& size ) {
     return nStartIndex != nEndIndex;
 }
 
-[[nodiscard]] CString SafeGetWindowText( CEdit const& edit ) {
+[[nodiscard]] CString GetWindowText( CEdit const* pEdit ) {
     CString str;
-    edit.GetWindowText( str );
-    return str.Trim( );
+    if ( pEdit ) {
+        pEdit->GetWindowText( str );
+    }
+    return str;
 }
 
 [[nodiscard]] bool GetValueFromEdit( CEdit const& edit, int& nValue ) {
-    CString strText { SafeGetWindowText( edit ) };
+    CString strText { GetWindowText( &edit ).Trim( ) };
     if ( strText.IsEmpty( ) ) {
         return false;
     }
@@ -544,7 +556,7 @@ void ComplainAboutBadValue( HWND hwnd, CEdit* pEdit, int const nNewValue, CStrin
 void PutTextOnClipboard( CString const& str ) {
     SetLastError( ERROR_SUCCESS );
 
-    if ( !::OpenClipboard( AfxGetMainWnd( )->GetSafeHwnd( ) ) ) {
+    if ( !::OpenClipboard( *AfxGetMainWnd( ) ) ) {
         DWORD dwError { ::GetLastError( ) };
         debug( L"PutTextOnClipboard: OpenClipboard failed: %lu\n", dwError );
 
@@ -587,20 +599,62 @@ void PutTextOnClipboard( CString const& str ) {
     ::CloseClipboard( );
 }
 
-[[nodiscard]] CRect GetClientRect( HWND const hwnd ) {
-    CRect rect;
-    return ::GetClientRect( hwnd, rect ) ? rect : CRect { { -65536, -65536 }, SIZE { -1, -1 } };
+[[nodiscard]] CRect GetClientRect( CWnd* const pWnd ) {
+    return GetClientRect( *pWnd );
 }
 
-[[nodiscard]] CRect GetClientRect( CWnd* const pWnd ) {
-    return GetClientRect( pWnd->GetSafeHwnd( ) );
+[[nodiscard]] CRect GetClientRect( HWND const hwnd ) {
+    CRect rect;
+    return ::GetClientRect( hwnd, rect ) ? rect : BadRect;
+}
+
+[[nodiscard]] CRect GetScreenRect( CWnd* const pWnd ) {
+    return GetScreenRect( *pWnd );
+}
+
+[[nodiscard]] CRect GetScreenRect( HWND const hwnd ) {
+    CRect rect;
+    if ( ::GetWindowRect( hwnd, rect ) ) {
+        POINT lt { rect.TopLeft( ) };
+        POINT rb { rect.BottomRight( ) };
+        if ( ::ScreenToClient( hwnd, &lt ) && ::ScreenToClient( hwnd, &rb ) ) {
+            return { lt, rb };
+        }
+    }
+
+    return BadRect;
+}
+
+[[nodiscard]] CRect GetScreenRect( CWnd* const pParent, CWnd* const pWnd ) {
+    return GetScreenRect( *pParent, *pWnd );
+}
+
+[[nodiscard]] CRect GetScreenRect( CWnd* const pParent, HWND const hwnd ) {
+    return GetScreenRect( *pParent, hwnd );
+}
+
+[[nodiscard]] CRect GetScreenRect( HWND const hwndParent, CWnd* const pWnd ) {
+    return GetScreenRect( hwndParent, *pWnd );
+}
+
+[[nodiscard]] CRect GetScreenRect( HWND const hwndParent, HWND const hwnd ) {
+    CRect rect;
+    if ( ::GetWindowRect( hwnd, rect ) ) {
+        POINT lt { rect.TopLeft( ) };
+        POINT rb { rect.BottomRight( ) };
+        if ( ::ScreenToClient( hwndParent, &lt ) && ::ScreenToClient( hwndParent, &rb ) ) {
+            return { lt, rb };
+        }
+    }
+
+    return BadRect;
+}
+
+[[nodiscard]] CRect GetWindowRect( CWnd* const pWnd ) {
+    return GetWindowRect( *pWnd );
 }
 
 [[nodiscard]] CRect GetWindowRect( HWND const hwnd ) {
     CRect rect;
-    return ::GetWindowRect( hwnd, rect ) ? rect : CRect { { -65536, -65536 }, SIZE { -1, -1 } };
-}
-
-[[nodiscard]] CRect GetWindowRect( CWnd* const pWnd ) {
-    return GetWindowRect( pWnd->GetSafeHwnd( ) );
+    return ::GetWindowRect( hwnd, rect ) ? rect : BadRect;
 }
