@@ -72,6 +72,7 @@
 #include <algorithm>
 #include <array>
 #include <concepts>
+#include <memory>
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
