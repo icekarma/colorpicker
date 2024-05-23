@@ -32,8 +32,6 @@ CColorPickerApp::~CColorPickerApp( ) {
 }
 
 BOOL CColorPickerApp::InitInstance( ) {
-    g_pSettings = new CSettings;
-
     INITCOMMONCONTROLSEX InitCtrls { sizeof InitCtrls, 0xFFFF };
     InitCommonControlsEx( &InitCtrls );
 
@@ -43,6 +41,7 @@ BOOL CColorPickerApp::InitInstance( ) {
 
     SetRegistryKey( L"Zive Technology Research" );
     LoadStdProfileSettings( );
+    g_pSettings = new CSettings;
 
     CSingleDocTemplate* pDocTemplate {
         new CSingleDocTemplate(
